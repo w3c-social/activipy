@@ -41,7 +41,9 @@ to trigger application-specific hooks.
 *** DONE Add license files
     CLOSED: [2015-10-07 Wed 14:29]
 
-*** TODO Add note on why both apache v2 and gplv3 to COPYING
+*** DONE Add note on why both apache v2 and gplv3 to COPYING
+    CLOSED: [2015-10-07 Wed 14:33]
+
 *** TODO Add copyright headers and a note on convention
 
 ** TODO ActivityStreams "classes"
