@@ -1,5 +1,12 @@
 All code here dual licensed under Apache License v2.0 and GPL v3 or
 later, as published by the Free Software Foundation.
 
+(Why both when Apache v2 and GPLv3 is effectively just Apache v2?
+Well, future compatibility is a minor concern.  Also, the founder of
+this package thinks that being in a camp on one or the other and
+shaking fists at each other is an annoying and self-defeating
+pasttime, so there's a bit of community commentary here: both
+approaches are great, choose strategically!)
+
 You ought to find some copies of those licenses in this directory, as
 long as nobody mucked things up!
