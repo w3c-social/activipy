@@ -1,0 +1,67 @@
+* Braindump
+
+Python is an imperative language; we won't try to be "purely
+functional" but "hidden state" could really screw us, so we'll try to
+reduce that as much as possible.
+
+We need:
+ - Use a gdbm backed activitystreams object storage
+ - For extensions, pyld
+ - verifiers
+ - method dispatch
+
+DMD store should store in a dictionary like:
+... with the key being the "@id" of the toplevel activitystreams
+object.
+
+#+BEGIN_SRC python
+  {"asobj": {"@type": "Object",
+             "@id": "uuid:d773cb99-078b-496b-b3f0-012d3ade5930",
+             "blah": "blah"},
+   "private": {"blah": "blah"}}
+#+END_SRC
+
+We are going to have to handle inheritance manually, because there can
+be multiple types.  We can't use python's inheritance system.
+
+We need an "ASVocab" system to operate within.  This one should have
+a memoized version of the json-ld expansion of the default
+activitystreams vocabulary, but it should also have a mapping of
+type URIs to ASClass objects.
+
+The store will be used separately, should provide simple store and
+retrieve mechanisms.
+
+Some complexity comes from the fact that in a "real world" system, we
+don't just store and receive what's been given to us.  We need a way
+to trigger application-specific hooks.
+
+* Tasks
+** TODO Add license stuff
+*** DONE Add license files
+    CLOSED: [2015-10-07 Wed 14:29]
+
+*** TODO Add note on why both apache v2 and gplv3 to COPYING
+*** TODO Add copyright headers and a note on convention
+
+** TODO ActivityStreams "classes"
+
+Note that normal python classes can't work here.
+
+*** TODO Absolute basics
+**** TODO Constructors
+**** TODO ???
+*** TODO Add inheritance / method dispatch system
+
+This is trickier than one may think; we can't do Python style 
+method resolution because an activity may have multiple types.
+
+** TODO Add basic GDBM based store
+
+This might eventually 
+
+** TODO Add verifier system
+** TODO Hook up pyld
+*** TODO Save that context
+** TODO Tests
+** TODO Fill in complete vocabulary
