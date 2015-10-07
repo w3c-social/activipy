@@ -1,20 +1,5 @@
-All code here dual licensed under Apache License v2.0 and GPL v3 or
-later, as published by the Free Software Foundation.
-
-(Why both when Apache v2 and GPLv3 is effectively just Apache v2?
-Well, future compatibility is a minor concern.  Also, the founder of
-this package thinks that being in a camp on one or the other and
-shaking fists at each other is an annoying and self-defeating
-pasttime, so there's a bit of community commentary here: both
-approaches are great, choose strategically!)
-
-You ought to find some copies of those licenses in this directory, as
-long as nobody mucked things up!
-
-When adding new files, please add the following:
-
 ## Activipy --- ActivityStreams 2.0 implementation and testing for Python
-## Copyright © 20XX  Your Name <youremail@example.org>
+## Copyright © 2015  Christopher Allan Webber <cwebber@dustycloud.org>
 ##
 ## This file is part of Activipy, which is GPLv3+ or Apache v2, your option
 ## (see COPYING); since that means effectively Apache v2...

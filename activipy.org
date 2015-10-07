@@ -37,15 +37,6 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
-** TODO Add license stuff
-*** DONE Add license files
-    CLOSED: [2015-10-07 Wed 14:29]
-
-*** DONE Add note on why both apache v2 and gplv3 to COPYING
-    CLOSED: [2015-10-07 Wed 14:33]
-
-*** TODO Add copyright headers and a note on convention
-
 ** TODO ActivityStreams "classes"
 
 Note that normal python classes can't work here.
@@ -67,3 +58,18 @@ This might eventually
 *** TODO Save that context
 ** TODO Tests
 ** TODO Fill in complete vocabulary
+** Archive                                                          :ARCHIVE:
+*** DONE Add license stuff
+    CLOSED: [2015-10-07 Wed 15:01]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-07 Wed 15:01
+    :END:
+**** DONE Add license files
+     CLOSED: [2015-10-07 Wed 14:29]
+
+**** DONE Add note on why both apache v2 and gplv3 to COPYING
+     CLOSED: [2015-10-07 Wed 14:33]
+
+**** DONE Add copyright headers and a note on convention
+     CLOSED: [2015-10-07 Wed 15:01]
+
