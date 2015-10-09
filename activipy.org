@@ -37,6 +37,217 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
+** TODO Command line test suite
+
+*** Relevant parts of convo
+
+<evanpro> paroneayea: so, a couple of questions on that
+<evanpro> Does having a single package that is a producer and a consumer make
+          sense? Or multiple packages?                                  [12:18]
+<paroneayea> evanpro: my first goal is to make a library for the purpose of
+             tests, basically along the lines of how you suggested... it'll
+             just store @id's to a gdbm store.  But I'll design it in a way
+             that afterwards, it can be used for something like pypump, and
+             for using as2 stuff
+<paroneayea> but my first goal is: fulfill the test requirements
+<evanpro> Whoa!
+<paroneayea> while working towards something more general
+<paroneayea> gdbm is oldschool I know
+<evanpro> Wait what's the GDBM for?
+<evanpro> I don't understand what you need persistence for              [12:19]
+<paroneayea> well it could also just be a dictionary
+<evanpro> Wouldn't an AS2 library do something like
+<paroneayea> I was going along with your suggestion that you have a
+             command-line submission tool
+<evanpro> JSON -> native language object
+<evanpro> and native language object -> JSON
+<paroneayea> evanpro: yes
+<paroneayea> evanpro: ok well maybe it can be in-memory only            [12:20]
+<paroneayea> evanpro: my main concern is get the thing working
+<evanpro> 1s
+<evanpro> So I was thinking that a test command-line app might look like this
+<evanpro> https://gist.github.com/evanp/b49c3fc37caa21a323a1
+<strugee> hey, would it be useful if I created next week's meeting page and
+          filled it with the stuff on the agenda that we didn't get to?
+<strugee> e.g. we missed branching models
+<evanpro> strugee: YES!                                                 [12:23]
+<evanpro> Nice
+<paroneayea> evanpro: that might work nicely
+<strugee> will do
+<paroneayea> evanpro: okay, I will probably do something like that      [12:24]
+<evanpro> paroneayea: and then a test driver would work like this
+<evanpro> https://gist.github.com/evanp/5d80c0aa3f168465d84d
+<evanpro> So that way you could call "testdriver.py dumpactivitytype.py"
+                                                                        [12:25]
+<evanpro> as well as "testdriver.py dumpactivitytype.rb"
+<paroneayea> evanpro: ok
+<paroneayea> evanpro: I see
+<paroneayea> evanpro: we also want a way to show mutations              [12:26]
+<paroneayea> evanpro: and side effects
+<paroneayea> eg update verbs should actually update the thing in store
+<evanpro> That might be too much for a data format to deal with
+<paroneayea> evanpro: I mean, for the test suite
+<evanpro> Yes, that's what I'm saying
+<paroneayea> we want to be sure that activities can actually do the things
+             they promise
+<evanpro> What I'm saying is that no we don't                           [12:27]
+<evanpro> When we're testing the social API, definitely
+<paroneayea> evanpro: this is why I was saying that there's not much to do as
+             in terms of a test suite
+<evanpro> But I think an activity streams library should just parse from JSON
+          and export to JSON
+<paroneayea> the only thing your example checks really is that it's valid
+             right?
+<paroneayea> that it's json, has the right fields, in the right types
+<evanpro> It checks that the activitystreams implementation library (the one
+          that the dumpactivitytype.py script imports) can find the type of an
+          activity                                                      [12:28]
+<evanpro> I realize that it appears to be really trivial
+<evanpro> But you'd need dozens of such test scripts                    [12:29]
+<evanpro> dumpactivityactortype.py
+<evanpro> dumpactivityactorid.py
+<evanpro> That kind of thing
+<paroneayea> evanpro: okay, so I'll definitely support this.
+<evanpro> Another possibility is using command-line arguments
+<paroneayea> evanpro: though, one of the things is, the activitystreams
+             vocabulary *does* describe things with side effects
+<paroneayea> I might test for that too, but I won't make it so complex that
+             you can't do the simple tsts you ahve                      [12:30]
+<evanpro> That's probably a fair point
+<evanpro> I would really, really strongly recommend that you first publish
+          your intentions for the test format
+<paroneayea> evanpro: to the list?
+<evanpro> And that you concentrate on the bare minimum first
+<evanpro> Yes
+<paroneayea> evanpro: okay I'll do that
+<evanpro> to the list                                                   [12:31]
+<paroneayea> evanpro: I was planning on working on deployment stuff this week,
+             but it seems like this has become really urgent
+<paroneayea> so I'll make it priority #1
+<evanpro> So, one thing we can do when we have even a rudimentary test suite
+<evanpro> Is that we can start testing libraries
+<evanpro> And so we can start writing libraries                         [12:32]
+<paroneayea> evanpro: right
+<evanpro> We could even have a hackathon to implement in a lot of different
+          languages
+<evanpro> And push implementations to npm, Ruby gems, pypi, etc.
+<paroneayea> evanpro: anyway, maybe now you can see why I was looking at gdbm;
+             if we do have a command line test thing and we *do* promise to
+             deliver tests on side effects
+<paroneayea> we need some way to persist things
+<paroneayea> but
+<paroneayea> I agree
+<paroneayea> there are tests that don't need that
+<evanpro> Right, I hear you
+<paroneayea> focus on the other stuff first.
+<evanpro> They seem trivial but they are so important                   [12:33]
+<evanpro> Probably the big thing is defining what the interface between
+          testdriver script and the tested script is
+<paroneayea> (and the reason why gdbm is even though it's oldschool, it's also
+             dead easy to get working because it's so "dumb")
+<paroneayea> evanpro: right.
+<evanpro> Oh, yeah, GDBM is fine there
+<evanpro> I might suggest using command-line args, too                  [12:34]
+<paroneayea> evanpro: I get why you had a "don't engineer this, chris!"
+             reaction though :)
+<evanpro> maybe something like this
+<paroneayea> er
+<paroneayea> overengineer
+<evanpro> <dumpscript> --activity-part actor --part-property id <filename>
+<evanpro> <dumpscript> --activity-part=actor --part-property=id <filename>
+                                                                        [12:35]
+<evanpro> Those are crummy names but :shrug:
+<evanpro> That way implementers don't have to write 50 different testing shims
+<paroneayea> evanpro: I hear you
+<paroneayea> evanpro: well, it may even be easier                       [12:36]
+<evanpro> It may also be worthwhile to have a producer test
+<paroneayea> --extract ["actor"]["@id"]
+<evanpro> That takes in some parameters and outputs some JSON
+<evanpro> Sure
+<evanpro> I'd be a little worried about defining a query language
+<evanpro> But yeah
+<paroneayea> evanpro: it's probably equally complex to define a billion
+             arguments
+<evanpro> So a producer script might take arguments like this
+<paroneayea> for the different components                               [12:37]
+<evanpro> agreed!
+<evanpro> <buildscript> --actor-id=urn:test:whatever --actor-name="Evan
+          Prodromou" --activity-type="Like" --object-id=urn:test:whatever2
+          --object-name="This terrible test"                            [12:38]
+<evanpro> But yeah pretty nightmarish
+<paroneayea> evanpro: so is the idea that this should spit out a
+             success/failure code or
+<evanpro> Oh, no!
+<evanpro> It should spit out JSON!
+<paroneayea> just extract the right part?
+<paroneayea> okay
+<paroneayea> evanpro: and it should validate, right?                    [12:39]
+<evanpro> dumpscript == take JSON, just spit out some extracted part of it
+<evanpro> buildscript = take params, spit out JSON
+<paroneayea> oh I see.
+<paroneayea> okay that makes much more sense.
+<paroneayea> echoscript == take json, dump out json
+<paroneayea> sorry ;)
+<evanpro> dumpscript and buildscript are provided by the implementer to test
+          the implementation                                            [12:40]
+<evanpro> and there's a test driver to run them
+<evanpro> so "testdriver dumpscript.py buildscript.py"
+<evanpro> Would run all the tests
+<evanpro> Or something like that
+<paroneayea> hm ok....
+<paroneayea> evanpro: I don't understand testdriver                     [12:41]
+<paroneayea> what does it do?
+<evanpro> Something like https://gist.github.com/evanp/5d80c0aa3f168465d84d
+
+
+
+*** TODO dumpscript
+
+<evanpro> dumpscript == take JSON, just spit out some extracted part of it
+
+#+BEGIN_SRC python
+  import activitystreams
+
+  json = parseCommandLineFileArgument()
+
+  activity = Activity.fromJSON(json)
+
+  print activity.type
+#+END_SRC
+
+<evanpro> <dumpscript> --activity-part=actor --part-property=id <filename>
+
+<evanpro> <dumpscript> --activity-part=actor --part-property=id <filename>
+<evanpro> Those are crummy names but :shrug:
+<evanpro> That way implementers don't have to write 50 different testing shims
+<paroneayea> evanpro: I hear you
+<paroneayea> evanpro: well, it may even be easier                       [12:36]
+<evanpro> It may also be worthwhile to have a producer test
+<paroneayea> --extract ["actor"]["@id"]
+<evanpro> That takes in some parameters and outputs some JSON
+<evanpro> Sure
+<evanpro> I'd be a little worried about defining a query language
+<evanpro> But yeah
+<paroneayea> evanpro: it's probably equally complex to define a billion
+             arguments
+<evanpro> So a producer script might take arguments like this
+<paroneayea> for the different components                               [12:37]
+<evanpro> agreed!
+<evanpro> <buildscript> --actor-id=urn:test:whatever --actor-name="Evan
+          Prodromou" --activity-type="Like" --object-id=urn:test:whatever2
+          --object-name="This terrible test"                            [12:38]
+<evanpro> But yeah pretty nightmarish
+
+
+*** TODO buildscript
+
+<evanpro> buildscript = take params, spit out JSON
+
+*** TODO testdriver
+
+<evanpro> so "testdriver dumpscript.py buildscript.py"
+
+
 ** TODO ActivityStreams "classes"
 
 Note that normal python classes can't work here.
@@ -72,4 +283,5 @@ This might eventually
 
 **** DONE Add copyright headers and a note on convention
      CLOSED: [2015-10-07 Wed 15:01]
+
 
