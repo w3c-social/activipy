@@ -1,0 +1,23 @@
+/dist/
+/bin/
+/develop-eggs/
+/build/
+/eggs/
+/lib/
+/lib64
+/local/
+/include/
+/parts/
+/share/
+/activipy*.egg/
+.egg-info
+
+# File extensions
+*.pyc
+*.pyo
+*~
+*.swp
+*.mo
+
+__pycache__
+*.pyc
