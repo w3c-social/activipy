@@ -18,11 +18,15 @@
 ##   limitations under the License.
 
 
+import json
 import sys
 import argparse
 from collections import namedtuple, OrderedDict
 
-# from . import types, vocab
+from .types import Activity, InvalidActivity
+
+class UserError(Exception): pass
+class InvalidInput(UserError): pass
 
 
 
@@ -30,12 +34,24 @@ from collections import namedtuple, OrderedDict
 # Dump command
 # ============
 
-def dump_cli():
-    pass
+def dump_cli(args):
+    try:
+        asobj = json.loads(args.asobj)
+    except ValueError:
+        raise InvalidInput(
+            "Not valid json: %s" % args.asobj)
+
+    activity = Activity.from_json(asobj)
+    try:
+        activity.validate()
+    except InvalidActivity as error:
+        raise InvalidInput(str(error))
 
 
 def dump_setup_subparser(subparser):
-    subparser.add_argument("as_json")
+    subparser.add_argument(
+        "asobj",
+        help="ActivityStreams object, as json")
 
 
 
@@ -96,8 +112,14 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    subcmd_proc = SUBCOMMANDS_MAP[args.subparser_name].cli_proc
-    subcmd_proc(args)
+    try:
+        subcmd_proc = SUBCOMMANDS_MAP[args.subparser_name].cli_proc
+        subcmd_proc(args)
+    except UserError as error:
+        print(error)
+        # it's only half evil that the user made this mistake,
+        # is my guess
+        sys.exit(333)
 
 
 if __name__ == "__main__":
