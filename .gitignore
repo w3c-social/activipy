@@ -10,7 +10,7 @@
 /parts/
 /share/
 /activipy*.egg/
-.egg-info
+*.egg-info
 
 # File extensions
 *.pyc

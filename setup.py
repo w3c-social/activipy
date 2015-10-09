@@ -17,3 +17,31 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+from setuptools import setup, find_packages
+
+setup(
+    name="activipy",
+    version="0.1.dev",
+    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    zip_safe=False,
+    include_package_data = True,
+    install_requires=[
+        "PyLD",
+        "pytest",
+        ],
+    # @@: Can we reproduce this in Guix?
+    entry_points="""\
+        [console_scripts]
+        activipy_tester = activipy.testcli:main
+        """,
+    license="Apache v2",
+    author="Christopher Allan Webber",
+    author_email="cwebber@dustycloud.org",
+    description="ActivityStreams 2.0 implementation and testing for Python",
+    long_description="""An ActivityStreams 2.0 implementation for Python.
+Provides an easy API for building ActivityStreams 2.0 based applications
+as well as a test suite for testing ActivityStreams 2.0 libraries against.""",
+    classifiers=[
+        # @@: Might need to drop v2
+        "License :: OSI Approved :: Apache Software License"]
+)
