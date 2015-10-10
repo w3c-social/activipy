@@ -37,6 +37,8 @@ class ASType(object):
         self.parents = parents
         self.methods = methods or {}
 
+        self._inheritance = None
+
     def validate(self, asobj):
         validator = self.methods.get("validate")
         if validator is not None:
@@ -44,6 +46,14 @@ class ASType(object):
 
     def __repr__(self):
         return "<ASType %s>" % self.id_short
+
+    @property
+    def inheritance_chain(self):
+        # memoization
+        if self._inheritance is None:
+            self._inheritance = astype_inheritance_list(self)
+
+        return self._inheritance
 
 
 def astype_inheritance_list(astype):
@@ -87,6 +97,7 @@ class ASVocab(object):
 
 class ASObj(object):
     """
+    The general ActivityStreams object that a user will work with
     """
     pass
 

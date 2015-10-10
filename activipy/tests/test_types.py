@@ -86,3 +86,7 @@ def test_inheritance_list():
         [ASOrderedCollectionPage, ASOrderedCollection,
          ASCollection, ASObject, ASCollectionPage]
 
+    # does the property version also work?
+    assert ASOrderedCollectionPage.inheritance_chain == \
+        [ASOrderedCollectionPage, ASOrderedCollection,
+         ASCollection, ASObject, ASCollectionPage]
