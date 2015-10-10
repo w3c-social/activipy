@@ -260,6 +260,29 @@ Note that normal python classes can't work here.
 This is trickier than one may think; we can't do Python style 
 method resolution because an activity may have multiple types.
 
+*** TODO Property information?
+
+
+** TODO Easy constructor interface
+
+Something like:
+
+#+BEGIN_SRC python
+  from activipy import vocab
+
+  root_beer_note = vocab.Create(
+      actor=vocab.Person(
+          "http://tsyesika.co.uk",
+          displayName="Jessica Tallon"),
+      to=["acct:cwebber@identi.ca"],
+      object=vocab.Note(
+          "http://tsyesika.co.uk/chat/sup-yo/",
+          content="Up for some root beer floats?"))
+#+END_SRC
+
+This should be able to flow pretty naturally out of our types.py
+interface.
+
 ** TODO Add basic GDBM based store
 
 This might eventually 
