@@ -253,17 +253,14 @@ to trigger application-specific hooks.
 Note that normal python classes can't work here.
 
 *** TODO Absolute basics
-**** TODO Constructors
-**** TODO ???
-*** TODO Add inheritance / method dispatch system
+**** TODO ASObj
+***** TODO Construction: Do deep copy of asjson manually
 
-This is trickier than one may think; we can't do Python style 
-method resolution because an activity may have multiple types.
+This way we can catch any asobj types
 
-*** TODO Property information?
+***** TODO Finish all those TODO methods
 
-
-** TODO Easy constructor interface
+**** TODO Easy ASType->ASObj constructor interface
 
 Something like:
 
@@ -282,6 +279,15 @@ Something like:
 
 This should be able to flow pretty naturally out of our types.py
 interface.
+
+**** TODO Fill in more here
+*** TODO Add inheritance / method dispatch system
+
+This is trickier than one may think; we can't do Python style 
+method resolution because an activity may have multiple types.
+
+*** TODO Property information?
+
 
 ** TODO Add basic GDBM based store
 
