@@ -252,15 +252,14 @@ to trigger application-specific hooks.
 
 Note that normal python classes can't work here.
 
-*** TODO Absolute basics
-**** TODO ASObj
-***** TODO Construction: Do deep copy of asjson manually
+*** TODO ASObj
+**** TODO Construction: Do deep copy of asjson manually
 
 This way we can catch any asobj types
 
-***** TODO Finish all those TODO methods
+**** TODO Finish all those TODO methods
 
-**** TODO Easy ASType->ASObj constructor interface
+*** TODO Easy ASType->ASObj constructor interface
 
 Something like:
 
@@ -280,14 +279,22 @@ Something like:
 This should be able to flow pretty naturally out of our types.py
 interface.
 
-**** TODO Fill in more here
-*** TODO Add inheritance / method dispatch system
+*** TODO Add ASProp
+
+*** Archive                                                         :ARCHIVE:
+**** DONE Add inheritance / method dispatch system
+    CLOSED: [2015-10-10 Sat 18:49]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
+     :END:
 
 This is trickier than one may think; we can't do Python style 
 method resolution because an activity may have multiple types.
 
-*** TODO Property information?
-
+** TODO Fill in complete vocabulary
+** TODO Documentation basics
+*** TODO Add sphinx basic structure
+*** TODO Document basic "types" structure
 
 ** TODO Add basic GDBM based store
 
@@ -297,7 +304,6 @@ This might eventually
 ** TODO Hook up pyld
 *** TODO Save that context
 ** TODO Tests
-** TODO Fill in complete vocabulary
 ** Archive                                                          :ARCHIVE:
 *** DONE Add license stuff
     CLOSED: [2015-10-07 Wed 15:01]
