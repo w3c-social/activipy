@@ -95,6 +95,35 @@ class ASVocab(object):
             for type in vocabs}
 
 
+# So, questions for ourselves.  What is this, if not merely a json
+# object?  After all, an ActivityStreams object can be represented as
+# "just JSON", and be done with it.  So what's *useful*?
+#
+# Here are some potentially useful properties:
+#  - Expanded json-ld form
+#  - Extracted types
+#    - As short forms
+#    - As expanded / unambiguous URIs (see json-ld)
+#    - As ASType objects (where possible)
+#  - Validation
+#  - Lookup of what a property key "means"
+#    (checking against activitystreams vocabulary)
+#  - key-value access, including fetching any nested activitystreams
+#    objects as ASObj types
+#  - json serialization to string
+#
+# Of all the above, it would be nice not to have to repeat these
+# operations.  If we've done it once, that should be good enough
+# forever... in other words, memoization.  But memoization means
+# that the object should be immutable.
+# 
+# ... but maybe ASObj objects *should* be immutable.
+# This means we copy.deepcopy() on our way in, and if users want
+# to change things, they either make a new ASObj or get back
+# entirely new ASObj objects.
+#
+# I like this idea...
+
 class ASObj(object):
     """
     The general ActivityStreams object that a user will work with
