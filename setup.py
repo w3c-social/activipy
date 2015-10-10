@@ -43,5 +43,4 @@ Provides an easy API for building ActivityStreams 2.0 based applications
 as well as a test suite for testing ActivityStreams 2.0 libraries against.""",
     classifiers=[
         # @@: Might need to drop v2
-        "License :: OSI Approved :: Apache Software License"]
-)
+        "License :: OSI Approved :: Apache Software License"])
