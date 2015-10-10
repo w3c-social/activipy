@@ -17,6 +17,7 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+import copy
 import pyld
 
 
@@ -54,6 +55,10 @@ class ASType(object):
             self._inheritance = astype_inheritance_list(self)
 
         return self._inheritance
+
+    def __call__(self, **kwargs):
+        # TODO: Use this as a friendly ActivityStreams object constructor
+        pass
 
 
 def astype_inheritance_list(astype):
@@ -128,6 +133,68 @@ class ASObj(object):
     """
     The general ActivityStreams object that a user will work with
     """
-    pass
+    # TODO
+    def __init__(self, jsobj):
+        self.__jsobj = copy.deepcopy(jsobj)
 
+    # TODO
+    def __getitem__(self, key):
+        # grab from the key value-pair
+        pass
+
+    # META TODO: Convert some @property here to @memoized_property
+    # TODO
+    @property
+    def type_simple(self):
+        pass
+
+    # TODO
+    @property
+    def type_expanded(self):
+        pass
+
+    # TODO
+    @property
+    def type_astype(self):
+        pass
+
+    # TODO
+    # TODO Memoize
+    def validate(self):
+        pass
+    
+    # TODO
+    @property
+    def is_valid(self):
+        pass
+
+    # Don't memoize this, users might mutate
+    @property
+    def as_json(self):
+        return copy.deepcopy(self.__jsobj)
+
+    # TODO
+    @property
+    def as_json_str(self):
+        pass
+
+    # TODO
+    # TODO Memoize
+    def __expanded_jsonld(self):
+        pass
+
+    # TODO: Memoize
+    @property
+    def as_expanded_jsonld(self):
+        """
+        Note: this produces a copy of the object returned, so consumers
+          of this method may want to keep a copy of its result
+          rather than calling over and over.
+        """
+        copy.deepcopy(self.__expanded_jsonld())
+
+    # TODO
+    @property
+    def as_expanded_jsonld_str(self):
+        pass
 
