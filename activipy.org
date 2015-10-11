@@ -315,6 +315,19 @@ This might eventually
 After all, I'm the one who started that project, and it's abandoned...
 
 ** TODO Maybe rename types.py to core.py
+** TODO Investigate restructuring ASType instances via metaclassing
+
+Basically, the main reason is that we'd like to be able to do:
+
+#+BEGIN_SRC python
+help(CollectionPage)
+#+END_SRC
+
+and get the appropriate useful info.
+
+However, it's still true that calling CollectionPage() should return a
+ASObj object, not a CollectionPage() object.  Reason being that
+ActivityStreams objects can have multiple "@type" fields.
 
 ** Archive                                                          :ARCHIVE:
 *** DONE Add license stuff
