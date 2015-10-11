@@ -135,7 +135,7 @@ class ASObj(object):
     """
     # TODO
     def __init__(self, jsobj):
-        self.__jsobj = copy.deepcopy(jsobj)
+        self.__jsobj = deepcopy_jsobj(jsobj)
 
     # TODO
     def __getitem__(self, key):
