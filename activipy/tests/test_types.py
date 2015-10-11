@@ -159,3 +159,40 @@ def test_deepcopy_jsobj():
     # Test nested asobj copying
     assert looks_like_root_beer_note(
         types.deepcopy_jsobj(ROOT_BEER_NOTE_MIXED_ASOBJ))
+
+
+ROOT_BEER_NOTE_ASOBJ = types.ASObj({
+    "@type": "Create",
+    "@id": "http://tsyesika.co.uk/act/foo-id-here/",
+    "actor": types.ASObj({
+        "@type": "Person",
+        "@id": "http://tsyesika.co.uk/",
+        "displayName": "Jessica Tallon"}),
+    "to": ["acct:cwebber@identi.ca",
+           "acct:justaguy@rhiaro.co.uk"],
+    "object": types.ASObj({
+        "@type": "Note",
+        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+        "content": "Up for some root beer floats?"})})
+
+
+def test_asobj_keyaccess():
+    assert ROOT_BEER_NOTE_ASOBJ["@type"] == "Create"
+    assert ROOT_BEER_NOTE_ASOBJ["@id"] == \
+        "http://tsyesika.co.uk/act/foo-id-here/"
+
+    # Accessing things that look like asobjects
+    # will return asobjects
+    assert isinstance(
+        ROOT_BEER_NOTE_ASOBJ["object"],
+        types.ASObj)
+
+    # However, we should still be able to get the
+    # dictionary edition by pulling down .json()
+    assert isinstance(
+        ROOT_BEER_NOTE_ASOBJ.json()["object"],
+        dict)
+
+    # Traversal of traversal should work
+    assert ROOT_BEER_NOTE_ASOBJ["object"]["content"] == \
+        "Up for some root beer floats?"
