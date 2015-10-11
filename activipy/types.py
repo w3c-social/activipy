@@ -133,14 +133,16 @@ class ASObj(object):
     """
     The general ActivityStreams object that a user will work with
     """
-    # TODO
     def __init__(self, jsobj):
         self.__jsobj = deepcopy_jsobj(jsobj)
+        assert isinstance(self.__jsobj.get("@type"), str)
 
-    # TODO
     def __getitem__(self, key):
-        # grab from the key value-pair
-        pass
+        val = self.__jsobj[key]
+        if isinstance(val, dict) and "@type" in val:
+            return ASObj(val)
+        else:
+            return deepcopy_jsobj(val)
 
     # META TODO: Convert some @property here to @memoized_property
     # TODO
@@ -197,6 +199,9 @@ class ASObj(object):
     @property
     def expanded_jsonld_str(self):
         pass
+
+    # TODO
+    # def __repr__(self):
 
 
 def deepcopy_jsobj(jsobj):
