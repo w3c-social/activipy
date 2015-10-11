@@ -171,12 +171,10 @@ class ASObj(object):
         pass
 
     # Don't memoize this, users might mutate
-    @property
     def json(self):
         return copy.deepcopy(self.__jsobj)
 
     # TODO
-    @property
     def json_str(self):
         pass
 
@@ -186,7 +184,6 @@ class ASObj(object):
         pass
 
     # TODO: Memoize
-    @property
     def expanded_jsonld(self):
         """
         Note: this produces a copy of the object returned, so consumers
@@ -196,7 +193,6 @@ class ASObj(object):
         copy.deepcopy(self.__expanded_jsonld())
 
     # TODO
-    @property
     def expanded_jsonld_str(self):
         pass
 
