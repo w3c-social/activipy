@@ -28,27 +28,27 @@ from activipy import types
 def fake_type_uri(type_name):
     return "http://example.org/ns#" + type_name
     
-ASObject = types.ASType("Object", fake_type_uri("object"), [])
-ASLink = types.ASType("Link", fake_type_uri("link"), [])
+ASObject = types.ASType(fake_type_uri("object"), [], "Object")
+ASLink = types.ASType(fake_type_uri("link"), [], "Link")
 
-ASActivity = types.ASType("Activity", fake_type_uri("activity"), [ASObject])
-ASPost = types.ASType("Post", fake_type_uri("post"), [ASActivity])
-ASDelete = types.ASType("Delete", fake_type_uri("delete"), [ASActivity])
+ASActivity = types.ASType(fake_type_uri("activity"), [ASObject], "Activity")
+ASPost = types.ASType(fake_type_uri("post"), [ASActivity], "Post")
+ASDelete = types.ASType(fake_type_uri("delete"), [ASActivity], "Delete")
 
 ASCollection = types.ASType(
-    "Collection", fake_type_uri("collection"), [ASObject])
+    fake_type_uri("collection"), [ASObject], "Collection")
 ASOrderedCollection = types.ASType(
-    "OrderedCollection",
     fake_type_uri("orderedcollection"),
-    [ASCollection])
+    [ASCollection],
+    "OrderedCollection")
 ASCollectionPage = types.ASType(
-    "CollectionPage",
     fake_type_uri("collectionpage"),
-    [ASCollection])
+    [ASCollection],
+    "CollectionPage")
 ASOrderedCollectionPage = types.ASType(
-    "OrderedCollectionPage",
     fake_type_uri("orderedcollectionpage"),
-    [ASOrderedCollection, ASCollectionPage])
+    [ASOrderedCollection, ASCollectionPage],
+    "OrderedCollectionPage")
 
 
 

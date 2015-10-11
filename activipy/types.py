@@ -32,11 +32,13 @@ class ASType(object):
     can have multiple types listed under @type.  So our inheritance
     model is a bit different than python's.
     """
-    def __init__(self, id_short, id_uri, parents, methods=None):
-        self.id_short = id_short
+    def __init__(self, id_uri, parents, id_short=None,
+                 methods=None, notes=None):
         self.id_uri = id_uri
         self.parents = parents
+        self.id_short = id_short
         self.methods = methods or {}
+        self.notes = None
 
         self._inheritance = None
 
@@ -46,7 +48,7 @@ class ASType(object):
             validator(asobj)
 
     def __repr__(self):
-        return "<ASType %s>" % self.id_short
+        return "<ASType %s>" % (self.id_short or self.id_uri)
 
     @property
     def inheritance_chain(self):
@@ -160,6 +162,8 @@ class ASObj(object):
     def type_astype(self):
         pass
 
+    ## @@: Do these belong here really?
+    ##   Or do they belong as part of the Vocab system?
     # TODO
     # TODO Memoize
     def validate(self):
