@@ -253,7 +253,8 @@ to trigger application-specific hooks.
 Note that normal python classes can't work here.
 
 *** TODO ASObj
-**** TODO Construction: Do deep copy of asjson manually
+**** DONE Construction: Do deep copy of asjson manually
+     CLOSED: [2015-10-11 Sun 11:33]
 
 This way we can catch any asobj types
 
