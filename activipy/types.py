@@ -206,7 +206,7 @@ def deepcopy_jsobj(jsobj):
     permit insertions of 
     """
     def copy_asobj(asobj):
-        return asobj.json
+        return asobj.json()
 
     def copy_dict(this_dict):
         new_dict = {}
