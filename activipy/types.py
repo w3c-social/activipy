@@ -170,12 +170,12 @@ class ASObj(object):
 
     # Don't memoize this, users might mutate
     @property
-    def as_json(self):
+    def json(self):
         return copy.deepcopy(self.__jsobj)
 
     # TODO
     @property
-    def as_json_str(self):
+    def json_str(self):
         pass
 
     # TODO
@@ -185,7 +185,7 @@ class ASObj(object):
 
     # TODO: Memoize
     @property
-    def as_expanded_jsonld(self):
+    def expanded_jsonld(self):
         """
         Note: this produces a copy of the object returned, so consumers
           of this method may want to keep a copy of its result
@@ -195,6 +195,43 @@ class ASObj(object):
 
     # TODO
     @property
-    def as_expanded_jsonld_str(self):
+    def expanded_jsonld_str(self):
         pass
 
+
+def deepcopy_jsobj(jsobj):
+    """
+    Perform a deep copy of a JSON style object, but also
+    permit insertions of 
+    """
+    def copy_asobj(asobj):
+        return asobj.json
+
+    def copy_dict(this_dict):
+        new_dict = {}
+        for key, val in this_dict.items():
+            new_dict[key] = copy_main(val)
+        return new_dict
+
+    def copy_list(this_list):
+        new_list = []
+        for item in this_list:
+            new_list.append(copy_main(item))
+        return new_list
+
+    def copy_main(jsobj):
+        if isinstance(jsobj, dict):
+            return copy_dict(jsobj)
+        elif isinstance(jsobj, ASObj):
+            return copy_asobj(jsobj)
+        elif isinstance(jsobj, list):
+            return copy_list(jsobj)
+        else:
+            # All other JSON type objects are immutable,
+            # just copy them down.
+            # @@: We could provide validation that it's
+            #   a valid json object here but that seems like
+            #   it would bring unnecessary performance penalties.
+            return jsobj
+
+    return copy_main(jsobj)
