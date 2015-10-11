@@ -308,6 +308,8 @@ This might eventually
 
 After all, I'm the one who started that project, and it's abandoned...
 
+** TODO Maybe rename types.py to core.py
+
 ** Archive                                                          :ARCHIVE:
 *** DONE Add license stuff
     CLOSED: [2015-10-07 Wed 15:01]
