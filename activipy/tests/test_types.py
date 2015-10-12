@@ -18,7 +18,7 @@
 ##   limitations under the License.
 
 import copy
-from activipy import types
+from activipy import types, vocab
 
 
 
@@ -121,44 +121,65 @@ ROOT_BEER_NOTE_MIXED_ASOBJ = {
         "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
         "content": "Up for some root beer floats?"})}
 
+ROOT_BEER_NOTE_VOCAB = vocab.Create(
+    "http://tsyesika.co.uk/act/foo-id-here/",
+    actor=vocab.Person(
+        "http://tsyesika.co.uk/",
+        displayName="Jessica Tallon"),
+    to=["acct:cwebber@identi.ca",
+        "acct:justaguy@rhiaro.co.uk"],
+    object=vocab.Note(
+        "htp://tsyesika.co.uk/chat/sup-yo/",
+        content="Up for some root beer floats?"))
+
+
+def _looks_like_root_beer_note(jsobj):
+    return (
+        len(jsobj) == 5 and
+        jsobj["@type"] == "Create" and
+        jsobj["@id"] == "http://tsyesika.co.uk/act/foo-id-here/" and
+        isinstance(jsobj["actor"], dict) and
+        len(jsobj["actor"]) == 3 and
+        jsobj["actor"]["@type"] == "Person" and
+        jsobj["actor"]["@id"] == "http://tsyesika.co.uk/" and
+        jsobj["actor"]["displayName"] == "Jessica Tallon" and
+        isinstance(jsobj["to"], list) and
+        jsobj["to"] == ["acct:cwebber@identi.ca",
+                        "acct:justaguy@rhiaro.co.uk"] and
+        isinstance(jsobj["object"], dict) and
+        len(jsobj["object"]) == 3 and
+        jsobj["object"]["@type"] == "Note" and
+        jsobj["object"]["@id"] == "htp://tsyesika.co.uk/chat/sup-yo/" and
+        jsobj["object"]["content"] == "Up for some root beer floats?")
+
 
 def test_deepcopy_jsobj():
-    def looks_like_root_beer_note(jsobj):
-        return (
-            len(jsobj) == 5 and
-            jsobj["@type"] == "Create" and
-            jsobj["@id"] == "http://tsyesika.co.uk/act/foo-id-here/" and
-            isinstance(jsobj["actor"], dict) and
-            len(jsobj["actor"]) == 3 and
-            jsobj["actor"]["@type"] == "Person" and
-            jsobj["actor"]["@id"] == "http://tsyesika.co.uk/" and
-            jsobj["actor"]["displayName"] == "Jessica Tallon" and
-            isinstance(jsobj["to"], list) and
-            jsobj["to"] == ["acct:cwebber@identi.ca",
-                            "acct:justaguy@rhiaro.co.uk"] and
-            isinstance(jsobj["object"], dict) and
-            len(jsobj["object"]) == 3 and
-            jsobj["object"]["@type"] == "Note" and
-            jsobj["object"]["@id"] == "htp://tsyesika.co.uk/chat/sup-yo/" and
-            jsobj["object"]["content"] == "Up for some root beer floats?")
-
     # We'll mutate later, so let's make a copy of this
     root_beer_note = copy.deepcopy(ROOT_BEER_NOTE_JSOBJ)
-    assert looks_like_root_beer_note(root_beer_note)
+    assert _looks_like_root_beer_note(root_beer_note)
 
     # Test copying a compicated datastructure
     copied_root_beer_note = types.deepcopy_jsobj(root_beer_note)
-    assert looks_like_root_beer_note(copied_root_beer_note)
+    assert _looks_like_root_beer_note(copied_root_beer_note)
 
     # Mutate
     root_beer_note["to"].append("sneaky@mcsneakers.example")
-    assert not looks_like_root_beer_note(root_beer_note)
+    assert not _looks_like_root_beer_note(root_beer_note)
     # but things are still as they were in our copy right??
-    assert looks_like_root_beer_note(copied_root_beer_note)
+    assert _looks_like_root_beer_note(copied_root_beer_note)
 
     # Test nested asobj copying
-    assert looks_like_root_beer_note(
+    assert _looks_like_root_beer_note(
         types.deepcopy_jsobj(ROOT_BEER_NOTE_MIXED_ASOBJ))
+
+
+def test_vocab_constructor():
+    assert isinstance(
+        ROOT_BEER_NOTE_VOCAB,
+        types.ASObj)
+
+    assert _looks_like_root_beer_note(
+        ROOT_BEER_NOTE_VOCAB.json())
 
 
 ROOT_BEER_NOTE_ASOBJ = types.ASObj({
