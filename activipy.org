@@ -265,7 +265,8 @@ We should do this like in the ANSI Common Lisp book, where we remove
 duplicates, but we remove duplictes but keep the *last* appearance of
 a "class"
 
-*** TODO Easy ASType->ASObj constructor interface
+*** DONE Easy ASType->ASObj constructor interface
+    CLOSED: [2015-10-12 Mon 15:14]
 
 Something like:
 
