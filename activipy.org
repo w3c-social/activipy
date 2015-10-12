@@ -298,7 +298,8 @@ interface.
 This is trickier than one may think; we can't do Python style 
 method resolution because an activity may have multiple types.
 
-** TODO Fill in complete vocabulary
+** DONE Fill in complete vocabulary
+   CLOSED: [2015-10-12 Mon 15:36]
 ** TODO Documentation basics
 *** TODO Add sphinx basic structure
 *** TODO Document basic "types" structure
