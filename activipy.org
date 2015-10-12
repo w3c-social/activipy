@@ -247,7 +247,6 @@ to trigger application-specific hooks.
 
 <evanpro> so "testdriver dumpscript.py buildscript.py"
 
-
 ** TODO ActivityStreams "classes"
 
 Note that normal python classes can't work here.
@@ -326,6 +325,12 @@ This might eventually
 ** TODO Hook up pyld
 *** TODO Save that context
 ** TODO Tests
+*** TODO Basic test infrastructure
+*** TODO Test all types.py stuff
+**** TODO ASType
+**** TODO ASVocab
+**** TODO ASObj
+*** TODO Basic vocabs stuff
 ** TODO Consider rename to Pydraulics?
 
 After all, I'm the one who started that project, and it's abandoned...
