@@ -253,11 +253,6 @@ to trigger application-specific hooks.
 Note that normal python classes can't work here.
 
 *** TODO ASObj
-**** DONE Construction: Do deep copy of asjson manually
-     CLOSED: [2015-10-11 Sun 11:33]
-
-This way we can catch any asobj types
-
 **** TODO Finish all those TODO methods
 **** TODO Better inheritance order
 
@@ -265,8 +260,32 @@ We should do this like in the ANSI Common Lisp book, where we remove
 duplicates, but we remove duplictes but keep the *last* appearance of
 a "class"
 
-*** DONE Easy ASType->ASObj constructor interface
+**** Archive                                                        :ARCHIVE:
+***** DONE Construction: Do deep copy of asjson manually
+     CLOSED: [2015-10-11 Sun 11:33]
+      :PROPERTIES:
+      :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+      :END:
+
+This way we can catch any asobj types
+
+*** TODO Add ASProp
+
+*** Archive                                                         :ARCHIVE:
+**** DONE Add inheritance / method dispatch system
+    CLOSED: [2015-10-10 Sat 18:49]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
+     :END:
+
+This is trickier than one may think; we can't do Python style 
+method resolution because an activity may have multiple types.
+
+**** DONE Easy ASType->ASObj constructor interface
     CLOSED: [2015-10-12 Mon 15:14]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+     :END:
 
 Something like:
 
@@ -286,20 +305,6 @@ Something like:
 This should be able to flow pretty naturally out of our types.py
 interface.
 
-*** TODO Add ASProp
-
-*** Archive                                                         :ARCHIVE:
-**** DONE Add inheritance / method dispatch system
-    CLOSED: [2015-10-10 Sat 18:49]
-     :PROPERTIES:
-     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
-     :END:
-
-This is trickier than one may think; we can't do Python style 
-method resolution because an activity may have multiple types.
-
-** DONE Fill in complete vocabulary
-   CLOSED: [2015-10-12 Mon 15:36]
 ** TODO Documentation basics
 *** TODO Add sphinx basic structure
 *** TODO Document basic "types" structure
@@ -331,17 +336,6 @@ However, it's still true that calling CollectionPage() should return a
 ASObj object, not a CollectionPage() object.  Reason being that
 ActivityStreams objects can have multiple "@type" fields.
 
-** CANCELED Switch to pyrsistent for ASObj structures?
-   CLOSED: [2015-10-12 Mon 15:35]
-
-https://github.com/tobgu/pyrsistent
-
-We more or less force/fake immutability right now, and maybe it makes
-more sense to just use something that *is* immutable
-
-*UPDATE:* Canceled.  [[https://gist.github.com/datagrok/2199506][More info]] on why Pyrsistent has a promising future,
-  but can't work for now.
-
 ** Archive                                                          :ARCHIVE:
 *** DONE Add license stuff
     CLOSED: [2015-10-07 Wed 15:01]
@@ -357,4 +351,23 @@ more sense to just use something that *is* immutable
 **** DONE Add copyright headers and a note on convention
      CLOSED: [2015-10-07 Wed 15:01]
 
+
+*** DONE Fill in complete vocabulary
+    CLOSED: [2015-10-12 Mon 15:36]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+    :END:
+*** CANCELED Switch to pyrsistent for ASObj structures?
+   CLOSED: [2015-10-12 Mon 15:35]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+    :END:
+
+https://github.com/tobgu/pyrsistent
+
+We more or less force/fake immutability right now, and maybe it makes
+more sense to just use something that *is* immutable
+
+*UPDATE:* Canceled.  [[https://gist.github.com/datagrok/2199506][More info]] on why Pyrsistent has a promising future,
+  but can't work for now.
 
