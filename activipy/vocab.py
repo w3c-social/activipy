@@ -159,3 +159,384 @@ OrderedCollectionPage = ASType(
 # Extended Classes: Activity Types
 # ================================
 
+Accept = ASType(
+    as_uri("Accept"), [Activity],
+    "Accept",
+    notes=(
+        "Indicates that the actor accepts the object. "
+        "The target property can be used in certain circumstances to indicate "
+        "the context into which the object has been accepted. For instance, "
+        "when expressing the activity, \"Sally accepted Joe into the Club\", "
+        "the \"target\" would identify the \"Club\"."))
+
+TentativeAccept = ASType(
+    as_uri("TentativeAccept"), [Accept],
+    "TentativeAccept",
+    notes=(
+        "A specialization of Accept indicating that the acceptance is "
+        "tentative."))
+
+Add = ASType(
+    as_uri("Add"), [Activity],
+    "Add",
+    notes=(
+        "Indicates that the actor has added the object to the target. If the "
+        "target property is not explicitly specified, the target would need "
+        "to be determined implicitly by context. The origin can be used to "
+        "identify the context from which the object originated."))
+
+Arrive = ASType(
+    as_uri("Arrive"), [IntransitiveActivity],
+    "Arrive",
+    notes=(
+        "An IntransitiveActivity that indicates that the actor has arrived "
+        "at the location. The origin can be used to identify the context "
+        "from which the actor originated. The target typically has no defined "
+        "meaning."))
+
+Create = ASType(
+    as_uri("Create"), [Activity],
+    "Create",
+    notes=(
+        "Indicates that the actor has created the object."))
+
+Delete = ASType(
+    as_uri("Delete"), [Activity],
+    "Delete",
+    notes=(
+        "Indicates that the actor has deleted the object. If specified, "
+        "the origin indicates the context from which the object was "
+        "deleted."))
+
+Follow = ASType(
+    as_uri("Follow"), [Activity],
+    "Follow",
+    notes=(
+        "Indicates that the actor is \"following\" the object. Following is "
+        "defined in the sense typically used within Social systems in which "
+        "the actor is interested in any activity performed by or on the "
+        "object. The target and origin typically have no defined meaning."))
+
+Ignore = ASType(
+    as_uri("Ignore"), [Activity],
+    "Ignore",
+    notes=(
+        "Indicates that the actor is ignoring the object. "
+        "The target and origin typically have no defined meaning."))
+
+Join = ASType(
+    as_uri("Join"), [Activity],
+    "Join",
+    notes=(
+        "Indicates that the actor has joined the object. The target and "
+        "origin typically have no defined meaning."))
+
+Leave = ASType(
+    as_uri("Leave"), [Activity],
+    "Leave",
+    notes=(
+        "Indicates that the actor has left the object. The target and origin "
+        "typically have no meaning."))
+
+Like = ASType(
+    as_uri("Like"), [Activity],
+    "Like",
+    notes=(
+        "Indicates that the actor likes, recommends or endorses the object. "
+        "The target and origin typically have no defined meaning."))
+
+Offer = ASType(
+    as_uri("Offer"), [Activity],
+    "Offer",
+    notes=(
+        "Indicates that the actor is offering the object. If specified, the "
+        "target indicates the entity to which the object is being offered."))
+
+Invite = ASType(
+    as_uri("Invite"), [Offer],
+    "Invite",
+    notes=(
+        "A specialization of Offer in which the actor is extending an "
+        "invitation for the object to the target."))
+
+Reject = ASType(
+    as_uri("Reject"), [Activity],
+    "Reject",
+    notes=(
+        "Indicates that the actor is rejecting the object. The target and "
+        "origin typically have no defined meaning."))
+
+TentativeReject = ASType(
+    as_uri("TentativeReject"), [Reject],
+    "TentativeReject",
+    notes=(
+        "A specialization of Reject in which the rejection is considered "
+        "tentative."))
+
+Remove = ASType(
+    as_uri("Remove"), [Activity],
+    "Remove",
+    notes=(
+        "Indicates that the actor is removing the object. If specified, the "
+        "origin indicates the context from which the object is being removed."))
+
+Undo = ASType(
+    as_uri("Undo"), [Activity],
+    "Undo",
+    notes=(
+        "Indicates that the actor is undoing the object. In most cases, "
+        "the object will be an Activity describing some previously performed "
+        "action (for instance, a person may have previously \"liked\" "
+        "an article but, for whatever reason, might choose to undo that "
+        "like at some later point in time).\n\n"
+        "The target and origin typically have no defined meaning."))
+
+Update = ASType(
+    as_uri("Update"), [Activity],
+    "Update",
+    notes=(
+        "Indicates that the actor has updated the object. Note, however, that "
+        "this vocabulary does not define a mechanism for describing the "
+        "actual set of modifications made to object.\n\n"
+        "The target and origin typically have no defined meaning."))
+
+Experience = ASType(
+    as_uri("Experience"), [Activity],
+    "Experience",
+    notes=(
+        "Indicates that the actor has experienced the object. The type of "
+        "experience is not specified."))
+
+View = ASType(
+    as_uri("View"), [Experience],
+    "View",
+    notes=(
+        "Indicates that the actor has viewed the object. Viewing is a "
+        "specialization of Experience."))
+
+Listen = ASType(
+    as_uri("Listen"), [Experience],
+    "Listen",
+    notes=(
+        "Indicates that the actor has listened to the object. Listening is a "
+        "specialization of Experience."))
+
+Read = ASType(
+    as_uri("Read"), [Experience],
+    "Read",
+    notes=(
+        "Indicates that the actor has read the object. Reading is a "
+        "specialization of Experience."))
+
+Move = ASType(
+    as_uri("Move"), [Activity],
+    "Move",
+    notes=(
+        "Indicates that the actor has moved object from origin to target. If "
+        "the origin or target are not specified, either can be determined by "
+        "context."))
+
+Travel = ASType(
+    as_uri("Travel"), [IntransitiveActivity],
+    "Travel",
+    notes=(
+        "Indicates that the actor is traveling to target from origin. "
+        "Travel is an IntransitiveObject whose actor specifies the direct "
+        "object. If the target or origin are not specified, either can be "
+        "determined by context."))
+
+Announce = ASType(
+    as_uri("Announce"), [Activity],
+    "Announce",
+    notes=(
+        "Indicates that the actor is calling the target's attention the object."
+        "\n\n"
+        "The origin typically has no defined meaning."))
+
+Block = ASType(
+    as_uri("Block"), [Ignore],
+    "Block",
+    notes=(
+        "Indicates that the actor is blocking the object. Blocking is a "
+        "stronger form of Ignore. The typical use is to support social systems "
+        "that allow one user to block activities or content of other users. "
+        "The target and origin typically have no defined meaning."))
+
+Flag = ASType(
+    as_uri("Flag"), [Activity],
+    "Flag",
+    notes=(
+        "Indicates that the actor is \"flagging\" the object. Flagging is "
+        "defined in the sense common to many social platforms as reporting "
+        "content as being inappropriate for any number of reasons."))
+
+Dislike = ASType(
+    as_uri("Dislike"), [Activity],
+    "Dislike",
+    notes=(
+        "Indicates that the actor dislikes the object."))
+
+
+
+# Extended Classes: Actor types
+# =============================
+
+Application = ASType(
+    as_uri("Application"), [Actor],
+    "Application",
+    notes=(
+        "Describes a software application."))
+
+Group = ASType(
+    as_uri("Group"), [Actor],
+    "Group",
+    notes=(
+        "Represents a formal or informal collective of Actors."))
+
+Organization = ASType(
+    as_uri("Organization"), [Actor],
+    "Organization",
+    notes=(
+        "Represents an organization."))
+
+Person = ASType(
+    as_uri("Person"), [Actor],
+    "Person",
+    notes=(
+        "Represents an individual person."))
+
+Process = ASType(
+    as_uri("Process"), [Actor],
+    "Process",
+    notes=(
+        "Represents a series of actions taken to achieve a particular goal."))
+
+Service = ASType(
+    as_uri("Service"), [Actor],
+    "Service",
+    notes=(
+        "Represents a service of any kind."))
+
+
+
+# Extended Classes: Object Types
+# ==============================
+
+Relationship = ASType(
+    as_uri("Relationship"), [Object],
+    "Relationship",
+    notes=(
+        "Describes a relationship between two individuals. "
+        "The subject and object properties are used to identify the "
+        "connected individuals.\n\n"
+        "See 3.3.1 [of ActivityStreams 2.0 Vocabulary document] Representing "
+        "Relationships Between Entities for additional information."))
+
+Content = ASType(
+    as_uri("Content"), [Object],
+    "Content",
+    notes=(
+        "Describes an entity representing any form of content. Examples "
+        "include documents, images, etc. Content objects typically are not "
+        "able to perform activities on their own, yet rather are usually the "
+        "object or target of activities."))
+
+Article = ASType(
+    as_uri("Article"), [Content],
+    "Article",
+    notes=(
+        "Represents any kind of multi-paragraph written work."))
+
+Album = ASType(
+    as_uri("Album"), [Collection],
+    "Album",
+    notes=(
+        "A type of Collection typically used to organize Image, Video or Audio "
+        "objects."))
+
+Folder = ASType(
+    as_uri("Folder"), [Collection],
+    "Folder",
+    notes=(
+        "A type of Collection typically used to organize objects such as"
+        "Documents."))
+
+Story = ASType(
+    as_uri("Story"), [OrderedCollection],
+    "Story",
+    notes=(
+        "A type of Ordered Collection usually containing Content Items "
+        "organized to \"tell a story\". "))
+
+Document = ASType(
+    as_uri("Document"), [Content],
+    "Document",
+    notes=(
+        "Represents a document of any kind."))
+
+Audio = ASType(
+    as_uri("Audio"), [Document],
+    "Audio",
+    notes=(
+        "Represents an audio document of any kind."))
+
+Image = ASType(
+    as_uri("Image"), [Document],
+    "Image",
+    notes=(
+        "An image document of any kind"))
+
+Video = ASType(
+    as_uri("Video"), [Content],
+    "Video",
+    notes=("Represents a video document of any kind."))
+
+Note = ASType(
+    as_uri("Note"), [Content],
+    "Note",
+    notes=(
+        "Represents a short work typically less than a single "
+        "paragraph in length."))
+
+Page = ASType(
+    as_uri("Page"), [Document],
+    "Page",
+    notes=(
+        "Represents a Web Page."))
+
+Question = ASType(
+    as_uri("Question"), [Content, IntransitiveActivity],
+    "Question",
+    notes=(
+        "Represents a question being asked. Question objects are unique in "
+        "that they are an extension of both Content and IntransitiveActivity. "
+        "That is, the Question object is an Activity but the direct object is "
+        "the question itself."))
+
+Event = ASType(
+    as_uri("Event"), [Object],
+    "Event",
+    notes=(
+        "Represents any kind of event."))
+
+Place = ASType(
+    as_uri("Place"), [Object],
+    "Place",
+    notes=(
+        "Represents a logical or physical location. "
+        "See 3.3.2 Representing Places [of ActivityStreams 2.0 Vocabulary "
+        "document] for additional information."))
+
+Mention = ASType(
+    as_uri("Mention"), [Link],
+    "Mention",
+    notes=(
+        "A specialized Link that represents an @mention."))
+
+Profile = ASType(
+    as_uri("Profile"), [Content],
+    "Profile",
+    notes=(
+        "A Profile is a content object that describes another Object, "
+        "typically used to describe Actor, objects. The describes property "
+        "is used to reference the object being described by the profile."))
