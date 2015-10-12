@@ -63,8 +63,21 @@ class ASType(object):
         return self._inheritance
 
     def __call__(self, **kwargs):
-        # TODO: Use this as a friendly ActivityStreams object constructor
-        pass
+        # @@: In the future maybe we want a way for people
+        #   to be able to add things within their vocabulary
+        #   without having to use the id_uri.
+        #
+        #   One way to do this would be to add a method
+        #   to construct things from the vocabulary,
+        #   and the default method in __call__ uses the BaseVocabulary
+        #   or whatever we call it
+        if self.core:
+            type_val = self.id_short
+        else:
+            type_val = self.id_uri
+        jsobj = {"@type": type_val}
+        jsobj.update(kwargs)
+        return ASObj(jsobj)
 
 
 def astype_inheritance_list(astype):
@@ -153,8 +166,12 @@ class ASObj(object):
     # META TODO: Convert some @property here to @memoized_property
     # TODO
     @property
-    def type_simple(self):
-        pass
+    def type(self):
+        type_attr = self["@type"]
+        if isinstance(self["@type"], list):
+            return type_attr
+        else:
+            return [type_attr]
 
     # TODO
     @property
@@ -204,8 +221,8 @@ class ASObj(object):
     def expanded_jsonld_str(self):
         pass
 
-    # TODO
-    # def __repr__(self):
+    def __repr__(self):
+        return "<ASObj %s>" % ", ".join(self.type)
 
 
 def deepcopy_jsobj(jsobj):
