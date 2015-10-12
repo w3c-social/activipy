@@ -62,7 +62,7 @@ class ASType(object):
 
         return self._inheritance
 
-    def __call__(self, **kwargs):
+    def __call__(self, id=None, **kwargs):
         # @@: In the future maybe we want a way for people
         #   to be able to add things within their vocabulary
         #   without having to use the id_uri.
@@ -77,6 +77,8 @@ class ASType(object):
             type_val = self.id_uri
         jsobj = {"@type": type_val}
         jsobj.update(kwargs)
+        if id:
+            jsobj["@id"] = id
         return ASObj(jsobj)
 
 
