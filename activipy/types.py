@@ -18,7 +18,7 @@
 ##   limitations under the License.
 
 import copy
-import pyld
+from pyld import jsonld
 
 
 # The actual instances of these are defined in vocab.py
@@ -166,7 +166,6 @@ class ASObj(object):
             return deepcopy_jsobj(val)
 
     # META TODO: Convert some @property here to @memoized_property
-    # TODO
     @property
     def type(self):
         type_attr = self["@type"]
@@ -202,6 +201,7 @@ class ASObj(object):
         return copy.deepcopy(self.__jsobj)
 
     # TODO
+    # TODO: Memoize
     def json_str(self):
         pass
 
@@ -220,6 +220,7 @@ class ASObj(object):
         copy.deepcopy(self.__expanded_jsonld())
 
     # TODO
+    # TODO: Memoize
     def expanded_jsonld_str(self):
         pass
 
