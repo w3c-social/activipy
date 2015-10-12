@@ -309,6 +309,15 @@ interface.
 *** TODO Add sphinx basic structure
 *** TODO Document basic "types" structure
 
+** TODO Make ASVocab more useful
+
+How to do this?
+
+We want to:
+ - probably preload a json-ld context
+ - Somehow make ASVocab objects useful for a 
+ - make ourself more useful to ASObj objects
+
 ** TODO Add basic GDBM based store
 
 This might eventually 
