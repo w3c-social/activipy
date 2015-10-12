@@ -325,9 +325,11 @@ This might eventually
 ** TODO Hook up pyld
 *** TODO Save that context
 ** TODO Tests
-*** TODO Basic test infrastructure
+*** DONE Basic test infrastructure
+    CLOSED: [2015-10-12 Mon 16:37]
 *** TODO Test all types.py stuff
-**** TODO ASType
+**** DONE ASType
+     CLOSED: [2015-10-12 Mon 16:37]
 **** TODO ASVocab
 **** TODO ASObj
 *** TODO Basic vocabs stuff
