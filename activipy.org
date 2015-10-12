@@ -330,12 +330,16 @@ However, it's still true that calling CollectionPage() should return a
 ASObj object, not a CollectionPage() object.  Reason being that
 ActivityStreams objects can have multiple "@type" fields.
 
-** TODO Switch to pyrsistent for ASObj structures?
+** CANCELED Switch to pyrsistent for ASObj structures?
+   CLOSED: [2015-10-12 Mon 15:35]
 
 https://github.com/tobgu/pyrsistent
 
 We more or less force/fake immutability right now, and maybe it makes
 more sense to just use something that *is* immutable
+
+*UPDATE:* Canceled.  [[https://gist.github.com/datagrok/2199506][More info]] on why Pyrsistent has a promising future,
+  but can't work for now.
 
 ** Archive                                                          :ARCHIVE:
 *** DONE Add license stuff
