@@ -1,4 +1,4 @@
-## Activipy --- ActivityStreams 2.0 implementation and testing for Python
+## Activipy --- ActivityStreams 2.0 implementation and validator for Python
 ## Copyright © 2015 Christopher Allan Webber <cwebber@dustycloud.org>
 ##
 ## This file is part of Activipy, which is GPLv3+ or Apache v2, your option
