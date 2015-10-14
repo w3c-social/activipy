@@ -37,6 +37,33 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
+** TODO Clean up method dispatch plan based on convo w/ steve
+
+#+BEGIN_SRC python
+
+  save_object = Method("save things", "handle_one")
+
+  myenv = Enviroment(
+     mapping={
+         (save_object, Note): note_save,
+         })
+
+  handle_one(myobj, "save_object", db)
+  handle_one(myobj, save_object, db)
+
+  # more pythonic optional interface
+  # a bit leaky though
+  myenv = MetaEnviroment(
+     mapping={
+         (save_object, Note): note_save,
+         }
+      vocab=[BasicVocab]
+  )
+
+  myenv.Person("foo")
+  Person()
+#+END_SRC
+
 ** CANCELED Command line test suite
    CLOSED: [2015-10-12 Mon 22:45]
 
