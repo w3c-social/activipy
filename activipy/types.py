@@ -156,7 +156,8 @@ class ASObj(object):
     """
     def __init__(self, jsobj):
         self.__jsobj = deepcopy_jsobj(jsobj)
-        assert isinstance(self.__jsobj.get("@type"), str)
+        assert (isinstance(self.__jsobj.get("@type"), str) or
+                isinstance(self.__jsobj.get("@type"), list))
 
     def __getitem__(self, key):
         val = self.__jsobj[key]
