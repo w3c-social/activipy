@@ -84,8 +84,15 @@ option on construction, which might be a-ok.
 
 I think this is a pretty good approach.
 
-*** DONE Clean up method dispatch plan based on convo w/ steve
+*** TODO Add Environment and method dispatch
+*** TODO Add vocabulary + method-class sugar
+
+*** Archive                                                         :ARCHIVE:
+**** DONE Clean up method dispatch plan based on convo w/ steve
     CLOSED: [2015-10-15 Thu 13:29]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-15 Thu 13:31
+     :END:
 
 #+BEGIN_SRC python
   save_object = Method("save things", "handle_one")
