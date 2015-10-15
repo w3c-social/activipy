@@ -50,6 +50,17 @@ ASOrderedCollectionPage = types.ASType(
     [ASOrderedCollection, ASCollectionPage],
     "OrderedCollectionPage")
 
+# BS testing widget
+ASWidget = types.ASType(
+    fake_type_uri("widget"),
+    [ASObject],
+    "Widget")
+
+ASFancyWidget = types.ASType(
+    fake_type_uri("fancywidget"),
+    [ASWidget],
+    "FancyWidget")
+
 
 
 
@@ -91,6 +102,14 @@ def test_inheritance_list():
     assert ASOrderedCollectionPage.inheritance_chain == \
         [ASOrderedCollectionPage, ASOrderedCollection,
          ASCollectionPage, ASCollection, ASObject]
+
+    # What about composite types
+    assert types.astype_inheritance_list(ASFancyWidget,
+                                         ASOrderedCollectionPage) == \
+        [ASFancyWidget, ASWidget,
+         ASOrderedCollectionPage, ASOrderedCollection,
+         ASCollectionPage, ASCollection, ASObject,]
+    
 
 
 ROOT_BEER_NOTE_JSOBJ = {

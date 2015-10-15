@@ -83,9 +83,12 @@ class ASType(object):
         return ASObj(jsobj)
 
 
-def astype_inheritance_list(astype):
+def astype_inheritance_list(*astypes):
     """
-    Gather the inheritance list for an ASType.
+    Gather the inheritance list for an ASType or multiple ASTypes
+
+    We need this because unlike w/ Python classes, an individual
+    ASObj can have composite types.
     """
     def traverse(astype, family):
         family.append(astype)
@@ -95,7 +98,9 @@ def astype_inheritance_list(astype):
         return family
 
     # not deduped at this point
-    family = traverse(astype, [])
+    family = []
+    for astype in astypes:
+        family = traverse(astype, family)
 
     # okay, dedupe here, only keep the oldest instance of each
     family.reverse()
