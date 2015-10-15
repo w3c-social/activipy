@@ -104,11 +104,11 @@ def test_inheritance_list():
          ASCollectionPage, ASCollection, ASObject]
 
     # What about composite types
-    assert types.astype_inheritance_list(ASFancyWidget,
-                                         ASOrderedCollectionPage) == \
-        [ASFancyWidget, ASWidget,
-         ASOrderedCollectionPage, ASOrderedCollection,
-         ASCollectionPage, ASCollection, ASObject,]
+    assert types.astype_inheritance_list(
+        ASFancyWidget, ASOrderedCollectionPage) == [
+            ASFancyWidget, ASWidget,
+            ASOrderedCollectionPage, ASOrderedCollection,
+            ASCollectionPage, ASCollection, ASObject]
     
 
 
