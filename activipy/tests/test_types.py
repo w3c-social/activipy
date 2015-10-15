@@ -85,12 +85,12 @@ def test_inheritance_list():
     # to a user's expectations.
     assert types.astype_inheritance_list(ASOrderedCollectionPage) == \
         [ASOrderedCollectionPage, ASOrderedCollection,
-         ASCollection, ASObject, ASCollectionPage]
+         ASCollectionPage, ASCollection, ASObject,]
 
     # does the property version also work?
     assert ASOrderedCollectionPage.inheritance_chain == \
         [ASOrderedCollectionPage, ASOrderedCollection,
-         ASCollection, ASObject, ASCollectionPage]
+         ASCollectionPage, ASCollection, ASObject]
 
 
 ROOT_BEER_NOTE_JSOBJ = {

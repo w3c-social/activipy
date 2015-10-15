@@ -54,6 +54,7 @@ class ASType(object):
     def __repr__(self):
         return "<ASType %s>" % (self.id_short or self.id_uri)
 
+    # TODO: Memoize this!
     @property
     def inheritance_chain(self):
         # memoization
@@ -84,17 +85,27 @@ class ASType(object):
 
 def astype_inheritance_list(astype):
     """
-    A depth-first gathering of this astype and all its parents
+    Gather the inheritance list for an ASType.
     """
     def traverse(astype, family):
-        if not astype in family:
-            family.append(astype)
-            for parent in astype.parents:
-                traverse(parent, family)
+        family.append(astype)
+        for parent in astype.parents:
+            traverse(parent, family)
 
         return family
 
-    return traverse(astype, [])
+    # not deduped at this point
+    family = traverse(astype, [])
+
+    # okay, dedupe here, only keep the oldest instance of each
+    family.reverse()
+    deduped_family = []
+    for member in family:
+        if member not in deduped_family:
+            deduped_family.append(member)
+
+    deduped_family.reverse()
+    return deduped_family
 
 
 def astype_methods(astype):
