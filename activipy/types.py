@@ -170,10 +170,14 @@ class ASObj(object):
     """
     The general ActivityStreams object that a user will work with
     """
-    def __init__(self, jsobj):
+    def __init__(self, jsobj, vocab=None, env=None):
         self.__jsobj = deepcopy_jsobj(jsobj)
         assert (isinstance(self.__jsobj.get("@type"), str) or
                 isinstance(self.__jsobj.get("@type"), list))
+        self.vocab = vocab
+        self.env = env
+        # @@: Not used yet, but we might soon
+        self.__orig_type = jsobj["@type"]
 
     def __getitem__(self, key):
         val = self.__jsobj[key]
@@ -199,18 +203,6 @@ class ASObj(object):
     # TODO
     @property
     def type_astype(self):
-        pass
-
-    ## @@: Do these belong here really?
-    ##   Or do they belong as part of the Vocab system?
-    # TODO
-    # TODO Memoize
-    def validate(self):
-        pass
-    
-    # TODO
-    @property
-    def is_valid(self):
         pass
 
     # Don't memoize this, users might mutate
