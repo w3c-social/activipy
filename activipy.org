@@ -37,10 +37,57 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
-** TODO Clean up method dispatch plan based on convo w/ steve
+** TODO "environment" w/ method dispatch and object sugar
+
+*** Brainstorm
+
+So here's how this thing works.
+
+There's an environment, which has a mapping between tuples of
+(method_symbol, Vocab) and method_to_call.
 
 #+BEGIN_SRC python
+  #                    method name    description    invocation method
+  save = Method("save", "Save things", handle_one)
+  gather_something = Method("gather_something", "Accrues some info", handle_map)
 
+  myenv = Enviroment(
+     mapping={
+         (save, Note): note_save,
+         (save, Object): basic_save,
+  })
+
+  handle_one(myobj, save, db)
+#+END_SRC
+
+This way, using the inheritance_chain() method, we can handle
+various types of method handling:
+
+ - handle_one
+ - handle_map
+ - handle_fold
+
+However, we have enough metadata here to provide some sugar.
+
+#+BEGIN_SRC python
+  myenv = Environment(
+    mapping={bla bla},
+    vocab=vocab)
+
+  activity = Environment.c.Activity("http://oh/snap")
+  activity.m.save(db)
+  # or maybe even just activity.save()
+#+END_SRC
+
+This would have to mean that ASObj gets a method dispatch keyword
+option on construction, which might be a-ok.
+
+I think this is a pretty good approach.
+
+*** DONE Clean up method dispatch plan based on convo w/ steve
+    CLOSED: [2015-10-15 Thu 13:29]
+
+#+BEGIN_SRC python
   save_object = Method("save things", "handle_one")
 
   myenv = Enviroment(
