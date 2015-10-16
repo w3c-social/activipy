@@ -275,18 +275,25 @@ def deepcopy_jsobj(jsobj):
     return copy_main(jsobj)
 
 
-def handle_one(astype_methods, asobj):
-    # TODO: Better error here
-    assert len(astype_methods) > 0
+class NoMethodFound(Exception): pass
+
+def throw_no_method_error(asobj):
+    raise NoMethodFound("Could not find a method for type: %s" % (
+        ", ".join(asobj.type)))
+
+def handle_one(astype_methods, asobj, _fallback=throw_no_method_error):
+    if len(astype_methods) == 0:
+        _fallback(asobj)
+        
     def func(*args, **kwargs):
         method, astype = astype_methods[0]
-        return method(asobj, astype, *args, **kwargs)
+        return method(asobj, *args, **kwargs)
     return func
 
 
 def handle_map(astype_methods, asobj):
     def func(*args, **kwargs):
-        return [method(astype, asobj, *args, **kwargs)
+        return [method(asobj, *args, **kwargs)
                 for method, astype in astype_methods]
     return func
 
@@ -295,7 +302,7 @@ def handle_fold(astype_methods, asobj):
     def func(initial=None, *args, **kwargs):
         val = initial
         for method, astype in astype_methods:
-            val = method(val, astype, asobj, *args, **kwargs)
+            val = method(val, asobj, *args, **kwargs)
         return val
     return func
 

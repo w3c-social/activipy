@@ -18,6 +18,9 @@
 ##   limitations under the License.
 
 import copy
+
+import pytest
+
 from activipy import types, vocab
 
 
@@ -236,3 +239,49 @@ def test_asobj_keyaccess():
     # Traversal of traversal should work
     assert ROOT_BEER_NOTE_ASOBJ["object"]["content"] == \
         "Up for some root beer floats?"
+
+
+def test_handle_one():
+    # Fake value boxes
+    received_args = []
+    received_kwargs = []
+
+    def test_method1(*args, **kwargs):
+        received_args.append(args)
+        received_kwargs.append(kwargs)
+        return "Got it!"
+
+    def test_method2(*args, **kwargs):
+        # we should never hit this
+        assert False
+        return "skip me!"
+
+    # well if we got this far we never hit test_method2, which is good
+    # did we run test_method1 then?
+    our_jsobj = ASWidget(foo="bar")
+    handler = types.handle_one(
+        [(test_method1, ASWidget), (test_method2, ASObject)],
+        our_jsobj)
+    assert handler(1, 2, foo="bar") == "Got it!"
+    assert received_args[0] == (our_jsobj, 1, 2)
+    assert received_kwargs[0] == {"foo": "bar"}
+
+    # Okay, let's try running with no methods available
+    with pytest.raises(types.NoMethodFound):
+        types.handle_one([], our_jsobj)
+
+    # Let's try running something with a custom fallback...
+    # ... this fallback drinks the half empty glass
+    glass = ["half_empty"]
+    def drink_glass(asobj):
+        # down the hatch
+        glass.pop()
+    types.handle_one([], our_jsobj, _fallback=drink_glass)
+    assert len(glass) == 0  # if this passes, the pessimists win
+
+def test_handle_map():
+    pass
+
+def test_handle_fold():
+    pass
+
