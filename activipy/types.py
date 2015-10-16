@@ -273,3 +273,38 @@ def deepcopy_jsobj(jsobj):
             return jsobj
 
     return copy_main(jsobj)
+
+
+class Environment(object):
+    """
+    An environment to collect vocabularies and provide
+    methods for activitystream types
+    """
+    def __init__(self, vocabs, methods, expand_by_default=False):
+        self.vocabs = vocabs
+        self.methods = methods
+
+    # TODO
+    def asobj_astypes(self, asobj, expand=None):
+        if expand is None:
+            expand = self.expand
+        pass
+
+    def asobj_astype_chain(self, asobj, expand=None):
+        if expand is None:
+            expand = self.expand
+        pass
+
+    def asobj_get_method(self, asobj, method, expand=None):
+        if expand is None:
+            expand = self.expand
+        pass
+
+    def asobj_run_method(self, asobj, method, expand=None, *args, **kwargs):
+        if expand is None:
+            expand = self.expand
+        # make note of why arguments make this slightly lossy
+        # when passing on; eg, can't use asobj/method/expand in the
+        # arguments to this function
+        pass
+
