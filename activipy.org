@@ -191,12 +191,155 @@ I think this is a pretty good approach.
   Person()
 #+END_SRC
 
-** CANCELED Command line test suite
+** TODO ActivityStreams "classes"
+
+Note that normal python classes can't work here.
+
+*** TODO ASObj
+**** TODO Finish all those TODO methods
+**** TODO Better inheritance order
+
+We should do this like in the ANSI Common Lisp book, where we remove
+duplicates, but we remove duplictes but keep the *last* appearance of
+a "class"
+
+**** Archive                                                        :ARCHIVE:
+***** DONE Construction: Do deep copy of asjson manually
+     CLOSED: [2015-10-11 Sun 11:33]
+      :PROPERTIES:
+      :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+      :END:
+
+This way we can catch any asobj types
+
+*** TODO Add ASProp
+
+*** Archive                                                         :ARCHIVE:
+**** DONE Add inheritance / method dispatch system
+    CLOSED: [2015-10-10 Sat 18:49]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
+     :END:
+
+This is trickier than one may think; we can't do Python style 
+method resolution because an activity may have multiple types.
+
+**** DONE Easy ASType->ASObj constructor interface
+    CLOSED: [2015-10-12 Mon 15:14]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+     :END:
+
+Something like:
+
+#+BEGIN_SRC python
+  from activipy import vocab
+
+  root_beer_note = vocab.Create(
+      actor=vocab.Person(
+          "http://tsyesika.co.uk",
+          displayName="Jessica Tallon"),
+      to=["acct:cwebber@identi.ca"],
+      object=vocab.Note(
+          "http://tsyesika.co.uk/chat/sup-yo/",
+          content="Up for some root beer floats?"))
+#+END_SRC
+
+This should be able to flow pretty naturally out of our types.py
+interface.
+
+** TODO Documentation basics
+*** TODO Add sphinx basic structure
+*** TODO Document basic "types" structure
+
+** TODO Make ASVocab more useful
+
+How to do this?
+
+We want to:
+ - probably preload a json-ld context
+ - Somehow make ASVocab objects useful for a 
+ - make ourself more useful to ASObj objects
+
+** TODO Add basic GDBM based store
+
+This might eventually 
+
+** TODO Add verifier system
+** TODO Hook up pyld
+*** TODO Save that context
+** TODO Tests
+*** DONE Basic test infrastructure
+    CLOSED: [2015-10-12 Mon 16:37]
+*** TODO Test all types.py stuff
+**** DONE ASType
+     CLOSED: [2015-10-12 Mon 16:37]
+**** TODO ASVocab
+**** TODO ASObj
+*** TODO Basic vocabs stuff
+** TODO Consider rename to Pydraulics?
+
+After all, I'm the one who started that project, and it's abandoned...
+
+** TODO Maybe rename types.py to core.py
+** TODO Investigate restructuring ASType instances via metaclassing
+
+Basically, the main reason is that we'd like to be able to do:
+
+#+BEGIN_SRC python
+help(CollectionPage)
+#+END_SRC
+
+and get the appropriate useful info.
+
+However, it's still true that calling CollectionPage() should return a
+ASObj object, not a CollectionPage() object.  Reason being that
+ActivityStreams objects can have multiple "@type" fields.
+
+** Archive                                                          :ARCHIVE:
+*** DONE Add license stuff
+    CLOSED: [2015-10-07 Wed 15:01]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-07 Wed 15:01
+    :END:
+**** DONE Add license files
+     CLOSED: [2015-10-07 Wed 14:29]
+
+**** DONE Add note on why both apache v2 and gplv3 to COPYING
+     CLOSED: [2015-10-07 Wed 14:33]
+
+**** DONE Add copyright headers and a note on convention
+     CLOSED: [2015-10-07 Wed 15:01]
+
+
+*** DONE Fill in complete vocabulary
+    CLOSED: [2015-10-12 Mon 15:36]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+    :END:
+*** CANCELED Switch to pyrsistent for ASObj structures?
+   CLOSED: [2015-10-12 Mon 15:35]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+    :END:
+
+https://github.com/tobgu/pyrsistent
+
+We more or less force/fake immutability right now, and maybe it makes
+more sense to just use something that *is* immutable
+
+*UPDATE:* Canceled.  [[https://gist.github.com/datagrok/2199506][More info]] on why Pyrsistent has a promising future,
+  but can't work for now.
+
+*** CANCELED Command line test suite
    CLOSED: [2015-10-12 Mon 22:45]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-15 Thu 21:05
+    :END:
 
 This is [[https://github.com/evanp/a2test][its own project]] now.  See [[https://github.com/w3c-social/activipy/issues/1][this issue]].
 
-*** Relevant parts of convo
+**** Relevant parts of convo
 
 <evanpro> paroneayea: so, a couple of questions on that
 <evanpro> Does having a single package that is a producer and a consumer make
@@ -358,7 +501,7 @@ This is [[https://github.com/evanp/a2test][its own project]] now.  See [[https:/
 
 
 
-*** CANCELED dumpscript
+**** CANCELED dumpscript
     CLOSED: [2015-10-12 Mon 22:45]
 
 <evanpro> dumpscript == take JSON, just spit out some extracted part of it
@@ -397,153 +540,13 @@ This is [[https://github.com/evanp/a2test][its own project]] now.  See [[https:/
 <evanpro> But yeah pretty nightmarish
 
 
-*** CANCELED buildscript
+**** CANCELED buildscript
     CLOSED: [2015-10-12 Mon 22:45]
 
 <evanpro> buildscript = take params, spit out JSON
 
-*** CANCELED testdriver
+**** CANCELED testdriver
     CLOSED: [2015-10-12 Mon 22:45]
 
 <evanpro> so "testdriver dumpscript.py buildscript.py"
-
-** TODO ActivityStreams "classes"
-
-Note that normal python classes can't work here.
-
-*** TODO ASObj
-**** TODO Finish all those TODO methods
-**** TODO Better inheritance order
-
-We should do this like in the ANSI Common Lisp book, where we remove
-duplicates, but we remove duplictes but keep the *last* appearance of
-a "class"
-
-**** Archive                                                        :ARCHIVE:
-***** DONE Construction: Do deep copy of asjson manually
-     CLOSED: [2015-10-11 Sun 11:33]
-      :PROPERTIES:
-      :ARCHIVE_TIME: 2015-10-12 Mon 15:41
-      :END:
-
-This way we can catch any asobj types
-
-*** TODO Add ASProp
-
-*** Archive                                                         :ARCHIVE:
-**** DONE Add inheritance / method dispatch system
-    CLOSED: [2015-10-10 Sat 18:49]
-     :PROPERTIES:
-     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
-     :END:
-
-This is trickier than one may think; we can't do Python style 
-method resolution because an activity may have multiple types.
-
-**** DONE Easy ASType->ASObj constructor interface
-    CLOSED: [2015-10-12 Mon 15:14]
-     :PROPERTIES:
-     :ARCHIVE_TIME: 2015-10-12 Mon 15:41
-     :END:
-
-Something like:
-
-#+BEGIN_SRC python
-  from activipy import vocab
-
-  root_beer_note = vocab.Create(
-      actor=vocab.Person(
-          "http://tsyesika.co.uk",
-          displayName="Jessica Tallon"),
-      to=["acct:cwebber@identi.ca"],
-      object=vocab.Note(
-          "http://tsyesika.co.uk/chat/sup-yo/",
-          content="Up for some root beer floats?"))
-#+END_SRC
-
-This should be able to flow pretty naturally out of our types.py
-interface.
-
-** TODO Documentation basics
-*** TODO Add sphinx basic structure
-*** TODO Document basic "types" structure
-
-** TODO Make ASVocab more useful
-
-How to do this?
-
-We want to:
- - probably preload a json-ld context
- - Somehow make ASVocab objects useful for a 
- - make ourself more useful to ASObj objects
-
-** TODO Add basic GDBM based store
-
-This might eventually 
-
-** TODO Add verifier system
-** TODO Hook up pyld
-*** TODO Save that context
-** TODO Tests
-*** DONE Basic test infrastructure
-    CLOSED: [2015-10-12 Mon 16:37]
-*** TODO Test all types.py stuff
-**** DONE ASType
-     CLOSED: [2015-10-12 Mon 16:37]
-**** TODO ASVocab
-**** TODO ASObj
-*** TODO Basic vocabs stuff
-** TODO Consider rename to Pydraulics?
-
-After all, I'm the one who started that project, and it's abandoned...
-
-** TODO Maybe rename types.py to core.py
-** TODO Investigate restructuring ASType instances via metaclassing
-
-Basically, the main reason is that we'd like to be able to do:
-
-#+BEGIN_SRC python
-help(CollectionPage)
-#+END_SRC
-
-and get the appropriate useful info.
-
-However, it's still true that calling CollectionPage() should return a
-ASObj object, not a CollectionPage() object.  Reason being that
-ActivityStreams objects can have multiple "@type" fields.
-
-** Archive                                                          :ARCHIVE:
-*** DONE Add license stuff
-    CLOSED: [2015-10-07 Wed 15:01]
-    :PROPERTIES:
-    :ARCHIVE_TIME: 2015-10-07 Wed 15:01
-    :END:
-**** DONE Add license files
-     CLOSED: [2015-10-07 Wed 14:29]
-
-**** DONE Add note on why both apache v2 and gplv3 to COPYING
-     CLOSED: [2015-10-07 Wed 14:33]
-
-**** DONE Add copyright headers and a note on convention
-     CLOSED: [2015-10-07 Wed 15:01]
-
-
-*** DONE Fill in complete vocabulary
-    CLOSED: [2015-10-12 Mon 15:36]
-    :PROPERTIES:
-    :ARCHIVE_TIME: 2015-10-12 Mon 15:41
-    :END:
-*** CANCELED Switch to pyrsistent for ASObj structures?
-   CLOSED: [2015-10-12 Mon 15:35]
-    :PROPERTIES:
-    :ARCHIVE_TIME: 2015-10-12 Mon 15:41
-    :END:
-
-https://github.com/tobgu/pyrsistent
-
-We more or less force/fake immutability right now, and maybe it makes
-more sense to just use something that *is* immutable
-
-*UPDATE:* Canceled.  [[https://gist.github.com/datagrok/2199506][More info]] on why Pyrsistent has a promising future,
-  but can't work for now.
 
