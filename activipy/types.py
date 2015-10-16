@@ -275,14 +275,39 @@ def deepcopy_jsobj(jsobj):
     return copy_main(jsobj)
 
 
+def handle_one(astype_methods, asobj):
+    # TODO: Better error here
+    assert len(astype_methods) > 0
+    def func(*args, **kwargs):
+        method, astype = astype_methods[0]
+        return method(asobj, astype, *args, **kwargs)
+    return func
+
+
+def handle_map(astype_methods, asobj):
+    def func(*args, **kwargs):
+        return [method(astype, asobj, *args, **kwargs)
+                for method, astype in astype_methods]
+    return func
+
+
+def handle_fold(astype_methods, asobj):
+    def func(initial=None, *args, **kwargs):
+        val = initial
+        for method, astype in astype_methods:
+            val = method(val, astype, asobj, *args, **kwargs)
+        return val
+    return func
+
+
 class Environment(object):
     """
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
-    def __init__(self, vocabs, methods, expand_by_default=False):
-        self.vocabs = vocabs
-        self.methods = methods
+    def __init__(self, methods=None, vocabs=None, expand_by_default=False):
+        self.vocabs = vocabs or []
+        self.methods = methods or {}
 
     # TODO
     def asobj_astypes(self, asobj, expand=None):
