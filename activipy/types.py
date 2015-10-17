@@ -298,11 +298,22 @@ def handle_map(astype_methods, asobj):
     return func
 
 
+class HaltIteration(object):
+    def __init__(self, val):
+        self.val = val
+
+
 def handle_fold(astype_methods, asobj):
     def func(initial=None, *args, **kwargs):
         val = initial
         for method, astype in astype_methods:
+            # @@: Not sure if asobj or val coming first is a better interface...
             val = method(val, asobj, *args, **kwargs)
+            # Provide a way to break out of the loop early...?
+            # @@: Is this a good idea, or even useful for anything?
+            if isinstance(val, HaltIteration):
+                val = val.val
+                break
         return val
     return func
 

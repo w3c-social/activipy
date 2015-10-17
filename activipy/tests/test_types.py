@@ -325,3 +325,17 @@ def test_handle_fold():
     assert result == (
         "Counting down! one mississippi... "
         "two mississippi... three mississippi... ")
+
+    # Now test breaking out early
+    def test_two_breaks_out(val, asobj, location):
+        return types.HaltIteration(val + "two %s... " % location)
+
+    handler = types.handle_fold([(test_one, ASFancyWidget),
+                                 (test_two_breaks_out, ASWidget),
+                                 (test_three, ASObject)],
+                                our_asobj)
+    result = handler("Counting down! ", "mississippi")
+    # we never get to three in this version
+    assert result == (
+        "Counting down! one mississippi... "
+        "two mississippi... ")
