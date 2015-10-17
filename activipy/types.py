@@ -180,7 +180,7 @@ class ASObj(object):
 
     # META TODO: Convert some @property here to @memoized_property
     @property
-    def type(self):
+    def types(self):
         type_attr = self["@type"]
         if isinstance(self["@type"], list):
             return type_attr
@@ -189,12 +189,12 @@ class ASObj(object):
 
     # TODO
     @property
-    def type_expanded(self):
+    def types_expanded(self):
         pass
 
     # TODO
     @property
-    def type_astype(self):
+    def types_astype(self):
         pass
 
     # Don't memoize this, users might mutate
@@ -226,7 +226,7 @@ class ASObj(object):
         pass
 
     def __repr__(self):
-        return "<ASObj %s>" % ", ".join(self.type)
+        return "<ASObj %s>" % ", ".join(self.types)
 
 
 def deepcopy_jsobj(jsobj):
@@ -271,7 +271,7 @@ class NoMethodFound(Exception): pass
 
 def throw_no_method_error(asobj):
     raise NoMethodFound("Could not find a method for type: %s" % (
-        ", ".join(asobj.type)))
+        ", ".join(asobj.types)))
 
 def handle_one(astype_methods, asobj, _fallback=throw_no_method_error):
     if len(astype_methods) == 0:
@@ -322,14 +322,22 @@ class Environment(object):
         self._short_id_map = self.__build_short_id_map()
         self._uri_map = self.__build_uri_map()
 
-    # TODO
-    def asobj_astypes(self, asobj):
+    def _process_asobj_type(self, asobj, type_id):
         # Try by short ID (in short IDs marked as acceptable for this)
 
         # Try by URI
 
         # Try by full json-ld expansion
         pass
+
+    # TODO
+    def asobj_astypes(self, asobj):
+        final_types = []
+        for type_id in asobj.types:
+            processed_type = self._process_asobj_type(asobj, type_id)
+            if processed_type is not None:
+                final_types.append(processed_type)
+        return final_types
 
     def asobj_astype_chain(self, asobj):
         pass
