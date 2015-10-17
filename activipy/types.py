@@ -113,14 +113,6 @@ def astype_inheritance_list(*astypes):
     return deduped_family
 
 
-def astype_methods(astype):
-    """
-    Gather all methods applicable to this astype
-    """
-    pass
-
-
-
 class ASVocab(object):
     """
     Mapping of known type IDs to ASTypes
