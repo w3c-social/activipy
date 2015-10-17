@@ -315,31 +315,31 @@ class Environment(object):
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
-    def __init__(self, methods=None, vocabs=None, expand_by_default=False):
+    def __init__(self, methods=None, vocabs=None):
         self.vocabs = vocabs or []
         self.methods = methods or {}
 
+        self._short_id_map = self.__build_short_id_map()
+        self._uri_map = self.__build_uri_map()
+
     # TODO
-    def asobj_astypes(self, asobj, expand=None):
-        if expand is None:
-            expand = self.expand
+    def asobj_astypes(self, asobj):
+        # Try by short ID (in short IDs marked as acceptable for this)
+
+        # Try by URI
+
+        # Try by full json-ld expansion
         pass
 
-    def asobj_astype_chain(self, asobj, expand=None):
-        if expand is None:
-            expand = self.expand
+    def asobj_astype_chain(self, asobj):
         pass
 
-    def asobj_get_method(self, asobj, method, expand=None):
-        if expand is None:
-            expand = self.expand
+    def asobj_get_method(self, asobj, method):
         pass
 
-    def asobj_run_method(self, asobj, method, expand=None, *args, **kwargs):
-        if expand is None:
-            expand = self.expand
+    def asobj_run_method(self, asobj, method, *args, **kwargs):
         # make note of why arguments make this slightly lossy
-        # when passing on; eg, can't use asobj/method/expand in the
+        # when passing on; eg, can't use asobj/method in the
         # arguments to this function
         pass
 
