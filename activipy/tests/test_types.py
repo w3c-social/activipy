@@ -123,7 +123,8 @@ ROOT_BEER_NOTE_JSOBJ = {
         "@id": "http://tsyesika.co.uk/",
         "displayName": "Jessica Tallon"},
     "to": ["acct:cwebber@identi.ca",
-           "acct:justaguy@rhiaro.co.uk"],
+           "acct:justaguy@rhiaro.co.uk",
+           "acct:ladyaeva@hedgehog.example"],
     "object": {
         "@type": "Note",
         "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
@@ -137,7 +138,8 @@ ROOT_BEER_NOTE_MIXED_ASOBJ = {
         "@id": "http://tsyesika.co.uk/",
         "displayName": "Jessica Tallon"}),
     "to": ["acct:cwebber@identi.ca",
-           "acct:justaguy@rhiaro.co.uk"],
+           "acct:justaguy@rhiaro.co.uk",
+           "acct:ladyaeva@hedgehog.example"],
     "object": types.ASObj({
         "@type": "Note",
         "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
@@ -149,7 +151,8 @@ ROOT_BEER_NOTE_VOCAB = vocab.Create(
         "http://tsyesika.co.uk/",
         displayName="Jessica Tallon"),
     to=["acct:cwebber@identi.ca",
-        "acct:justaguy@rhiaro.co.uk"],
+        "acct:justaguy@rhiaro.co.uk",
+        "acct:ladyaeva@hedgehog.example"],
     object=vocab.Note(
         "htp://tsyesika.co.uk/chat/sup-yo/",
         content="Up for some root beer floats?"))
@@ -167,7 +170,8 @@ def _looks_like_root_beer_note(jsobj):
         jsobj["actor"]["displayName"] == "Jessica Tallon" and
         isinstance(jsobj["to"], list) and
         jsobj["to"] == ["acct:cwebber@identi.ca",
-                        "acct:justaguy@rhiaro.co.uk"] and
+                        "acct:justaguy@rhiaro.co.uk",
+                        "acct:ladyaeva@hedgehog.example"] and
         isinstance(jsobj["object"], dict) and
         len(jsobj["object"]) == 3 and
         jsobj["object"]["@type"] == "Note" and
