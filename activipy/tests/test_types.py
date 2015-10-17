@@ -283,8 +283,29 @@ def test_handle_one():
     types.handle_one([], our_jsobj, _fallback=drink_glass)
     assert len(glass) == 0  # if this passes, the pessimists win
 
+
 def test_handle_map():
-    pass
+    def test_one(*args, **kwargs):
+        return (1, args, kwargs)
+
+    def test_two(*args, **kwargs):
+        return (2, args, kwargs)
+
+    def test_three(*args, **kwargs):
+        return (3, args, kwargs)
+
+    our_asobj = ASWidget(snorf="snizzle")
+    handler = types.handle_map([(test_one, ASFancyWidget),
+                                (test_two, ASWidget), (test_three, ASObject)],
+                               our_asobj)
+    result = handler("one", "two", "three", lets="go!")
+    assert result[0][0] == 1
+    assert result[1][0] == 2
+    assert result[2][0] == 3
+    for r in result:
+        assert r[1] == (our_asobj, "one", "two", "three")
+        assert r[2] == {"lets": "go!"}
+
 
 def test_handle_fold():
     pass
