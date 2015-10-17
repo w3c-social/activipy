@@ -111,6 +111,8 @@ which comes from supplying an environment.
 
 We might want to also provide an expanded=True argument to some of those methods.
 
+OR, maybe we can do "cheapest available" determination of an ASType.
+
 ** TODO "environment" w/ method dispatch and object sugar
 
 *** Brainstorm
@@ -197,12 +199,6 @@ Note that normal python classes can't work here.
 
 *** TODO ASObj
 **** TODO Finish all those TODO methods
-**** TODO Better inheritance order
-
-We should do this like in the ANSI Common Lisp book, where we remove
-duplicates, but we remove duplictes but keep the *last* appearance of
-a "class"
-
 **** Archive                                                        :ARCHIVE:
 ***** DONE Construction: Do deep copy of asjson manually
      CLOSED: [2015-10-11 Sun 11:33]
@@ -211,6 +207,16 @@ a "class"
       :END:
 
 This way we can catch any asobj types
+
+***** DONE Better inheritance order
+     CLOSED: [2015-10-17 Sat 14:05]
+      :PROPERTIES:
+      :ARCHIVE_TIME: 2015-10-17 Sat 14:05
+      :END:
+
+We should do this like in the ANSI Common Lisp book, where we remove
+duplicates, but we remove duplictes but keep the *last* appearance of
+a "class"
 
 *** TODO Add ASProp
 
