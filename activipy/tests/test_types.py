@@ -308,5 +308,20 @@ def test_handle_map():
 
 
 def test_handle_fold():
-    pass
+    def test_one(val, asobj, location):
+        return val + "one %s... " % location
 
+    def test_two(val, asobj, location):
+        return val + "two %s... " % location
+
+    def test_three(val, asobj, location):
+        return val + "three %s... " % location
+
+    our_asobj = ASWidget(snorf="snizzle")
+    handler = types.handle_fold([(test_one, ASFancyWidget),
+                                 (test_two, ASWidget), (test_three, ASObject)],
+                                our_asobj)
+    result = handler("Counting down! ", "mississippi")
+    assert result == (
+        "Counting down! one mississippi... "
+        "two mississippi... three mississippi... ")
