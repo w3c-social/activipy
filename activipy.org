@@ -113,6 +113,16 @@ We might want to also provide an expanded=True argument to some of those methods
 
 OR, maybe we can do "cheapest available" determination of an ASType.
 
+What are the ways we might go about pulling down an ASType?
+
+ - By short ID... but this requires this short ID be marked "safe"
+   for short expansion
+ - By already known URI
+ - By json-ld examination (most expensive!)
+
+Do we really want an expand=None?  Maybe that's kind of dumb
+
+
 ** TODO "environment" w/ method dispatch and object sugar
 
 *** Brainstorm
