@@ -122,6 +122,17 @@ What are the ways we might go about pulling down an ASType?
 
 Do we really want an expand=None?  Maybe that's kind of dumb
 
+*** TODO From short id
+
+The question is, where do we mark whether its safe to consider the
+short_id as a safe representation from?  Is it in the environment
+or in the vocab?
+
+The vocab may make sense because we could do a
+shortids=load_from_vocabs((Vocab1, None), (GMGVocab, "gmg:"))
+
+*** TODO From known URI
+*** TODO By json-ld examination
 
 ** TODO "environment" w/ method dispatch and object sugar
 
