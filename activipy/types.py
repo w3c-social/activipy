@@ -125,7 +125,7 @@ class ASVocab(object):
 
     def _map_vocabs(self, vocabs):
         return {
-            type.id: type
+            type.id_uri: type
             for type in vocabs}
 
 
@@ -315,28 +315,63 @@ class Environment(object):
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
-    def __init__(self, methods=None, vocabs=None):
+    def __init__(self, methods=None, vocabs=None,
+                 # not ideal, I'd rather somehow load something
+                 # that uses the vocabs as passed in, but that
+                 # introduces its own complexities
+                 shortids=None):
         self.vocabs = vocabs or []
         self.methods = methods or {}
+        self.shortids = shortids or {}
 
-        self._short_id_map = self.__build_short_id_map()
-        self._uri_map = self.__build_uri_map()
+        self.uri_map = self.__build_uri_map()
 
-    def _process_asobj_type(self, asobj, type_id):
+    def __build_uri_map(self):
+        uri_map = {}
+        for vocab in self.vocabs:
+            uri_map.update(vocab.vocab_map)
+
+        return uri_map
+
+    def _process_type_simple(self, type_id):
         # Try by short ID (in short IDs marked as acceptable for this)
+        if type_id in self.shortids:
+            return self.shortids[type_id]
 
         # Try by URI
+        elif type_id in self.uri_map:
+            return self.uri_map[type_id]
 
-        # Try by full json-ld expansion
-        pass
+        else:
+            # this would happen anyway, but might as well be explicit
+            # about what's happening here in the code flow
+            return None
 
     # TODO
     def asobj_astypes(self, asobj):
         final_types = []
+        process_as_jsonld = False
         for type_id in asobj.types:
-            processed_type = self._process_asobj_type(asobj, type_id)
+            processed_type = self._process_type_simple(type_id)
             if processed_type is not None:
                 final_types.append(processed_type)
+            else:
+                # We have to bail out
+                process_as_jsonld = True
+                break
+
+        # Are there any remaining types to process here?
+        if process_as_jsonld:
+            # @@: We could do a version of this which didn't
+            #   throw away the information we already had,
+            #   maybe.  But it would be tricky.
+            final_types = []
+            asobj_jsonld = asobj.expanded_jsonld()
+            for type_uri in asobj_jsonld[0]["@types"]:
+                processed_type = self._process_type_simple(type_uri)
+                if processed_type is not None:
+                    final_types.append(processed_type)
+
         return final_types
 
     def asobj_astype_chain(self, asobj):
