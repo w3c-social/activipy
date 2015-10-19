@@ -344,7 +344,7 @@ vocabulary.
 
 *** TODO cache things in the documentLoader
 
-*** TODO Provide a side-effect environment option
+*** TODO Provide a side-effect free environment option
 
 
 ** TODO Tests
