@@ -294,7 +294,59 @@ This might eventually
 
 ** TODO Add verifier system
 ** TODO Hook up pyld
-*** TODO Save that context
+*** Brainstorm
+
+Okay, so what do we want to do here?
+
+ - Vocabularies might provide an "implied context".  That's the
+   biggest issue, because otherwise it can be inferred unambiguously
+   from expanding the document.
+ - Mostly, we might not want to re-read things?
+
+This last one is a good goal but maybe we shouldn't worry about it
+immediately.
+
+Here's the options from the JsonLdProcessor code:
+
+#+BEGIN_SRC python
+  class JsonLdProcessor(object):
+      """
+      A JSON-LD processor.
+      """
+      # [...]
+      def expand(self, input_, options):
+          """
+          Performs JSON-LD expansion.
+
+          :param input_: the JSON-LD input to expand.
+          :param options: the options to use.
+            [base] the base IRI to use.
+            [expandContext] a context to expand with.
+            [keepFreeFloatingNodes] True to keep free-floating nodes,
+              False not to (default: False).
+            [documentLoader(url)] the document loader
+              (default: _default_document_loader).
+
+          :return: the expanded JSON-LD output.
+          """
+#+END_SRC
+
+ - we probably want to be able to set expandContext.
+ - the documentLoader could thus possibly come with some context
+   preloaded.  But that's kind of an optimization.
+   
+At least we know the two main steps now?
+
+*** TODO Handle the implied context
+
+Should be passed into the environment, but possibly built out of the
+vocabulary.
+
+*** TODO cache things in the documentLoader
+
+*** TODO Provide a side-effect environment option
+
+
 ** TODO Tests
 *** DONE Basic test infrastructure
     CLOSED: [2015-10-12 Mon 16:37]
