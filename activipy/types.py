@@ -18,6 +18,8 @@
 ##   limitations under the License.
 
 import copy
+import json
+
 from pyld import jsonld
 
 
@@ -201,29 +203,38 @@ class ASObj(object):
     def json(self):
         return copy.deepcopy(self.__jsobj)
 
-    # TODO
     # TODO: Memoize
     def json_str(self):
-        pass
+        return json.dumps(self.json())
 
-    # TODO
     # TODO Memoize
     def __expanded_jsonld(self):
-        pass
+        if self.env and self.env.document_loader:
+            document_loader = self.env.document_loader
+        else:
+            # TODO: Put in basic document loader here
+            document_loader = None
 
-    # TODO: Memoize
+        options = {
+            "expandContext": (
+                "http://www.w3.org/TR/activitystreams-core/"
+                "activitystreams2-context.jsonld")}
+        if document_loader:
+            options["documentLoader"] = document_loader
+
+        return jsonld.expand(self.__jsobj, options)
+
     def expanded_jsonld(self):
         """
         Note: this produces a copy of the object returned, so consumers
           of this method may want to keep a copy of its result
           rather than calling over and over.
         """
-        copy.deepcopy(self.__expanded_jsonld())
+        return copy.deepcopy(self.__expanded_jsonld())
 
-    # TODO
     # TODO: Memoize
     def expanded_jsonld_str(self):
-        pass
+        return json.dumps(self.expanded_jsonld())
 
     def __repr__(self):
         return "<ASObj %s>" % ", ".join(self.types)
