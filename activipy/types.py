@@ -17,6 +17,7 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+from pkg_resources import resource_filename
 import copy
 import json
 
@@ -132,7 +133,13 @@ class ASVocab(object):
 
 
 # TODO: Add this one by default
-# http://www.w3.org/TR/activitystreams-core/activitystreams2-context.jsonld
+AS2_CONTEXT_FILE = resource_filename(
+    'activipy', 'activitystreams2-context.jsonld')
+AS2_CONTEXT = json.loads(open(AS2_CONTEXT_FILE, 'r').read())
+AS2_CONTEXT_URI = (
+    "http://www.w3.org/TR/activitystreams-core/activitystreams2-context.jsonld")
+AS2_DEFAULT_URL_MAP = {
+    AS2_CONTEXT_URI: AS2_CONTEXT}
 
 # Once things are cached, json-ld expansion seems to happen at about
 # 1250 douments / second on my laptop
@@ -147,9 +154,12 @@ def make_simple_loader(url_map, load_unknown_urls=True,
 
     # Wrap in the structure that's expected to come back from the
     # documentLoader
+    _pre_url_map = {}
+    _pre_url_map.update(AS2_CONTEXT)
+    _pre_url_map.update(url_map)
     _url_map = {
         url: _make_context(url, doc)
-        for url, doc in url_map.items()}
+        for url, doc in _pre_url_map.items()}
 
     def loader(url):
         if url in _url_map:
