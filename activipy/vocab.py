@@ -75,6 +75,7 @@
 ##    work will at all times remain with copyright holders.
 
 from .types import ASType as real_ASType
+from .types import ASVocab, Environment
 
 def as_uri(identifier):
     return "http://www.w3.org/ns/activitystreams#" + identifier
@@ -544,3 +545,15 @@ Profile = ASType(
         "A Profile is a content object that describes another Object, "
         "typically used to describe Actor, objects. The describes property "
         "is used to reference the object being described by the profile."))
+
+CoreVocab = ASVocab(
+    [Object, Link, Activity, IntransitiveActivity, Actor, Collection,
+     OrderedCollection, CollectionPage, OrderedCollectionPage,
+     Accept, TentativeAccept, Add, Arrive, Create, Delete,
+     Follow, Ignore, Join, Leave, Like, Offer, Invite, Reject,
+     TentativeReject, Remove, Undo, Update, Experience, View,
+     Listen, Read, Move, Travel, Announce, Block, Flag, Dislike,
+     Application, Group, Organization, Person, Process, Service,
+     Relationship, Content, Article, Album, Folder, Story, Document,
+     Audio, Image, Video, Note, Page, Question, Event, Place, Mention,
+     Profile])
