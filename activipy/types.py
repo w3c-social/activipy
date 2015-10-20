@@ -427,7 +427,7 @@ class Environment(object):
             #   maybe.  But it would be tricky.
             final_types = []
             asobj_jsonld = asobj.expanded_jsonld()
-            for type_uri in asobj_jsonld[0]["@types"]:
+            for type_uri in asobj_jsonld[0]["@type"]:
                 processed_type = self._process_type_simple(type_uri)
                 if processed_type is not None:
                     final_types.append(processed_type)
@@ -446,3 +446,29 @@ class Environment(object):
         # arguments to this function
         pass
 
+
+def shortids_from_vocab(vocab, prefix=None):
+    """
+    Get a mapping of all short ids to their ASType objects in a vocab
+
+    Useful for mapping shortids to ASType objects!
+    """
+    def maybe_add_prefix(id_short):
+        if prefix:
+            return "%s:%s" % (prefix, id_short)
+        else:
+            return id_short
+
+    return {
+        maybe_add_prefix(v.id_short): v
+        for v in vocab.vocab_map.values()}
+
+
+def chain_dicts(*dicts):
+    """
+    Chain together a series of dictionaries into one
+    """
+    final_dict = {}
+    for this_dict in dicts:
+        final_dict.update(this_dict)
+    return final_dict
