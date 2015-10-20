@@ -131,6 +131,39 @@ class ASVocab(object):
             for type in vocabs}
 
 
+# TODO: Add this one by default
+# http://www.w3.org/TR/activitystreams-core/activitystreams2-context.jsonld
+
+def make_simple_loader(url_map, load_unknown_urls=True,
+                       cache_externally_loaded=True):
+    def _make_context(url, doc):
+        return {
+            "contextUrl": None,
+            "documentUrl": url,
+            "document": doc}
+
+    # Wrap in the structure that's expected to come back from the
+    # documentLoader
+    _url_map = {
+        url: _make_context(url, doc)
+        for url, doc in url_map.items()}
+
+    def loader(url):
+        if url in _url_map:
+            return _url_map[url]
+        elif load_unknown_urls:
+            doc = jsonld.load_document(url)
+            if cache_externally_loaded:
+                _url_map[url] = doc
+            return doc
+        else:
+            raise jsonld.JsonLdError(
+                "url not found and loader set to not load unknown URLs.",
+                {'url': url})
+
+    return loader
+
+
 # So, questions for ourselves.  What is this, if not merely a json
 # object?  After all, an ActivityStreams object can be represented as
 # "just JSON", and be done with it.  So what's *useful*?
