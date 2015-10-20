@@ -293,6 +293,9 @@ We want to:
 This might eventually 
 
 ** TODO Add verifier system
+
+We can use the method dispatch system to handle this.
+
 ** TODO Tests
 *** DONE Basic test infrastructure
     CLOSED: [2015-10-12 Mon 16:37]
