@@ -337,7 +337,12 @@ Here's the options from the JsonLdProcessor code:
    
 At least we know the two main steps now?
 
-*** TODO Handle the implied context
+*Update:* It turns out the first of these is much simpler than we
+originally were thinking!  There's only one implied context in
+ActivityStreams, so we can hardcode the expandContext.
+
+*** DONE Handle the implied context
+    CLOSED: [2015-10-19 Mon 21:26]
 
 Should be passed into the environment, but possibly built out of the
 vocabulary.
@@ -345,7 +350,10 @@ vocabulary.
 *** TODO cache things in the documentLoader
 
 *** TODO Provide a side-effect free environment option
+*** TODO Easily build expandContext and documentLoader based on supplied vocabulary?
 
+One way or another we want to reduce the amount of data duplicated
+from the building of the Environment
 
 ** TODO Tests
 *** DONE Basic test infrastructure
