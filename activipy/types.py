@@ -375,7 +375,7 @@ class Environment(object):
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
-    def __init__(self, methods=None, vocabs=None,
+    def __init__(self, vocabs=None, methods=None,
                  # not ideal, I'd rather somehow load something
                  # that uses the vocabs as passed in, but that
                  # introduces its own complexities
