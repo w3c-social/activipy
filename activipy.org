@@ -293,7 +293,8 @@ We want to:
 This might eventually 
 
 ** TODO Add verifier system
-** TODO Hook up pyld
+** DONE Hook up pyld
+   CLOSED: [2015-10-20 Tue 15:56]
 *** Brainstorm
 
 Okay, so what do we want to do here?
@@ -347,7 +348,8 @@ ActivityStreams, so we can hardcode the expandContext.
 Should be passed into the environment, but possibly built out of the
 vocabulary.
 
-*** TODO cache things in the documentLoader
+*** DONE cache things in the documentLoader
+    CLOSED: [2015-10-20 Tue 15:55]
 
 The documentLoader seems to just be a function accepting a URI, and
 raising JsonLdError if something goes badly.
@@ -371,8 +373,10 @@ So we could write a factory function that takes a mapping of
       return loader
 #+END_SRC
 
-*** TODO Provide a side-effect free environment option
-*** TODO Easily build expandContext and documentLoader based on supplied vocabulary?
+*** DONE Provide a side-effect free environment option
+    CLOSED: [2015-10-20 Tue 15:55]
+*** DONE Easily build expandContext and documentLoader based on supplied vocabulary?
+    CLOSED: [2015-10-20 Tue 15:56]
 
 One way or another we want to reduce the amount of data duplicated
 from the building of the Environment
