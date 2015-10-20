@@ -349,6 +349,28 @@ vocabulary.
 
 *** TODO cache things in the documentLoader
 
+The documentLoader seems to just be a function accepting a URI, and
+raising JsonLdError if something goes badly.
+
+#+BEGIN_SRC python
+  {
+      'contextUrl': None,
+      'documentUrl': url,
+      'document': data.decode('utf8')
+  }
+#+END_SRC
+
+So we could write a factory function that takes a mapping of
+{url: document}
+
+#+BEGIN_SRC python
+  def make_simple_loader(url_map, load_unknown_urls=True):
+      def loader(url):
+          # foo
+          return loaded_url
+      return loader
+#+END_SRC
+
 *** TODO Provide a side-effect free environment option
 *** TODO Easily build expandContext and documentLoader based on supplied vocabulary?
 
