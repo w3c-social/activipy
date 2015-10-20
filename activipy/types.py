@@ -134,6 +134,9 @@ class ASVocab(object):
 # TODO: Add this one by default
 # http://www.w3.org/TR/activitystreams-core/activitystreams2-context.jsonld
 
+# Once things are cached, json-ld expansion seems to happen at about
+# 1250 douments / second on my laptop
+
 def make_simple_loader(url_map, load_unknown_urls=True,
                        cache_externally_loaded=True):
     def _make_context(url, doc):
@@ -153,6 +156,9 @@ def make_simple_loader(url_map, load_unknown_urls=True,
             return _url_map[url]
         elif load_unknown_urls:
             doc = jsonld.load_document(url)
+            # @@: Is this optimization safe in all cases?
+            if isinstance(doc["document"], str):
+                doc["document"] = json.loads(doc["document"])
             if cache_externally_loaded:
                 _url_map[url] = doc
             return doc
