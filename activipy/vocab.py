@@ -75,7 +75,7 @@
 ##    work will at all times remain with copyright holders.
 
 from .types import ASType as real_ASType
-from .types import ASVocab, Environment
+from .types import ASVocab, Environment, shortids_from_vocab
 
 def as_uri(identifier):
     return "http://www.w3.org/ns/activitystreams#" + identifier
@@ -546,6 +546,12 @@ Profile = ASType(
         "typically used to describe Actor, objects. The describes property "
         "is used to reference the object being described by the profile."))
 
+
+
+
+# Core definition Vocab and basic environment
+# ===========================================
+
 CoreVocab = ASVocab(
     [Object, Link, Activity, IntransitiveActivity, Actor, Collection,
      OrderedCollection, CollectionPage, OrderedCollectionPage,
@@ -557,3 +563,11 @@ CoreVocab = ASVocab(
      Relationship, Content, Article, Album, Folder, Story, Document,
      Audio, Image, Video, Note, Page, Question, Event, Place, Mention,
      Profile])
+
+BasicEnv = Environment(
+    # @@: Maybe this one should be implied?
+    vocabs=[CoreVocab],
+    shortids=shortids_from_vocab(CoreVocab),
+    c_accessors=shortids_from_vocab(CoreVocab))
+# alias
+Env = BasicEnv
