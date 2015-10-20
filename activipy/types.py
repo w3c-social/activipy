@@ -370,6 +370,12 @@ def handle_fold(astype_methods, asobj):
     return func
 
 
+# TODO
+class CAccessor(object):
+    def __init__(self, access_map):
+        pass
+
+
 class Environment(object):
     """
     An environment to collect vocabularies and provide
@@ -379,10 +385,14 @@ class Environment(object):
                  # not ideal, I'd rather somehow load something
                  # that uses the vocabs as passed in, but that
                  # introduces its own complexities
-                 shortids=None):
+                 shortids=None, c_accessors=None,
+                 document_loader=None):
         self.vocabs = vocabs or []
         self.methods = methods or {}
         self.shortids = shortids or {}
+        self.document_loader = document_loader
+        # TODO: make this actually work ;p
+        self.c = CAccessor(c_accessors)
 
         self.uri_map = self.__build_uri_map()
 
@@ -406,6 +416,11 @@ class Environment(object):
             # this would happen anyway, but might as well be explicit
             # about what's happening here in the code flow
             return None
+
+    # TODO: map method dispatch here
+    @property
+    def m(self):
+        pass
 
     # TODO
     def asobj_astypes(self, asobj):
