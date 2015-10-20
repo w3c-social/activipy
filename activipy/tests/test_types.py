@@ -21,7 +21,7 @@ import copy
 
 import pytest
 
-from activipy import types, vocab
+from activipy import core, vocab
 
 
 
@@ -31,35 +31,35 @@ from activipy import types, vocab
 def fake_type_uri(type_name):
     return "http://example.org/ns#" + type_name
     
-ASObject = types.ASType(fake_type_uri("object"), [], "Object")
-ASLink = types.ASType(fake_type_uri("link"), [], "Link")
+ASObject = core.ASType(fake_type_uri("object"), [], "Object")
+ASLink = core.ASType(fake_type_uri("link"), [], "Link")
 
-ASActivity = types.ASType(fake_type_uri("activity"), [ASObject], "Activity")
-ASPost = types.ASType(fake_type_uri("post"), [ASActivity], "Post")
-ASDelete = types.ASType(fake_type_uri("delete"), [ASActivity], "Delete")
+ASActivity = core.ASType(fake_type_uri("activity"), [ASObject], "Activity")
+ASPost = core.ASType(fake_type_uri("post"), [ASActivity], "Post")
+ASDelete = core.ASType(fake_type_uri("delete"), [ASActivity], "Delete")
 
-ASCollection = types.ASType(
+ASCollection = core.ASType(
     fake_type_uri("collection"), [ASObject], "Collection")
-ASOrderedCollection = types.ASType(
+ASOrderedCollection = core.ASType(
     fake_type_uri("orderedcollection"),
     [ASCollection],
     "OrderedCollection")
-ASCollectionPage = types.ASType(
+ASCollectionPage = core.ASType(
     fake_type_uri("collectionpage"),
     [ASCollection],
     "CollectionPage")
-ASOrderedCollectionPage = types.ASType(
+ASOrderedCollectionPage = core.ASType(
     fake_type_uri("orderedcollectionpage"),
     [ASOrderedCollection, ASCollectionPage],
     "OrderedCollectionPage")
 
 # BS testing widget
-ASWidget = types.ASType(
+ASWidget = core.ASType(
     fake_type_uri("widget"),
     [ASObject],
     "Widget")
 
-ASFancyWidget = types.ASType(
+ASFancyWidget = core.ASType(
     fake_type_uri("fancywidget"),
     [ASWidget],
     "FancyWidget")
@@ -71,25 +71,25 @@ ASFancyWidget = types.ASType(
 
 def test_inheritance_list():
     # Should just be itself
-    assert types.astype_inheritance_list(ASObject) == \
+    assert core.astype_inheritance_list(ASObject) == \
         [ASObject]
-    assert types.astype_inheritance_list(ASLink) == \
+    assert core.astype_inheritance_list(ASLink) == \
         [ASLink]
 
     # Should be itself, then its parent
-    assert types.astype_inheritance_list(ASActivity) == \
+    assert core.astype_inheritance_list(ASActivity) == \
         [ASActivity, ASObject]
-    assert types.astype_inheritance_list(ASCollection) == \
+    assert core.astype_inheritance_list(ASCollection) == \
         [ASCollection, ASObject]
 
     # A slightly longer inheritance chain
-    assert types.astype_inheritance_list(ASPost) == \
+    assert core.astype_inheritance_list(ASPost) == \
         [ASPost, ASActivity, ASObject]
-    assert types.astype_inheritance_list(ASDelete) == \
+    assert core.astype_inheritance_list(ASDelete) == \
         [ASDelete, ASActivity, ASObject]
-    assert types.astype_inheritance_list(ASOrderedCollection) == \
+    assert core.astype_inheritance_list(ASOrderedCollection) == \
         [ASOrderedCollection, ASCollection, ASObject]
-    assert types.astype_inheritance_list(ASCollectionPage) == \
+    assert core.astype_inheritance_list(ASCollectionPage) == \
         [ASCollectionPage, ASCollection, ASObject]
 
     # Multiple inheritance!  Egads.
@@ -97,7 +97,7 @@ def test_inheritance_list():
     # traversal.  A breadth-first traversal would mean
     # ASCollectionPage would go before ASCollection, which may be more
     # to a user's expectations.
-    assert types.astype_inheritance_list(ASOrderedCollectionPage) == \
+    assert core.astype_inheritance_list(ASOrderedCollectionPage) == \
         [ASOrderedCollectionPage, ASOrderedCollection,
          ASCollectionPage, ASCollection, ASObject,]
 
@@ -106,8 +106,8 @@ def test_inheritance_list():
         [ASOrderedCollectionPage, ASOrderedCollection,
          ASCollectionPage, ASCollection, ASObject]
 
-    # What about composite types
-    assert types.astype_inheritance_list(
+    # What about composite core
+    assert core.astype_inheritance_list(
         ASFancyWidget, ASOrderedCollectionPage) == [
             ASFancyWidget, ASWidget,
             ASOrderedCollectionPage, ASOrderedCollection,
@@ -133,14 +133,14 @@ ROOT_BEER_NOTE_JSOBJ = {
 ROOT_BEER_NOTE_MIXED_ASOBJ = {
     "@type": "Create",
     "@id": "http://tsyesika.co.uk/act/foo-id-here/",
-    "actor": types.ASObj({
+    "actor": core.ASObj({
         "@type": "Person",
         "@id": "http://tsyesika.co.uk/",
         "displayName": "Jessica Tallon"}),
     "to": ["acct:cwebber@identi.ca",
            "acct:justaguy@rhiaro.co.uk",
            "acct:ladyaeva@hedgehog.example"],
-    "object": types.ASObj({
+    "object": core.ASObj({
         "@type": "Note",
         "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
         "content": "Up for some root beer floats?"})}
@@ -185,7 +185,7 @@ def test_deepcopy_jsobj():
     assert _looks_like_root_beer_note(root_beer_note)
 
     # Test copying a compicated datastructure
-    copied_root_beer_note = types.deepcopy_jsobj(root_beer_note)
+    copied_root_beer_note = core.deepcopy_jsobj(root_beer_note)
     assert _looks_like_root_beer_note(copied_root_beer_note)
 
     # Mutate
@@ -196,28 +196,28 @@ def test_deepcopy_jsobj():
 
     # Test nested asobj copying
     assert _looks_like_root_beer_note(
-        types.deepcopy_jsobj(ROOT_BEER_NOTE_MIXED_ASOBJ))
+        core.deepcopy_jsobj(ROOT_BEER_NOTE_MIXED_ASOBJ))
 
 
 def test_vocab_constructor():
     assert isinstance(
         ROOT_BEER_NOTE_VOCAB,
-        types.ASObj)
+        core.ASObj)
 
     assert _looks_like_root_beer_note(
         ROOT_BEER_NOTE_VOCAB.json())
 
 
-ROOT_BEER_NOTE_ASOBJ = types.ASObj({
+ROOT_BEER_NOTE_ASOBJ = core.ASObj({
     "@type": "Create",
     "@id": "http://tsyesika.co.uk/act/foo-id-here/",
-    "actor": types.ASObj({
+    "actor": core.ASObj({
         "@type": "Person",
         "@id": "http://tsyesika.co.uk/",
         "displayName": "Jessica Tallon"}),
     "to": ["acct:cwebber@identi.ca",
            "acct:justaguy@rhiaro.co.uk"],
-    "object": types.ASObj({
+    "object": core.ASObj({
         "@type": "Note",
         "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
         "content": "Up for some root beer floats?"})})
@@ -232,7 +232,7 @@ def test_asobj_keyaccess():
     # will return asobjects
     assert isinstance(
         ROOT_BEER_NOTE_ASOBJ["object"],
-        types.ASObj)
+        core.ASObj)
 
     # However, we should still be able to get the
     # dictionary edition by pulling down .json()
@@ -263,7 +263,7 @@ def test_handle_one():
     # well if we got this far we never hit test_method2, which is good
     # did we run test_method1 then?
     our_jsobj = ASWidget(foo="bar")
-    handler = types.handle_one(
+    handler = core.handle_one(
         [(test_method1, ASWidget), (test_method2, ASObject)],
         our_jsobj)
     assert handler(1, 2, foo="bar") == "Got it!"
@@ -271,8 +271,8 @@ def test_handle_one():
     assert received_kwargs[0] == {"foo": "bar"}
 
     # Okay, let's try running with no methods available
-    with pytest.raises(types.NoMethodFound):
-        types.handle_one([], our_jsobj)
+    with pytest.raises(core.NoMethodFound):
+        core.handle_one([], our_jsobj)
 
     # Let's try running something with a custom fallback...
     # ... this fallback drinks the half empty glass
@@ -280,7 +280,7 @@ def test_handle_one():
     def drink_glass(asobj):
         # down the hatch
         glass.pop()
-    types.handle_one([], our_jsobj, _fallback=drink_glass)
+    core.handle_one([], our_jsobj, _fallback=drink_glass)
     assert len(glass) == 0  # if this passes, the pessimists win
 
 
@@ -295,7 +295,7 @@ def test_handle_map():
         return (3, args, kwargs)
 
     our_asobj = ASWidget(snorf="snizzle")
-    handler = types.handle_map([(test_one, ASFancyWidget),
+    handler = core.handle_map([(test_one, ASFancyWidget),
                                 (test_two, ASWidget), (test_three, ASObject)],
                                our_asobj)
     result = handler("one", "two", "three", lets="go!")
@@ -318,7 +318,7 @@ def test_handle_fold():
         return val + "three %s... " % location
 
     our_asobj = ASWidget(snorf="snizzle")
-    handler = types.handle_fold([(test_one, ASFancyWidget),
+    handler = core.handle_fold([(test_one, ASFancyWidget),
                                  (test_two, ASWidget), (test_three, ASObject)],
                                 our_asobj)
     result = handler("Counting down! ", "mississippi")
@@ -328,9 +328,9 @@ def test_handle_fold():
 
     # Now test breaking out early
     def test_two_breaks_out(val, asobj, location):
-        return types.HaltIteration(val + "two %s... " % location)
+        return core.HaltIteration(val + "two %s... " % location)
 
-    handler = types.handle_fold([(test_one, ASFancyWidget),
+    handler = core.handle_fold([(test_one, ASFancyWidget),
                                  (test_two_breaks_out, ASWidget),
                                  (test_three, ASObject)],
                                 our_asobj)

@@ -23,7 +23,7 @@ import sys
 import argparse
 from collections import namedtuple, OrderedDict
 
-from .types import Activity, InvalidActivity
+from .core import Activity, InvalidActivity
 
 class UserError(Exception): pass
 class InvalidInput(UserError): pass
