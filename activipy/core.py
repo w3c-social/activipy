@@ -459,9 +459,6 @@ class Environment(object):
 
         return final_types
 
-    def asobj_astype_chain(self, asobj):
-        pass
-
     def asobj_get_method(self, asobj, method):
         pass
 
