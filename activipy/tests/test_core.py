@@ -65,6 +65,20 @@ ASFancyWidget = core.ASType(
     "FancyWidget")
 
 
+# Example vocab and environment
+ExampleVocab = core.ASVocab(
+    [ASObject, ASLink,
+     ASActivity, ASPost, ASDelete,
+     ASCollection, ASOrderedCollection, ASCollectionPage,
+     ASOrderedCollectionPage,
+     ASWidget, ASFancyWidget])
+
+ExampleEnv = core.Environment(
+    vocabs=[ExampleVocab],
+    shortids=core.shortids_from_vocab(ExampleVocab),
+    c_accessors=core.shortids_from_vocab(ExampleVocab))
+
+
 
 
 # Basic tests
