@@ -1,4 +1,4 @@
-g## Activipy --- ActivityStreams 2.0 implementation and validator for Python
+## Activipy --- ActivityStreams 2.0 implementation and validator for Python
 ## Copyright © 2015 Christopher Allan Webber <cwebber@dustycloud.org>
 ##
 ## This file is part of Activipy, which is GPLv3+ or Apache v2, your option
@@ -247,9 +247,16 @@ class ASObj(object):
         pass
 
     # TODO
+    # TODO: Memoize
     @property
     def types_astype(self):
-        pass
+        if self.env:
+            env = self.env
+        else:
+            from activipy import vocab
+            env = vocab.BasicEnv
+
+        return env.asobj_astypes(self)
 
     # Don't memoize this, users might mutate
     def json(self):
