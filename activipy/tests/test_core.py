@@ -434,3 +434,17 @@ def test_environment_m_access_handle_one():
     MethodEnv.m.save(collection, db)
     assert db["fooid:8888"] == ("saved as object", collection)
 
+
+def test_environment_m_access_handle_map():
+    result = MethodEnv.m.get_things(MethodEnv.c.Widget("fooid:12345"))
+    assert result == ["objects are fun"]
+
+    result = MethodEnv.m.get_things(MethodEnv.c.Activity("fooid:0202"))
+    assert result == ["activities are neat", "objects are fun"]
+
+    result = MethodEnv.m.get_things(MethodEnv.c.Delete("fooid:0303"))
+    assert result == ["activities are neat", "objects are fun"]
+
+    result = MethodEnv.m.get_things(MethodEnv.c.Post("fooid:0808"))
+    assert result == ["posts are cool", "activities are neat",
+                      "objects are fun"]
