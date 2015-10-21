@@ -271,7 +271,6 @@ class ASObj(object):
         if self.env and self.env.document_loader:
             document_loader = self.env.document_loader
         else:
-            # TODO: Put in basic document loader here
             document_loader = default_loader
 
         options = {
@@ -397,7 +396,7 @@ class Environment(object):
                  # that uses the vocabs as passed in, but that
                  # introduces its own complexities
                  shortids=None, c_accessors=None,
-                 document_loader=None):
+                 document_loader=default_loader):
         self.vocabs = vocabs or []
         self.methods = methods or {}
         self.shortids = shortids or {}
