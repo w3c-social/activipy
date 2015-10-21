@@ -243,12 +243,10 @@ class ASObj(object):
         else:
             return [type_attr]
 
-    # TODO
     @property
     def types_expanded(self):
-        pass
+        return copy.deepcopy(self.__expanded()[0]["@type"])
 
-    # TODO
     # TODO: Memoize
     @property
     def types_astype(self):
@@ -269,7 +267,7 @@ class ASObj(object):
         return json.dumps(self.json())
 
     # TODO Memoize
-    def __expanded_jsonld(self):
+    def __expanded(self):
         if self.env and self.env.document_loader:
             document_loader = self.env.document_loader
         else:
@@ -285,17 +283,17 @@ class ASObj(object):
 
         return jsonld.expand(self.__jsobj, options)
 
-    def expanded_jsonld(self):
+    def expanded(self):
         """
         Note: this produces a copy of the object returned, so consumers
           of this method may want to keep a copy of its result
           rather than calling over and over.
         """
-        return copy.deepcopy(self.__expanded_jsonld())
+        return copy.deepcopy(self.__expanded())
 
     # TODO: Memoize
-    def expanded_jsonld_str(self):
-        return json.dumps(self.expanded_jsonld())
+    def expanded_str(self):
+        return json.dumps(self.expanded())
 
     def __repr__(self):
         return "<ASObj %s>" % ", ".join(self.types)
@@ -454,7 +452,7 @@ class Environment(object):
             #   throw away the information we already had,
             #   maybe.  But it would be tricky.
             final_types = []
-            asobj_jsonld = asobj.expanded_jsonld()
+            asobj_jsonld = asobj.expanded()
             for type_uri in asobj_jsonld[0]["@type"]:
                 processed_type = self._process_type_simple(type_uri)
                 if processed_type is not None:
