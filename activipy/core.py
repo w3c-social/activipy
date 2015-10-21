@@ -1,4 +1,4 @@
-## Activipy --- ActivityStreams 2.0 implementation and validator for Python
+g## Activipy --- ActivityStreams 2.0 implementation and validator for Python
 ## Copyright © 2015 Christopher Allan Webber <cwebber@dustycloud.org>
 ##
 ## This file is part of Activipy, which is GPLv3+ or Apache v2, your option
@@ -179,6 +179,9 @@ def make_simple_loader(url_map, load_unknown_urls=True,
 
     return loader
 
+
+# TODO: This was a good early in-comments braindump; now move to the
+# documentation and restructure!
 
 # So, questions for ourselves.  What is this, if not merely a json
 # object?  After all, an ActivityStreams object can be represented as
