@@ -218,11 +218,12 @@ class ASObj(object):
     """
     The general ActivityStreams object that a user will work with
     """
-    def __init__(self, jsobj, vocab=None, env=None):
+    def __init__(self, jsobj, env=None):
         self.__jsobj = deepcopy_jsobj(jsobj)
         assert (isinstance(self.__jsobj.get("@type"), str) or
                 isinstance(self.__jsobj.get("@type"), list))
-        self.vocab = vocab
+        # @@: Should we default to vocab.BasicEnv here rather
+        #   than at types_astype?
         self.env = env
         # @@: Not used yet, but we might soon
         self.__orig_type = jsobj["@type"]
@@ -336,6 +337,18 @@ def deepcopy_jsobj(jsobj):
     return copy_main(jsobj)
 
 
+# @@: Maybe rename to MethodSpec?
+class MethodId(object):
+    # TODO: fill in
+    """
+    A method identifier
+    """
+    def __init__(self, name, description, handler):
+        self.name = name
+        self.description = description
+        self.handler = handler
+
+
 class NoMethodFound(Exception): pass
 
 def throw_no_method_error(asobj):
@@ -381,9 +394,10 @@ def handle_fold(astype_methods, asobj):
 
 # TODO
 # @@: Can this be just an @property on Environment?
-class CAccessor(object):
-    def __init__(self, access_map):
-        pass
+class AttrMapper(object):
+    def __init__(self, attrib_map):
+        for key, val in attrib_map.items():
+            setattr(self, key, val)
 
 
 class Environment(object):
@@ -401,10 +415,30 @@ class Environment(object):
         self.methods = methods or {}
         self.shortids = shortids or {}
         self.document_loader = document_loader
-        # TODO: make this actually work ;p
-        self.c = CAccessor(c_accessors)
+        # I wish this could just be the 
+        self.c = AttrMapper(c_accessors)
+        # self.c = self.__build_c_accessors()
+        self.m = self.__build_m_map()
 
         self.uri_map = self.__build_uri_map()
+
+    # def __build_c_accessors(self):
+    #     pass
+
+    def __build_m_map(self):
+        def make_method_dispatcher(method_id):
+            def method_dispatcher(asobj, *args, **kwargs):
+                method = self.asobj_get_method(asobj, method_id)
+                return method(*args, **kwargs)
+            return method_dispatcher
+
+        method_ids = set([method_id for (method_id, astype)
+                          in self.methods.keys()])
+        m_mapping = {
+            method_id.name: make_method_dispatcher(method_id)
+            for method_id in method_ids}
+
+        return AttrMapper(m_mapping)
 
     def __build_uri_map(self):
         uri_map = {}
@@ -427,12 +461,6 @@ class Environment(object):
             # about what's happening here in the code flow
             return None
 
-    # TODO: map method dispatch here
-    @property
-    def m(self):
-        pass
-
-    # TODO
     def asobj_astypes(self, asobj):
         final_types = []
         process_as_jsonld = False
@@ -460,13 +488,20 @@ class Environment(object):
         return final_types
 
     def asobj_get_method(self, asobj, method):
-        pass
+        # get all types for this asobj
+        astypes = self.asobj_astypes(asobj)
+
+        # get a map of all relevant {method_proc: astype}
+        return [
+            (self.methods[(method, astype)], astype)
+            for astype in astypes
+            if self.methods.has_key((method, astype))]
 
     def asobj_run_method(self, asobj, method, *args, **kwargs):
         # make note of why arguments make this slightly lossy
         # when passing on; eg, can't use asobj/method in the
         # arguments to this function
-        pass
+        return self.astype_get_method(asobj, method)(*args, **kwargs)
 
 
 def shortids_from_vocab(vocab, prefix=None):
