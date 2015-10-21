@@ -374,6 +374,7 @@ def handle_fold(astype_methods, asobj):
 
 
 # TODO
+# @@: Can this be just an @property on Environment?
 class CAccessor(object):
     def __init__(self, access_map):
         pass
