@@ -353,3 +353,68 @@ def test_handle_fold():
     assert result == (
         "Counting down! one mississippi... "
         "two mississippi... ")
+
+
+
+
+# Methods testing
+# ===============
+
+### begin testing methods ###
+
+save = core.MethodId("save", "Save things", core.handle_one)
+get_things = core.MethodId("get_things", "Build up a map of stuff",
+                           core.handle_map)
+# This one's name intentionally different than its variable name
+# for testing reasons
+combine_things = core.MethodId("combine", "combine things", core.handle_fold)
+
+def _object_save(asobj, db):
+    db[asobj["@id"]] = ("saved as object", asobj)
+
+def _widget_save(asobj, db):
+    db[asobj["@id"]] = ("saved as widget", asobj)
+
+def _object_get_things(asobj):
+    return "objects are fun"
+
+def _activity_get_things(asobj):
+    return "activities are neat"
+
+def _post_get_things(asobj):
+    return "posts are cool"
+
+def _collection_combine_things(asobj, val, chant):
+    return val + chant + "%s, my friend, and remember us collected\n"
+    
+def _ordered_collection_combine_things(asobj, val, chant):
+    return val + chant + ", my dear, and cherish the order\n"
+
+def _ordered_collection_page_combine_things(asobj, val, chant):
+    return val + chant + ", my sweet, a new page is turning\n"
+
+### end testing methods ###
+
+MethodEnv = core.Environment(
+    vocabs=[ExampleVocab],
+    methods={
+        (save, ASObject): _object_save,
+        (save, ASWidget): _widget_save,
+        (get_things, ASObject): _object_get_things,
+        (get_things, ASActivity): _activity_get_things,
+        (get_things, ASPost): _post_get_things,
+        (combine_things, ASCollection): _collection_combine_things,
+        (combine_things, ASOrderedCollection): (
+            _ordered_collection_combine_things),
+        (combine_things, ASOrderedCollectionPage): (
+            _ordered_collection_page_combine_things)},
+    shortids=core.shortids_from_vocab(ExampleVocab),
+    c_accessors=core.shortids_from_vocab(ExampleVocab))
+
+
+def test_environment_c_access():
+    widget = MethodEnv.c.Widget(foo="bar")
+    assert widget["foo"] == "bar"
+    assert widget.types_astype == [ASWidget]
+    assert widget.env == MethodEnv
+    assert MethodEnv.c.Widget.astype == ASWidget

@@ -66,7 +66,7 @@ class ASType(object):
 
         return self._inheritance
 
-    def __call__(self, id=None, **kwargs):
+    def __call__(self, id=None, env=None, **kwargs):
         # @@: In the future maybe we want a way for people
         #   to be able to add things within their vocabulary
         #   without having to use the id_uri.
@@ -75,6 +75,11 @@ class ASType(object):
         #   to construct things from the vocabulary,
         #   and the default method in __call__ uses the BaseVocabulary
         #   or whatever we call it
+        #
+        # TODO: Oh jeez, fix this
+        #   We could build this more intelligently by looking
+        #   at the environment's shortids and see if this
+        #   matches this ASType
         if self.core:
             type_val = self.id_short
         else:
@@ -83,7 +88,11 @@ class ASType(object):
         jsobj.update(kwargs)
         if id:
             jsobj["@id"] = id
-        return ASObj(jsobj)
+
+        if env:
+            return ASObj(jsobj, env=env)
+        else:
+            return ASObj(jsobj)
 
 
 def astype_inheritance_list(*astypes):
@@ -399,6 +408,17 @@ class AttrMapper(object):
         for key, val in attrib_map.items():
             setattr(self, key, val)
 
+class TypeConstructor(object):
+    def __init__(self, astype, env):
+        self.astype = astype
+        self.__env = env
+
+    def __call__(self, *args, **kwargs):
+        return self.astype(env=self.__env, *args, **kwargs)
+
+    def __repr__(self):
+        return "<TypeConstructor for %s>" % self.astype.__repr__()
+
 
 class Environment(object):
     """
@@ -415,15 +435,15 @@ class Environment(object):
         self.methods = methods or {}
         self.shortids = shortids or {}
         self.document_loader = document_loader
-        # I wish this could just be the 
-        self.c = AttrMapper(c_accessors)
-        # self.c = self.__build_c_accessors()
+        self.c = self.__build_c_accessors(c_accessors)
         self.m = self.__build_m_map()
 
         self.uri_map = self.__build_uri_map()
 
-    # def __build_c_accessors(self):
-    #     pass
+    def __build_c_accessors(self, c_accessors):
+        return AttrMapper(
+            {name: TypeConstructor(astype, self)
+             for name, astype in c_accessors.items()})
 
     def __build_m_map(self):
         def make_method_dispatcher(method_id):
