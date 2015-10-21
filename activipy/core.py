@@ -425,6 +425,8 @@ class Environment(object):
                  document_loader=default_loader):
         self.vocabs = vocabs or []
         self.methods = methods or {}
+        # @@: Should we make all short ids mandatorily contain
+        #   the base schema?
         self.shortids = shortids or {}
         self.document_loader = document_loader
         self.c = self.__build_c_accessors(c_accessors)
