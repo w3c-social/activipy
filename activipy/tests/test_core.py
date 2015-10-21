@@ -322,13 +322,13 @@ def test_handle_map():
 
 
 def test_handle_fold():
-    def test_one(val, asobj, location):
+    def test_one(asobj, val, location):
         return val + "one %s... " % location
 
-    def test_two(val, asobj, location):
+    def test_two(asobj, val, location):
         return val + "two %s... " % location
 
-    def test_three(val, asobj, location):
+    def test_three(asobj, val, location):
         return val + "three %s... " % location
 
     our_asobj = ASWidget(snorf="snizzle")
@@ -341,7 +341,7 @@ def test_handle_fold():
         "two mississippi... three mississippi... ")
 
     # Now test breaking out early
-    def test_two_breaks_out(val, asobj, location):
+    def test_two_breaks_out(asobj, val, location):
         return core.HaltIteration(val + "two %s... " % location)
 
     handler = core.handle_fold([(test_one, ASFancyWidget),
@@ -385,7 +385,7 @@ def _post_get_things(asobj):
     return "posts are cool"
 
 def _collection_combine_things(asobj, val, chant):
-    return val + chant + "%s, my friend, and remember us collected\n"
+    return val + chant + ", my friend, and remember us collected\n"
     
 def _ordered_collection_combine_things(asobj, val, chant):
     return val + chant + ", my dear, and cherish the order\n"
@@ -448,3 +448,29 @@ def test_environment_m_access_handle_map():
     result = MethodEnv.m.get_things(MethodEnv.c.Post("fooid:0808"))
     assert result == ["posts are cool", "activities are neat",
                       "objects are fun"]
+
+
+def test_environment_m_access_handle_fold():
+    # This test function is kinda disturbing
+    result = MethodEnv.m.combine(MethodEnv.c.Collection("fooid:1"), "",
+                                 "Huzzah")
+    assert result == "Huzzah, my friend, and remember us collected\n"
+    
+    result = MethodEnv.m.combine(MethodEnv.c.OrderedCollection("fooid:2"), "",
+                                 "Huzzah")
+    assert result == (
+        "Huzzah, my dear, and cherish the order\n"
+        "Huzzah, my friend, and remember us collected\n")
+
+    result = MethodEnv.m.combine(MethodEnv.c.OrderedCollectionPage("fooid:2"),
+                                 "", "Rejoice")
+    assert result == (
+        "Rejoice, my sweet, a new page is turning\n"
+        "Rejoice, my dear, and cherish the order\n"
+        "Rejoice, my friend, and remember us collected\n")
+
+    # nothing for this one
+    result = MethodEnv.m.combine(MethodEnv.c.Widget("fooid:12345"), "",
+                                 "Huzzah")
+    assert result == ""
+    

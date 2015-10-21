@@ -383,7 +383,7 @@ def handle_fold(astype_methods, asobj):
         val = initial
         for method, astype in astype_methods:
             # @@: Not sure if asobj or val coming first is a better interface...
-            val = method(val, asobj, *args, **kwargs)
+            val = method(asobj, val, *args, **kwargs)
             # Provide a way to break out of the loop early...?
             # @@: Is this a good idea, or even useful for anything?
             if isinstance(val, HaltIteration):
