@@ -179,6 +179,8 @@ def make_simple_loader(url_map, load_unknown_urls=True,
 
     return loader
 
+default_loader = make_simple_loader({})
+
 
 # TODO: This was a good early in-comments braindump; now move to the
 # documentation and restructure!
@@ -272,7 +274,7 @@ class ASObj(object):
             document_loader = self.env.document_loader
         else:
             # TODO: Put in basic document loader here
-            document_loader = None
+            document_loader = default_loader
 
         options = {
             "expandContext": (
