@@ -37,6 +37,7 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
+** TODO Fix how ASType.__call__() handles long vs short URIs
 ** TODO Add ASObj.type_astype()
 
 *** Brainstorm
