@@ -501,13 +501,13 @@ class Environment(object):
 
         return final_types
 
-    def asobj_astype_chain(self, asobj):
+    def asobj_astype_inheritance(self, asobj):
         return astype_inheritance_list(
             *self.asobj_astypes(asobj))
 
     def asobj_get_method(self, asobj, method):
         # get all types for this asobj
-        astypes = self.asobj_astype_chain(asobj)
+        astypes = self.asobj_astype_inheritance(asobj)
 
         # get a map of all relevant {method_proc: astype}
         return method.handler(
