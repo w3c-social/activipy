@@ -504,10 +504,11 @@ class Environment(object):
         astypes = self.asobj_astypes(asobj)
 
         # get a map of all relevant {method_proc: astype}
-        return [
-            (self.methods[(method, astype)], astype)
-            for astype in astypes
-            if self.methods.has_key((method, astype))]
+        return method.handler(
+            [(self.methods[(method, astype)], astype)
+             for astype in astypes
+             if (method, astype) in self.methods],
+            asobj)
 
     def asobj_run_method(self, asobj, method, *args, **kwargs):
         # make note of why arguments make this slightly lossy
