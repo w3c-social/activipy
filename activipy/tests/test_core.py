@@ -418,3 +418,19 @@ def test_environment_c_access():
     assert widget.types_astype == [ASWidget]
     assert widget.env == MethodEnv
     assert MethodEnv.c.Widget.astype == ASWidget
+
+
+def test_environment_m_access_handle_one():
+    db = {}
+    widget = MethodEnv.c.Widget("fooid:12345")
+    MethodEnv.m.save(widget, db)
+    assert db["fooid:12345"] == ("saved as widget", widget)
+
+    foo_object = MethodEnv.c.Object("fooid:00001")
+    MethodEnv.m.save(foo_object, db)
+    assert db["fooid:00001"] == ("saved as object", foo_object)
+
+    collection = MethodEnv.c.Collection("fooid:8888")
+    MethodEnv.m.save(collection, db)
+    assert db["fooid:8888"] == ("saved as object", collection)
+
