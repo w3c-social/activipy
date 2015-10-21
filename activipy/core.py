@@ -67,20 +67,12 @@ class ASType(object):
         return self._inheritance
 
     def __call__(self, id=None, env=None, **kwargs):
-        # @@: In the future maybe we want a way for people
-        #   to be able to add things within their vocabulary
-        #   without having to use the id_uri.
-        #
-        #   One way to do this would be to add a method
-        #   to construct things from the vocabulary,
-        #   and the default method in __call__ uses the BaseVocabulary
-        #   or whatever we call it
-        #
-        # TODO: Oh jeez, fix this
-        #   We could build this more intelligently by looking
-        #   at the environment's shortids and see if this
-        #   matches this ASType
-        if self.core:
+        # @@: Is this okay?  Kinda bold!
+        if env is None:
+            from activipy import vocab
+            env = vocab.BasicEnv
+
+        if self.id_short is not None and self.id_short in env.shortids:
             type_val = self.id_short
         else:
             type_val = self.id_uri
