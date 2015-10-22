@@ -214,6 +214,9 @@ I think this is a pretty good approach.
   Person()
 #+END_SRC
 
+** TODO Add memoization
+*** TODO General memoization function
+*** TODO Property memoization
 ** TODO Add ASProp
 
 ** TODO Documentation basics
