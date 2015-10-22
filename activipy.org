@@ -312,7 +312,8 @@ We can use the method dispatch system to handle this.
 
 After all, I'm the one who started that project, and it's abandoned...
 
-** TODO Maybe rename types.py to core.py
+** DONE Maybe rename types.py to core.py
+   CLOSED: [2015-10-22 Thu 09:34]
 ** TODO Investigate restructuring ASType instances via metaclassing
 
 Basically, the main reason is that we'd like to be able to do:
