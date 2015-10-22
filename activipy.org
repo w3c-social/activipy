@@ -219,8 +219,23 @@ I think this is a pretty good approach.
 *** TODO Property memoization
 ** TODO Add ASProp
 
+** TODO Add demos section
+*** TODO linter/validator
+*** TODO Easy GDBM based storage system
+
 ** TODO Documentation basics
-*** TODO Add sphinx basic structure
+*** DONE Add sphinx basic structure
+    CLOSED: [2015-10-22 Thu 13:01]
+*** TODO Documentation structure
+
+ - Intro
+   - About ActiviPy
+   - Tutorial
+ - Core types
+ - Vocabulary
+ - Extending the environment
+ - Advanced Examples
+
 *** TODO Document basic "types" structure
 
 ** TODO Make ASVocab more useful
@@ -231,10 +246,6 @@ We want to:
  - probably preload a json-ld context
  - Somehow make ASVocab objects useful for a 
  - make ourself more useful to ASObj objects
-
-** TODO Add basic GDBM based store
-
-This might eventually 
 
 ** TODO Add verifier system
 
