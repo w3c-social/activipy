@@ -234,7 +234,7 @@ class ASObj(object):
     def __getitem__(self, key):
         val = self.__jsobj[key]
         if isinstance(val, dict) and "@type" in val:
-            return ASObj(val)
+            return ASObj(val, self.env)
         else:
             return deepcopy_jsobj(val)
 
