@@ -141,7 +141,7 @@ ROOT_BEER_NOTE_JSOBJ = {
            "acct:ladyaeva@hedgehog.example"],
     "object": {
         "@type": "Note",
-        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+        "@id": "http://tsyesika.co.uk/chat/sup-yo/",
         "content": "Up for some root beer floats?"}}
 
 ROOT_BEER_NOTE_MIXED_ASOBJ = {
@@ -156,7 +156,7 @@ ROOT_BEER_NOTE_MIXED_ASOBJ = {
            "acct:ladyaeva@hedgehog.example"],
     "object": core.ASObj({
         "@type": "Note",
-        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+        "@id": "http://tsyesika.co.uk/chat/sup-yo/",
         "content": "Up for some root beer floats?"})}
 
 ROOT_BEER_NOTE_VOCAB = vocab.Create(
@@ -168,7 +168,7 @@ ROOT_BEER_NOTE_VOCAB = vocab.Create(
         "acct:justaguy@rhiaro.co.uk",
         "acct:ladyaeva@hedgehog.example"],
     object=vocab.Note(
-        "htp://tsyesika.co.uk/chat/sup-yo/",
+        "http://tsyesika.co.uk/chat/sup-yo/",
         content="Up for some root beer floats?"))
 
 
@@ -189,7 +189,7 @@ def _looks_like_root_beer_note(jsobj):
         isinstance(jsobj["object"], dict) and
         len(jsobj["object"]) == 3 and
         jsobj["object"]["@type"] == "Note" and
-        jsobj["object"]["@id"] == "htp://tsyesika.co.uk/chat/sup-yo/" and
+        jsobj["object"]["@id"] == "http://tsyesika.co.uk/chat/sup-yo/" and
         jsobj["object"]["content"] == "Up for some root beer floats?")
 
 
@@ -233,7 +233,7 @@ ROOT_BEER_NOTE_ASOBJ = core.ASObj({
            "acct:justaguy@rhiaro.co.uk"],
     "object": core.ASObj({
         "@type": "Note",
-        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+        "@id": "http://tsyesika.co.uk/chat/sup-yo/",
         "content": "Up for some root beer floats?"})})
 
 
