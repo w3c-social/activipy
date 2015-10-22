@@ -28,6 +28,7 @@ setup(
     install_requires=[
         "PyLD",
         "pytest",
+        "sphinx",
         ],
     # @@: Can we reproduce this in Guix?
     entry_points="""\
