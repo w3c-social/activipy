@@ -254,13 +254,7 @@ class ASObj(object):
     # TODO: Memoize
     @property
     def types_astype(self):
-        if self.env:
-            env = self.env
-        else:
-            from activipy import vocab
-            env = vocab.BasicEnv
-
-        return env.asobj_astypes(self)
+        return self.env.asobj_astypes(self)
 
     # Don't memoize this, users might mutate
     def json(self):
@@ -272,7 +266,7 @@ class ASObj(object):
 
     # TODO Memoize
     def __expanded(self):
-        if self.env and self.env.document_loader:
+        if self.env.document_loader:
             document_loader = self.env.document_loader
         else:
             document_loader = default_loader
