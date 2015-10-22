@@ -236,6 +236,7 @@ class ASObj(object):
         if isinstance(val, dict) and "@type" in val:
             return ASObj(val, self.env)
         else:
+            # TODO: Switch this to deepcopy_jsobj_out(val, env=self.env)
             return deepcopy_jsobj(val)
 
     # META TODO: Convert some @property here to @memoized_property
