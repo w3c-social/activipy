@@ -214,68 +214,6 @@ I think this is a pretty good approach.
   Person()
 #+END_SRC
 
-** DONE ActivityStreams "classes"
-   CLOSED: [2015-10-22 Thu 09:36]
-
-Note that normal python classes can't work here.
-
-*** DONE ASObj
-    CLOSED: [2015-10-22 Thu 09:35]
-**** DONE Finish all those TODO methods
-     CLOSED: [2015-10-22 Thu 09:35]
-**** Archive                                                        :ARCHIVE:
-***** DONE Construction: Do deep copy of asjson manually
-     CLOSED: [2015-10-11 Sun 11:33]
-      :PROPERTIES:
-      :ARCHIVE_TIME: 2015-10-12 Mon 15:41
-      :END:
-
-This way we can catch any asobj types
-
-***** DONE Better inheritance order
-     CLOSED: [2015-10-17 Sat 14:05]
-      :PROPERTIES:
-      :ARCHIVE_TIME: 2015-10-17 Sat 14:05
-      :END:
-
-We should do this like in the ANSI Common Lisp book, where we remove
-duplicates, but we remove duplictes but keep the *last* appearance of
-a "class"
-
-*** Archive                                                         :ARCHIVE:
-**** DONE Add inheritance / method dispatch system
-    CLOSED: [2015-10-10 Sat 18:49]
-     :PROPERTIES:
-     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
-     :END:
-
-This is trickier than one may think; we can't do Python style 
-method resolution because an activity may have multiple types.
-
-**** DONE Easy ASType->ASObj constructor interface
-    CLOSED: [2015-10-12 Mon 15:14]
-     :PROPERTIES:
-     :ARCHIVE_TIME: 2015-10-12 Mon 15:41
-     :END:
-
-Something like:
-
-#+BEGIN_SRC python
-  from activipy import vocab
-
-  root_beer_note = vocab.Create(
-      actor=vocab.Person(
-          "http://tsyesika.co.uk",
-          displayName="Jessica Tallon"),
-      to=["acct:cwebber@identi.ca"],
-      object=vocab.Note(
-          "http://tsyesika.co.uk/chat/sup-yo/",
-          content="Up for some root beer floats?"))
-#+END_SRC
-
-This should be able to flow pretty naturally out of our types.py
-interface.
-
 ** TODO Add ASProp
 
 ** TODO Documentation basics
@@ -682,3 +620,68 @@ from the building of the Environment
     :PROPERTIES:
     :ARCHIVE_TIME: 2015-10-22 Thu 09:35
     :END:
+*** DONE ActivityStreams "classes"
+   CLOSED: [2015-10-22 Thu 09:36]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-22 Thu 09:36
+    :END:
+
+Note that normal python classes can't work here.
+
+**** DONE ASObj
+     CLOSED: [2015-10-22 Thu 09:35]
+***** DONE Finish all those TODO methods
+      CLOSED: [2015-10-22 Thu 09:35]
+***** Archive                                                       :ARCHIVE:
+****** DONE Construction: Do deep copy of asjson manually
+     CLOSED: [2015-10-11 Sun 11:33]
+      :PROPERTIES:
+      :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+      :END:
+
+This way we can catch any asobj types
+
+****** DONE Better inheritance order
+     CLOSED: [2015-10-17 Sat 14:05]
+      :PROPERTIES:
+      :ARCHIVE_TIME: 2015-10-17 Sat 14:05
+      :END:
+
+We should do this like in the ANSI Common Lisp book, where we remove
+duplicates, but we remove duplictes but keep the *last* appearance of
+a "class"
+
+**** Archive                                                        :ARCHIVE:
+***** DONE Add inheritance / method dispatch system
+    CLOSED: [2015-10-10 Sat 18:49]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-10 Sat 18:49
+     :END:
+
+This is trickier than one may think; we can't do Python style 
+method resolution because an activity may have multiple types.
+
+***** DONE Easy ASType->ASObj constructor interface
+    CLOSED: [2015-10-12 Mon 15:14]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-12 Mon 15:41
+     :END:
+
+Something like:
+
+#+BEGIN_SRC python
+  from activipy import vocab
+
+  root_beer_note = vocab.Create(
+      actor=vocab.Person(
+          "http://tsyesika.co.uk",
+          displayName="Jessica Tallon"),
+      to=["acct:cwebber@identi.ca"],
+      object=vocab.Note(
+          "http://tsyesika.co.uk/chat/sup-yo/",
+          content="Up for some root beer floats?"))
+#+END_SRC
+
+This should be able to flow pretty naturally out of our types.py
+interface.
+
