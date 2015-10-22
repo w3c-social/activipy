@@ -223,8 +223,10 @@ class ASObj(object):
         self.__jsobj = deepcopy_jsobj(jsobj)
         assert (isinstance(self.__jsobj.get("@type"), str) or
                 isinstance(self.__jsobj.get("@type"), list))
-        # @@: Should we default to vocab.BasicEnv here rather
-        #   than at types_astype?
+        if not env:
+            from activipy import vocab
+            env = vocab.BasicEnv
+            
         self.env = env
         # @@: Not used yet, but we might soon
         self.__orig_type = jsobj["@type"]
