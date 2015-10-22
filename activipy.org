@@ -37,8 +37,6 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
-** DONE Fix how ASType.__call__() handles long vs short URIs
-   CLOSED: [2015-10-21 Wed 17:39]
 ** TODO Add ASObj.type_astype()
 
 *** Brainstorm
@@ -312,8 +310,6 @@ We can use the method dispatch system to handle this.
 
 After all, I'm the one who started that project, and it's abandoned...
 
-** DONE Maybe rename types.py to core.py
-   CLOSED: [2015-10-22 Thu 09:34]
 ** TODO Investigate restructuring ASType instances via metaclassing
 
 Basically, the main reason is that we'd like to be able to do:
@@ -673,3 +669,13 @@ So we could write a factory function that takes a mapping of
 One way or another we want to reduce the amount of data duplicated
 from the building of the Environment
 
+*** DONE Maybe rename types.py to core.py
+    CLOSED: [2015-10-22 Thu 09:34]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-22 Thu 09:35
+    :END:
+*** DONE Fix how ASType.__call__() handles long vs short URIs
+    CLOSED: [2015-10-21 Wed 17:39]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-22 Thu 09:35
+    :END:
