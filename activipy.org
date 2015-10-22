@@ -220,11 +220,10 @@ I think this is a pretty good approach.
 ** TODO Add ASProp
 
 ** TODO Add demos section
+*** TODO Easy GDBM based storage system
 *** TODO linter/validator
 
 We can use the method dispatch system to handle this.
-
-*** TODO Easy GDBM based storage system
 
 ** TODO Documentation basics
 *** DONE Add sphinx basic structure
