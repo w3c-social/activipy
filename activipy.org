@@ -221,6 +221,9 @@ I think this is a pretty good approach.
 
 ** TODO Add demos section
 *** TODO linter/validator
+
+We can use the method dispatch system to handle this.
+
 *** TODO Easy GDBM based storage system
 
 ** TODO Documentation basics
@@ -246,10 +249,6 @@ We want to:
  - probably preload a json-ld context
  - Somehow make ASVocab objects useful for a 
  - make ourself more useful to ASObj objects
-
-** TODO Add verifier system
-
-We can use the method dispatch system to handle this.
 
 ** TODO Tests
 *** DONE Basic test infrastructure
