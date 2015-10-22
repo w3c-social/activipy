@@ -293,8 +293,18 @@ class ASObj(object):
     def expanded_str(self):
         return json.dumps(self.expanded())
 
+    @property
+    def id(self):
+        return self.__jsobj.get("@id")
+
     def __repr__(self):
-        return "<ASObj %s>" % ", ".join(self.types)
+        if self.id:
+            return "<ASObj %s \"%s\">" % (
+                ", ".join(self.types),
+                self.id)
+        else:
+            return "<ASObj %s>" % ", ".join(self.types)
+            
 
 
 def deepcopy_jsobj(jsobj):
