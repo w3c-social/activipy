@@ -214,12 +214,15 @@ I think this is a pretty good approach.
   Person()
 #+END_SRC
 
-** TODO ActivityStreams "classes"
+** DONE ActivityStreams "classes"
+   CLOSED: [2015-10-22 Thu 09:36]
 
 Note that normal python classes can't work here.
 
-*** TODO ASObj
-**** TODO Finish all those TODO methods
+*** DONE ASObj
+    CLOSED: [2015-10-22 Thu 09:35]
+**** DONE Finish all those TODO methods
+     CLOSED: [2015-10-22 Thu 09:35]
 **** Archive                                                        :ARCHIVE:
 ***** DONE Construction: Do deep copy of asjson manually
      CLOSED: [2015-10-11 Sun 11:33]
@@ -238,8 +241,6 @@ This way we can catch any asobj types
 We should do this like in the ANSI Common Lisp book, where we remove
 duplicates, but we remove duplictes but keep the *last* appearance of
 a "class"
-
-*** TODO Add ASProp
 
 *** Archive                                                         :ARCHIVE:
 **** DONE Add inheritance / method dispatch system
@@ -274,6 +275,8 @@ Something like:
 
 This should be able to flow pretty naturally out of our types.py
 interface.
+
+** TODO Add ASProp
 
 ** TODO Documentation basics
 *** TODO Add sphinx basic structure
