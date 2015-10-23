@@ -13,14 +13,30 @@ beer floats.  How could we structure that in Python?  First, let's
 look at the ActivityStreams representation of this note, and then
 we'll look at how we got there.
 
-Okay, let's make that all in Activipy:
+What vocabulary do we want to use?  Let's look at what comes out of
+the box::
+
+  >>> vocab.Create.notes
+  'Indicates that the actor has created the object.'
+  >>> vocab.Person.notes
+  'Represents an individual person.'
+  >>> vocab.Note.notes
+  'Represents a short work typically less than a single paragraph in length.'
+
+Those sound like the things we mean.  Great!  It's nice that Activipy
+includes the notes from the
+`Activity Vocabulary <http://www.w3.org/TR/activitystreams-vocabulary/>`_
+so it's easy for us to keep track of what things mean.
+
+So it turns out we can use these vocabulary definitions as friendly
+constructors::
 
 .. code:: python
 
   # gives us the core vocabulary
   from activipy import vocab
 
-  post_this_note = vocab.Create(
+  post_this = vocab.Create(
       actor=vocab.Person(
           "http://tsyesika.co.uk/",
           displayName="Jessica Tallon"),
@@ -35,9 +51,9 @@ Oh, okay, that's pretty easy to read!  We can see that we've specified
 who we are, who we want to send the message to, and the actual message
 we're posting.
 
-What does that message look like?  Let's see::
+What does our message look like?  Let's see::
 
-  >>> post_this_note.json()
+  >>> post_this.json()
   {"@type": "Create",
    "actor": {
        "@type": "Person",
@@ -55,23 +71,21 @@ Oh interesting!  That looks pretty similar to the Python constructor
 version.  In fact, we could have built this from the json itself::
 
   >>> from activipy import core, vocab
-  >>> post_this_note_json = {
-        "@type": "Create",
-        "@id": "http://tsyesika.co.uk/act/foo-id-here/",
-        "actor": {
-            "@type": "Person",
-            "@id": "http://tsyesika.co.uk/",
-            "displayName": "Jessica Tallon"},
-        "to": ["acct:cwebber@identi.ca",
-               "acct:justaguy@rhiaro.co.uk",
-               "acct:ladyaeva@hedgehog.example"],
-        "object": {
-            "@type": "Note",
-            "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
-            "content": "Up for some root beer floats?"}}
-  # This will return the same thing as our vocab.Create()
-  # invocation earlier
-  >>> core.ASObj(post_this_note, vocab.BasicEnv)
+  >>> core.ASObj({
+  ...     "@type": "Create",
+  ...     "@id": "http://tsyesika.co.uk/act/foo-id-here/",
+  ...     "actor": {
+  ...         "@type": "Person",
+  ...         "@id": "http://tsyesika.co.uk/",
+  ...         "displayName": "Jessica Tallon"},
+  ...     "to": ["acct:cwebber@identi.ca",
+  ...            "acct:justaguy@rhiaro.co.uk",
+  ...            "acct:ladyaeva@hedgehog.example"],
+  ...     "object": {
+  ...         "@type": "Note",
+  ...         "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+  ...         "content": "Up for some root beer floats?"}},
+  ...   vocab.BasicEnv)
   <ASObj Create>
 
 Hm!  So it's nice to have "pythonic" constructors, but this json
@@ -80,13 +94,13 @@ just for this?  Let's see what else Activipy gives us.
 
 Activipy gives simple dictionary-style access::
 
-  >>> post_this_note["to"]
+  >>> post_this["to"]
   ['acct:cwebber@identi.ca', 'acct:justaguy@rhiaro.co.uk']
 
 Helpful, but we could have gotten that from running .json() and
 pulling out the right values!  But this is kinda nice::
 
-  >>> root_beer_note = post_this_note["object"]
+  >>> root_beer_note = post_this["object"]
   >>> root_beer_note
   <ASObj Note "http://tsyesika.co.uk/chat/sup-yo/">
   
@@ -121,20 +135,45 @@ But hey, what's this thing::
   ['http://www.w3.org/ns/activitystreams#Note']
   
 Huh?  A URL?  This starts to hint at something more
-complicated... something to do with extensions!  This starts to make
-more sense when we think about naming conflicts... if you send me a
-message about "running a mile", and I send you a message about
-"running a program", those are obviously two very different
-definitions of "running", and it might create a lot of problems if
-they become confused.  There should be an unambiguous way to represent
-things, and that's exactly where `json-ld <http://json-ld.org/>`_
-comes in.  In json-ld, json objects can be "expanded" to an
-unambiguous format, and then "compacted" to the right definitions for
-our own local server, so we'll never get confused between two
-different definitions of "running" again.  Here's a brief hint towards
-that right now::
+complicated... something to do with extensions!  But we're getting
+ahead of ourselves.  Extension stuff comes later!  Right now we're
+itching to *do* something with these objects... so what can we do, and
+how do we do it?
 
-  >>> post_this_note.expanded()
+
+Methods for our madness
+-----------------------
+
+
+The more we change, the more we stay the same
+---------------------------------------------
+
+.. TODO: We need functional setters for this part to work :)
+
+
+Expanding our vocabulary
+------------------------
+
+Remember when we did this?
+
+.. code:: python
+
+  >>> root_beer_note.types_expanded
+  ['http://www.w3.org/ns/activitystreams#Note']
+
+This starts to make more sense when we think about naming
+conflicts... if you send me a message about "running a mile", and I
+send you a message about "running a program", those are obviously two
+very different definitions of "running", and it might create a lot of
+problems if they become confused.  There should be an unambiguous way
+to represent things, and that's exactly where `json-ld
+<http://json-ld.org/>`_ comes in.  In json-ld, json objects can be
+"expanded" to an unambiguous format, and then "compacted" to the right
+definitions for our own local server, so we'll never get confused
+between two different definitions of "running" again.  Here's a brief
+hint towards that right now::
+
+  >>> post_this.expanded()
   [{'@type': ['http://www.w3.org/ns/activitystreams#Create'],
     'http://www.w3.org/ns/activitystreams#actor': [{'@id': 'http://tsyesika.co.uk/',
       '@type': ['http://www.w3.org/ns/activitystreams#Person'],
@@ -158,16 +197,3 @@ just plain old json.  Even when you get into extension land, Activipy
 makes things so that you can think as in terms of pythonic constructors
 rather than json-ld, so your code will look like simple Python, just
 like at the very beginning of our tutorial.
-
-But we're getting ahead of ourselves.  Extension stuff comes later!
-Right now we're itching to *do* something with these objects... so
-what can we do, and how do we do it?
-
-Methods for our madness
------------------------
-
-
-
-Expanding our vocabulary
-------------------------
-
