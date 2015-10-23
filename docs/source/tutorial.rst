@@ -31,7 +31,7 @@ so it's easy for us to keep track of what things mean.
 So it turns out we can use these vocabulary definitions as friendly
 constructors::
 
-.. code:: python
+.. code-block:: python
 
   # gives us the core vocabulary
   from activipy import vocab
