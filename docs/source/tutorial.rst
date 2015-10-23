@@ -156,7 +156,7 @@ Expanding our vocabulary
 
 Remember when we did this?
 
-.. code:: python
+.. code-block:: python
 
   >>> root_beer_note.types_expanded
   ['http://www.w3.org/ns/activitystreams#Note']
