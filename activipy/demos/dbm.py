@@ -1,6 +1,8 @@
 import json
 from dbm import gnu as gdbm
 
+from activipy import core, vocab
+
 
 class JsonDBM(object):
     """
@@ -23,33 +25,46 @@ class JsonDBM(object):
         self.db.close()
 
 
+
 # Each of these returns the full object inserted into dbm
 
-def dbm_insert_method(asobj, db, private=None):
+def dbm_fetch(id, db):
+    return core.ASObj(db[id])
+
+def dbm_insert(asobj, db, private=None):
     pass
 
-def dbm_update_method(asobj, db, private=None):
+def dbm_update(asobj, db, private=None):
     pass
 
-def dbm_upsert_method(asobj, db, private=None):
+def dbm_upsert(asobj, db, private=None):
     pass
 
-def dbm_delete_method(asobj, db):
+def dbm_delete(asobj, db):
     pass
+
+
+
+
+# Insert/update special methods for Activity / IntransitiveActivity
+# objects
 
 
 
 
 # Now, DBM with private data edition
 
-def privatedbm_insert_method(asobj, db, private=None):
+def privatedbm_fetch(db, id):
     pass
 
-def privatedbm_update_method(asobj, db, private=None):
+def privatedbm_insert(asobj, db, private=None):
     pass
 
-def privatedbm_upsert_method(asobj, db, private=None):
+def privatedbm_update(asobj, db, private=None):
     pass
 
-def privatedbm_delete_method(asobj, db):
+def privatedbm_upsert(asobj, db, private=None):
+    pass
+
+def privatedbm_delete(asobj, db):
     pass
