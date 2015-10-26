@@ -134,89 +134,6 @@ shortids=load_from_vocabs((Vocab1, None), (GMGVocab, "gmg:"))
 *** TODO From known URI
 *** TODO By json-ld examination
 
-** DONE "environment" w/ method dispatch and object sugar
-   CLOSED: [2015-10-26 Mon 13:49]
-
-*** Brainstorm
-
-So here's how this thing works.
-
-There's an environment, which has a mapping between tuples of
-(method_symbol, Vocab) and method_to_call.
-
-#+BEGIN_SRC python
-  #                    method name    description    invocation method
-  save = Method("save", "Save things", handle_one)
-  gather_something = Method("gather_something", "Accrues some info", handle_map)
-
-  myenv = Enviroment(
-     mapping={
-         (save, Note): note_save,
-         (save, Object): basic_save,
-  })
-
-  handle_one(myobj, save, db)
-#+END_SRC
-
-This way, using the inheritance_chain() method, we can handle
-various types of method handling:
-
- - handle_one
- - handle_map
- - handle_fold
-
-However, we have enough metadata here to provide some sugar.
-
-#+BEGIN_SRC python
-  myenv = Environment(
-    mapping={bla bla},
-    vocab=vocab)
-
-  activity = Environment.c.Activity("http://oh/snap")
-  activity.m.save(db)
-  # or maybe even just activity.save()
-#+END_SRC
-
-This would have to mean that ASObj gets a method dispatch keyword
-option on construction, which might be a-ok.
-
-I think this is a pretty good approach.
-
-*** DONE Add Environment and method dispatch
-    CLOSED: [2015-10-26 Mon 13:48]
-*** DONE Add vocabulary + method-class sugar
-    CLOSED: [2015-10-26 Mon 13:49]
-*** Archive                                                         :ARCHIVE:
-**** DONE Clean up method dispatch plan based on convo w/ steve
-    CLOSED: [2015-10-15 Thu 13:29]
-     :PROPERTIES:
-     :ARCHIVE_TIME: 2015-10-15 Thu 13:31
-     :END:
-
-#+BEGIN_SRC python
-  save_object = Method("save things", "handle_one")
-
-  myenv = Enviroment(
-     mapping={
-         (save_object, Note): note_save,
-         })
-
-  handle_one(myobj, "save_object", db)
-  handle_one(myobj, save_object, db)
-
-  # more pythonic optional interface
-  # a bit leaky though
-  myenv = MetaEnviroment(
-     mapping={
-         (save_object, Note): note_save,
-         }
-      vocab=[BasicVocab]
-  )
-
-  myenv.Person("foo")
-  Person()
-#+END_SRC
-
 ** TODO Add memoization
 *** TODO General memoization function
 *** TODO Property memoization
@@ -713,4 +630,90 @@ Something like:
 
 This should be able to flow pretty naturally out of our types.py
 interface.
+
+*** DONE "environment" w/ method dispatch and object sugar
+    CLOSED: [2015-10-26 Mon 13:49]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-26 Mon 13:49
+    :END:
+
+**** Brainstorm
+
+So here's how this thing works.
+
+There's an environment, which has a mapping between tuples of
+(method_symbol, Vocab) and method_to_call.
+
+#+BEGIN_SRC python
+  #                    method name    description    invocation method
+  save = Method("save", "Save things", handle_one)
+  gather_something = Method("gather_something", "Accrues some info", handle_map)
+
+  myenv = Enviroment(
+     mapping={
+         (save, Note): note_save,
+         (save, Object): basic_save,
+  })
+
+  handle_one(myobj, save, db)
+#+END_SRC
+
+This way, using the inheritance_chain() method, we can handle
+various types of method handling:
+
+ - handle_one
+ - handle_map
+ - handle_fold
+
+However, we have enough metadata here to provide some sugar.
+
+#+BEGIN_SRC python
+  myenv = Environment(
+    mapping={bla bla},
+    vocab=vocab)
+
+  activity = Environment.c.Activity("http://oh/snap")
+  activity.m.save(db)
+  # or maybe even just activity.save()
+#+END_SRC
+
+This would have to mean that ASObj gets a method dispatch keyword
+option on construction, which might be a-ok.
+
+I think this is a pretty good approach.
+
+**** DONE Add Environment and method dispatch
+     CLOSED: [2015-10-26 Mon 13:48]
+**** DONE Add vocabulary + method-class sugar
+     CLOSED: [2015-10-26 Mon 13:49]
+**** Archive                                                        :ARCHIVE:
+***** DONE Clean up method dispatch plan based on convo w/ steve
+    CLOSED: [2015-10-15 Thu 13:29]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-15 Thu 13:31
+     :END:
+
+#+BEGIN_SRC python
+  save_object = Method("save things", "handle_one")
+
+  myenv = Enviroment(
+     mapping={
+         (save_object, Note): note_save,
+         })
+
+  handle_one(myobj, "save_object", db)
+  handle_one(myobj, save_object, db)
+
+  # more pythonic optional interface
+  # a bit leaky though
+  myenv = MetaEnviroment(
+     mapping={
+         (save_object, Note): note_save,
+         }
+      vocab=[BasicVocab]
+  )
+
+  myenv.Person("foo")
+  Person()
+#+END_SRC
 
