@@ -17,6 +17,9 @@ class JsonDBM(object):
     def __setitem__(self, key, value):
         self.db[key.encode('utf-8')] = json.dumps(value)
 
+    def __delitem__(self, key):
+        del self.db[key.encode('utf-8')]
+
     @classmethod
     def open(cls, filename):
         return cls(gdbm.open(filename, 'c'))
