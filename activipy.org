@@ -134,7 +134,8 @@ shortids=load_from_vocabs((Vocab1, None), (GMGVocab, "gmg:"))
 *** TODO From known URI
 *** TODO By json-ld examination
 
-** TODO "environment" w/ method dispatch and object sugar
+** DONE "environment" w/ method dispatch and object sugar
+   CLOSED: [2015-10-26 Mon 13:49]
 
 *** Brainstorm
 
@@ -181,8 +182,10 @@ option on construction, which might be a-ok.
 
 I think this is a pretty good approach.
 
-*** TODO Add Environment and method dispatch
-*** TODO Add vocabulary + method-class sugar
+*** DONE Add Environment and method dispatch
+    CLOSED: [2015-10-26 Mon 13:48]
+*** DONE Add vocabulary + method-class sugar
+    CLOSED: [2015-10-26 Mon 13:49]
 *** Archive                                                         :ARCHIVE:
 **** DONE Clean up method dispatch plan based on convo w/ steve
     CLOSED: [2015-10-15 Thu 13:29]
