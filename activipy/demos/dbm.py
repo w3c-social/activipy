@@ -20,6 +20,9 @@ class JsonDBM(object):
     def __delitem__(self, key):
         del self.db[key.encode('utf-8')]
 
+    def __contains__(self, key):
+        return key in self.db
+
     @classmethod
     def open(cls, filename):
         return cls(gdbm.open(filename, 'c'))
@@ -27,6 +30,11 @@ class JsonDBM(object):
     def close(self):
         self.db.close()
 
+    def get(self, key, default=None):
+        if key in self.db:
+            return self[key]
+        else:
+            return default
 
 
 # Each of these returns the full object inserted into dbm
@@ -35,7 +43,9 @@ def dbm_fetch(id, db):
     return core.ASObj(db[id])
 
 def dbm_insert(asobj, db, private=None):
-    pass
+    # TODO: Better error here
+    assert asobj.id is not None
+
 
 def dbm_update(asobj, db, private=None):
     pass
