@@ -42,19 +42,15 @@ class JsonDBM(object):
 def dbm_fetch(id, db):
     return core.ASObj(db[id])
 
-def dbm_insert(asobj, db, private=None):
-    # TODO: Better error here
+def dbm_save(asobj, db, private=None):
     assert asobj.id is not None
-
-
-def dbm_update(asobj, db, private=None):
-    pass
-
-def dbm_upsert(asobj, db, private=None):
-    pass
+    new_val = asobj.json()
+    db[asobj.id] = new_val
+    return new_val
 
 def dbm_delete(asobj, db):
-    pass
+    assert asobj.id is not None
+    del db[asobj.id]
 
 
 
