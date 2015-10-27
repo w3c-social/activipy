@@ -436,7 +436,7 @@ class Environment(object):
         #   the base schema?
         self.shortids = shortids or {}
         self.document_loader = document_loader
-        self.c = self.__build_c_accessors(c_accessors)
+        self.c = self.__build_c_accessors(c_accessors or {})
         self.m = self.__build_m_map()
 
         self.uri_map = self.__build_uri_map()
