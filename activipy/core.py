@@ -419,6 +419,14 @@ class TypeConstructor(object):
         return "<TypeConstructor for %s>" % self.astype.__repr__()
 
 
+class EnvironmentMismatch(Exception):
+    """
+    Raised when an ASObj calls a method through an Environment
+    but does not have that environment bound to itself.
+    """
+    pass
+
+
 class Environment(object):
     """
     An environment to collect vocabularies and provide
@@ -513,6 +521,11 @@ class Environment(object):
             *self.asobj_astypes(asobj))
 
     def asobj_get_method(self, asobj, method):
+        if asobj.env is not self:
+            raise EnvironmentMismatch(
+                "ASObj attempted to call method with an Environment "
+                "it was not bound to!")
+
         # get all types for this asobj
         astypes = self.asobj_astype_inheritance(asobj)
 
