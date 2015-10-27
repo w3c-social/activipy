@@ -39,8 +39,8 @@ class JsonDBM(object):
 
 # Each of these returns the full object inserted into dbm
 
-def dbm_fetch(id, db):
-    return core.ASObj(db[id])
+def dbm_fetch(id, db, env):
+    return core.ASObj(db[id], env)
 
 def dbm_save(asobj, db):
     assert asobj.id is not None
@@ -99,14 +99,57 @@ def dbm_activity_normalized_save(asobj, db):
     return as_json
 
 
+dbm_denormalize_method = core.MethodId(
+    "denormalize", "Expand out an activitystreams object recursively",
+    # @@: Should this be a handle_fold?
+    core.handle_one)
+
+
+def dbm_denormalize_object(asobj, db):
+    # For now, on any standard object, just return that as-is
+    return asobj
+
+
+def dbm_denormalize_activity(asobj, db):
+    as_json = asobj.json()
+
+    def maybe_denormalize(key):
+        val = as_json.get(key)
+        # If there's no specific val,
+        # it's not a string, or it's not in the database,
+        # just leave it!
+        if val is None or not isinstance(val, str) or val not in db:
+            return
+
+        # Otherwise, looks like that value *is* in the database... hey!
+        # Let's pull it out and set it as the key.
+        as_json[key] = db[val]
+
+    maybe_denormalize("actor")
+    maybe_denormalize("object")
+    maybe_denormalize("target")
+    return core.ASObj(as_json, asobj.env)
+
+
 DbmNormalizedEnv = core.Environment(
     vocabs=[vocab.CoreVocab],
     methods={
         (dbm_save_method, vocab.Object): dbm_save,
+        (dbm_save_method, vocab.Activity): dbm_activity_normalized_save,
         (dbm_delete_method, vocab.Object): dbm_delete,
-        (dbm_save_method, vocab.Activity): dbm_activity_normalized_save},
+        (dbm_denormalize_method, vocab.Object): dbm_denormalize_object,
+        (dbm_denormalize_method, vocab.Activity): dbm_denormalize_activity},
     shortids=core.shortids_from_vocab(vocab.CoreVocab),
     c_accessors=core.shortids_from_vocab(vocab.CoreVocab))
+
+
+def dbm_fetch_denormalized(id, db, env):
+    """
+    Fetch a fully denormalized ASObj from the database.
+    """
+    return env.asobj_run_method(
+        dbm_fetch(id, db, env),
+        dbm_denormalize_method, db)
 
 
 
