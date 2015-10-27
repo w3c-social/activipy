@@ -150,29 +150,3 @@ def dbm_fetch_denormalized(id, db, env):
     return env.asobj_run_method(
         dbm_fetch(id, db, env),
         dbm_denormalize_method, db)
-
-
-
-
-# Insert/update special methods for Activity / IntransitiveActivity
-# objects
-
-
-
-
-# Now, DBM with private data edition
-
-def privatedbm_fetch(db, id):
-    pass
-
-def privatedbm_insert(asobj, db, private=None):
-    pass
-
-def privatedbm_update(asobj, db, private=None):
-    pass
-
-def privatedbm_upsert(asobj, db, private=None):
-    pass
-
-def privatedbm_delete(asobj, db):
-    pass
