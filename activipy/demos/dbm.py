@@ -69,11 +69,40 @@ DbmEnv = core.Environment(
     c_accessors=core.shortids_from_vocab(vocab.CoreVocab))
 
 
-def dbm_save_activity(asobj, db):
-    pass
+def dbm_activity_normalized_save(asobj, db):
+    assert asobj.id is not None
+    as_json = asobj.json()
+
+    def maybe_normalize(key):
+        val = as_json.get(key)
+        # yup, time to normalize
+        if asobj.env.is_astype(val, vocab.Object):
+            val_asobj = core.ASObj(val, asobj.env)
+            # If there's no id, or if this object is already in the database,
+            # then okay, don't normalize
+            if val.id is None or val.id in db:
+                return
+
+            # Otherwise, save to the database
+            asobj.env.run_method(val_asobj, dbm_save_method, db)
+            # and set the key to be the .id
+            as_json[key] = val_asobj.id
+
+    maybe_normalize("actor")
+    maybe_normalize("object")
+    maybe_normalize("target")
+    db[asobj.id] = as_json
+    return as_json
 
 
-
+DbmNormalizedEnv = core.Environment(
+    vocabs=[vocab.CoreVocab],
+    methods={
+        (dbm_save_method, vocab.Object): dbm_save,
+        (dbm_delete_method, vocab.Object): dbm_delete,
+        (dbm_save_method, vocab.Activity): dbm_save},
+    shortids=core.shortids_from_vocab(vocab.CoreVocab),
+    c_accessors=core.shortids_from_vocab(vocab.CoreVocab))
 
 
 
