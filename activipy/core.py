@@ -363,19 +363,19 @@ def throw_no_method_error(asobj):
     raise NoMethodFound("Could not find a method for type: %s" % (
         ", ".join(asobj.types)))
 
-def handle_one(astype_methods, asobj, _fallback=throw_no_method_error):
+def handle_one(astype_methods, env, asobj, _fallback=throw_no_method_error):
     if len(astype_methods) == 0:
         _fallback(asobj)
         
     def func(*args, **kwargs):
         method, astype = astype_methods[0]
-        return method(asobj, *args, **kwargs)
+        return method(env, asobj, *args, **kwargs)
     return func
 
 
-def handle_map(astype_methods, asobj):
+def handle_map(astype_methods, env, asobj):
     def func(*args, **kwargs):
-        return [method(asobj, *args, **kwargs)
+        return [method(env, asobj, *args, **kwargs)
                 for method, astype in astype_methods]
     return func
 
@@ -385,12 +385,12 @@ class HaltIteration(object):
         self.val = val
 
 
-def handle_fold(astype_methods, asobj):
+def handle_fold(astype_methods, env, asobj):
     def func(initial=None, *args, **kwargs):
         val = initial
         for method, astype in astype_methods:
             # @@: Not sure if asobj or val coming first is a better interface...
-            val = method(asobj, val, *args, **kwargs)
+            val = method(env, asobj, val, *args, **kwargs)
             # Provide a way to break out of the loop early...?
             # @@: Is this a good idea, or even useful for anything?
             if isinstance(val, HaltIteration):
@@ -521,7 +521,7 @@ class Environment(object):
             [(self.methods[(method, astype)], astype)
              for astype in astypes
              if (method, astype) in self.methods],
-            asobj)
+            self, asobj)
 
     def asobj_run_method(self, asobj, method, *args, **kwargs):
         # make note of why arguments make this slightly lossy

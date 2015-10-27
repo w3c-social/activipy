@@ -42,13 +42,13 @@ class JsonDBM(object):
 def dbm_fetch(id, db):
     return core.ASObj(db[id])
 
-def dbm_save(asobj, db):
+def dbm_save(env, asobj, db):
     assert asobj.id is not None
     new_val = asobj.json()
     db[asobj.id] = new_val
     return new_val
 
-def dbm_delete(asobj, db):
+def dbm_delete(env, asobj, db):
     assert asobj.id is not None
     del db[asobj.id]
 
@@ -69,11 +69,8 @@ DbmEnv = core.Environment(
     c_accessors=core.shortids_from_vocab(vocab.CoreVocab))
 
 
-def dbm_save_activity(asobj, db):
+def dbm_save_activity(env, asobj, db):
     pass
-
-
-
 
 
 
@@ -89,14 +86,14 @@ def dbm_save_activity(asobj, db):
 def privatedbm_fetch(db, id):
     pass
 
-def privatedbm_insert(asobj, db, private=None):
+def privatedbm_insert(env, asobj, db, private=None):
     pass
 
-def privatedbm_update(asobj, db, private=None):
+def privatedbm_update(env, asobj, db, private=None):
     pass
 
-def privatedbm_upsert(asobj, db, private=None):
+def privatedbm_upsert(env, asobj, db, private=None):
     pass
 
-def privatedbm_delete(asobj, db):
+def privatedbm_delete(env, asobj, db):
     pass
