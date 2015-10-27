@@ -75,16 +75,20 @@ def dbm_activity_normalized_save(asobj, db):
 
     def maybe_normalize(key):
         val = as_json.get(key)
+        # Skip if not a dictionary with a "@type"
+        if not isinstance(val, dict) or not "@type" in val:
+            return
+
+        val_asobj = core.ASObj(val, asobj.env)
         # yup, time to normalize
-        if asobj.env.is_astype(val, vocab.Object):
-            val_asobj = core.ASObj(val, asobj.env)
+        if asobj.env.is_astype(val_asobj, vocab.Object, inherit=True):
             # If there's no id, or if this object is already in the database,
             # then okay, don't normalize
-            if val.id is None or val.id in db:
+            if val_asobj.id is None or val_asobj.id in db:
                 return
 
             # Otherwise, save to the database
-            asobj.env.run_method(val_asobj, dbm_save_method, db)
+            asobj.env.asobj_run_method(val_asobj, dbm_save_method, db)
             # and set the key to be the .id
             as_json[key] = val_asobj.id
 
@@ -100,7 +104,7 @@ DbmNormalizedEnv = core.Environment(
     methods={
         (dbm_save_method, vocab.Object): dbm_save,
         (dbm_delete_method, vocab.Object): dbm_delete,
-        (dbm_save_method, vocab.Activity): dbm_save},
+        (dbm_save_method, vocab.Activity): dbm_activity_normalized_save},
     shortids=core.shortids_from_vocab(vocab.CoreVocab),
     c_accessors=core.shortids_from_vocab(vocab.CoreVocab))
 
