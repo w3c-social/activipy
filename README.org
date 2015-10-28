@@ -1,5 +1,7 @@
 #+TITLE: Activipy: ActivityStreams 2.0 stuff for Python
 
+Read the [[http://activipy.readthedocs.org/en/latest/index.html][documentation!]]
+
 * What is this?
 
 Activipy is an implementation of ActivityStreams 2.0 for Python.
