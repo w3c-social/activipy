@@ -25,7 +25,9 @@ from a mad scientist type person::
        "@id": "http://drboss.example/rants/power-productivity/",
        "content": "Thanks to my latest invention, productivity is up 1 million percent! MWAHAHA!!"}}
 
-Here's another::
+Here's another:
+
+.. code-block:: python
 
   {"@id": "http://employeemine.example/sarah/blog/new-job-please/"
    "@type": "Note",
@@ -94,3 +96,18 @@ web!
 How Activipy and ActivityStreams work together
 ----------------------------------------------
 
+So if ActivityStreams is just JSON (and optionally json-ld), what do
+you need Activipy for?  Good question!
+
+Activipy provides a whole suite of useful tools, including friendly
+and Pythonic constructors, a flexible and extensible method dispatch
+system, and much more.  Activipy provides you with the basic tools you
+need to map ActivityStreams to the world of your Python application.
+And if you're just starting out in writing a brand new social network
+application?  You'd better believe Activipy is a good place to start!
+
+Activipy means making your networked application social is easy.  And
+best of all, you can speak a common language with other
+ActivityStreams speaking applications across the net.
+
+Sound good?  :ref:`Let's get started! <tutorial-chapter>`

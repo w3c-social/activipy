@@ -1,3 +1,5 @@
+.. _tutorial-chapter:
+
 An Activipy tutorial
 ====================
 
