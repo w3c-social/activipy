@@ -357,6 +357,9 @@ class MethodId(object):
         self.description = description
         self.handler = handler
 
+    def __repr__(self):
+        return "<MethodId %s>" % self.name
+
 
 class NoMethodFound(Exception): pass
 
