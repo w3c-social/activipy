@@ -258,6 +258,11 @@ class ASObj(object):
     def types_astype(self):
         return self.env.asobj_astypes(self)
 
+    # TODO: Memoize
+    @property
+    def types_inheritance(self):
+        return self.env.asobj_astype_inheritance(self)
+
     # Don't memoize this, users might mutate
     def json(self):
         return copy.deepcopy(self.__jsobj)
