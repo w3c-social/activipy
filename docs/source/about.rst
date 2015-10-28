@@ -101,9 +101,32 @@ you need Activipy for?  Good question!
 
 Activipy provides a whole suite of useful tools, including friendly
 and Pythonic constructors, a flexible and extensible method dispatch
-system, and much more.  Activipy provides you with the basic tools you
-need to map ActivityStreams to the world of your Python application.
-And if you're just starting out in writing a brand new social network
+system, and much more.  We could express the above like this::
+
+  >>> from activipy import vocab
+  >>> vocab.Create(
+  ...   "http://drboss.example/api/objects/123415/",
+  ...   actor=vocab.Person(
+  ...     "http://drboss.example/me/",
+  ...     displayName="Professor BossManager"),
+  ...   to=["http://employeemine.example/jim/",
+  ...       "http://employeemine.example/sarah/"],
+  ...   object=vocab.Note(
+  ...     http://drboss.example/rants/power-productivity/",
+  ...     content="Thanks to my latest invention, productivity is up 1 million percent! MWAHAHA!!"))
+
+If we were writing our own diary application, we could specify an
+environment that knows how to post notes to it::
+
+  >>> from ourjournal import DiaryEnv
+  >>> dear_diary = DiaryEnv.c.Note(
+  ...     displayName="New job, please.",
+  ...     content="Anyone know where I can get a job not managed by a mad scientist?")
+  >>> dear_diary.post()
+
+Activipy provides you with the basic tools you need to map
+ActivityStreams to the world of your Python application.  And if
+you're just starting out in writing a brand new social network
 application?  You'd better believe Activipy is a good place to start!
 
 Activipy means making your networked application social is easy.  And
