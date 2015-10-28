@@ -195,7 +195,7 @@ BasicEnv is, as you would expect, the default and most minimal
 environment, containing the core vocabulary and nothing else.  For
 many applications, this is all you need.  If your application needs
 additional terminology, we will cover this later in the manual, but
-for now, we will only concern ourself with the core vocabulary.
+for now, we will only concern ourselves with the core vocabulary.
 
 Even if we stick with the core vocabulary, we may wish to use a
 different environment than BasicEnv.  Why?  Well we keep saying that
@@ -204,7 +204,7 @@ vocabulary, `Environment` objects can contain a mapping of methods!
 
 So, we want to try something... what would be a good demo?  How about
 storing things!  Sounds good to me!  In our case we're going to simply
-serialize activitystreams objects to json and dump them in and out of
+serialize ActivityStreams objects to json and dump them in and out of
 a minimalist key-value
 `dbm database <https://docs.python.org/3/library/dbm.html>`_.
 (Note: this will be a lot more efficient if you install the Python
@@ -360,7 +360,7 @@ needed?
 Let's think about this for a moment.  We know that the root activity
 that we're posting here is of the type `Create`.  We could look at the
 `ActivityStreams Vocabulary document <http://www.w3.org/TR/activitystreams-vocabulary/>`_
-to find out the inheritence chain, but we don't even have to... Activipy
+to find out the inheritance chain, but we don't even have to... Activipy
 can help us out here::
 
   >>> post_this.types_inheritance
@@ -530,7 +530,7 @@ inheritance chain, something like this::
 
 We aren't doing that... we're using this intermediate `Environment`
 thing instead, and ASObj instances are all just instances of ASObj.
-Why?  Why not just use Python's normal class heirarchy?  Why have an
+Why?  Why not just use Python's normal class hierarchy?  Why have an
 `Environment` at all?
 
 There are a few reasons:
@@ -539,13 +539,13 @@ There are a few reasons:
    actually have *multiple* values set here, and the functionality
    provided by the ASObj will be a union of those types.  Because of
    this, Python's classes really don't work at all to track
-   inheritence.  Luckily, there are other benefits of going with an
+   inheritance.  Luckily, there are other benefits of going with an
    `Environment`....
 
 2. Different applications need to do different things.  It's useful to
    have a general way of handling method dispatch that appropriately
-   pays respect to the inheritence system of the ActivityStreams base
-   vocabulary, and it's nice to make that as Pythonic as posible, but
+   pays respect to the inheritance system of the ActivityStreams base
+   vocabulary, and it's nice to make that as Pythonic as possible, but
    you might never save ActivityStreams objects to a DBM store (very
    few production applications would).  You very well may store
    objects to an SQL database, or some object store, or who knows
@@ -560,7 +560,7 @@ There are a few reasons:
    entirely new vocabulary, and Activipy allows you to do this.
    Allowing a user to define their own Environment means that this is
    not difficult to do, and how to transfer to those to the
-   appropriate ASType represenations (and then to know how to operate
+   appropriate ASType representations (and then to know how to operate
    upon them) is very possible.
 
 There's more to say on these subjects, but hopefully this section
