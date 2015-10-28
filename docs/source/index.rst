@@ -1,8 +1,9 @@
 Activipy: Your pythonic social network toolkit
 ==============================================
 
-Activipy (pronounced "activi-pie")
-is an `ActivityStreams 2.0 <http://www.w3.org/TR/activitystreams-core/>`_
+`Activipy <https://github.com/w3c-social/activipy>`_
+(pronounced "activi-pie") is an
+`ActivityStreams 2.0 <http://www.w3.org/TR/activitystreams-core/>`_
 toolkit for Python.  It helps making your application or website social
 while keeping things fun.
 
