@@ -35,6 +35,7 @@ constructors::
   from activipy import vocab
 
   post_this = vocab.Create(
+      "http://tsyesika.co.uk/act/foo-id-here/",
       actor=vocab.Person(
           "http://tsyesika.co.uk/",
           displayName="Jessica Tallon"),
@@ -52,7 +53,8 @@ we're posting.
 What does our message look like?  Let's see::
 
   >>> post_this.json()
-  {"@type": "Create",
+  {"@id": "http://tsyesika.co.uk/act/foo-id-here/",
+   "@type": "Create",
    "actor": {
        "@type": "Person",
        "@id": "http://tsyesika.co.uk/",
@@ -69,7 +71,7 @@ Oh interesting!  That looks pretty similar to the Python constructor
 version.  In fact, we could have built this from the json itself::
 
   >>> from activipy import core, vocab
-  >>> core.ASObj({
+  >>> post_this = core.ASObj({
   ...     "@type": "Create",
   ...     "@id": "http://tsyesika.co.uk/act/foo-id-here/",
   ...     "actor": {
@@ -142,7 +144,217 @@ how do we do it?
 Methods for our madness
 -----------------------
 
-.. TODO: Now we need some demo environments :)
+Before we hop right into methods, a quick refresher.  Remember when we
+said we could have built our post_this object like this?
+
+.. code-block:: pycon
+
+  >>> from activipy import core, vocab
+  >>> post_this = core.ASObj({
+  ...     # ... json stuff here
+  ...   },
+  ...   vocab.BasicEnv)
+  <ASObj Create>
+
+Wait, what's that BasicEnv thing hanging off the end?  That's pretty
+curious.  What does it do?
+
+Since we're passing into the object, it's a good (and correct) guess
+to assume that the ASObj instance has access to it::
+
+  >>> post_this.env
+  <activipy.core.Environment at 0x7fecf206f5c0>
+
+The environment helps us in a few ways.  For one thing, it contains a
+set of vocabulary that our environment "knows" about.  In fact, we
+could even do constructors that implicitly pass in the environment
+directly from the environment itself, using the vocabulary it's been
+informed of::
+
+  >>> env = vocab.BasicEnv
+  >>> root_beer_note = env.c.Note(
+  ...   "htp://tsyesika.co.uk/chat/sup-yo/",
+  ...   content="Up for some root beer floats?")
+  >>> root_beer_note
+  <ASObj.Note>
+
+Well that's pretty neat!  It looks like the `Environment.c` accessor
+is a friendly way to access vocabulary classes.  Cool!  So you can
+already guess at one purpose for environments: if your application is
+working with an extended vocabulary, it's possible for Activipy to
+"know" about your vocabulary while determining types, etc.  The
+BasicEnv is, as you would expect, the default and most minimal
+environment, containing the core vocabulary and nothing else.  For
+many applications, this is all you need.  If your application needs
+additional terminology, we will cover this later in the manual, but
+for now, we will only concern ourself with the core vocabulary.
+
+Even if we stick with the core vocabulary, we may wish to use a
+different environment than BasicEnv.  Why?  Well we keep saying that
+we want to *do* something with our applications.  Aside from mapping
+vocabulary, `Environment` objects can contain a mapping of methods!
+
+So, we want to try something... what would be a good demo?  How about
+storing things!  Sounds good to me!  In our case we're going to simply
+serialize activitystreams objects to json and dump them in and out of
+a minimalist key-value
+`dbm database <https://docs.python.org/3/library/dbm.html>`_.
+(Note: this will be a lot more efficient if you install the Python
+bindings for `gdbm <http://www.gnu.org.ua/software/gdbm/>`_.)
+
+Our dbm demo module contains a JsonDBM wrapper which conveniently
+serializes/deserializes to/from json when pulling things in/out of the
+database.  Let's give it a spin so we know what we're working with::
+
+  >>> from activipy.demos import dbm
+  >>> db = dbm.JsonDBM.open("/tmp/test.db")
+  >>> db["foo"] = {"cat": "meow", "dog": "woof"}
+  >>> db["foo"]
+  {'cat': 'meow', 'dog': 'woof'}
+  >>> "foo" in db
+  True
+  >>> del db["foo"]
+  >>> "foo" in db
+  False
+
+Okay, so that's a pretty easy to use key-value store!  We could
+clearly dump our ASObj objects to json and manually save them into
+here.  It would be nice if there was a "save" method that could do
+that for us though.  How could such a save method be made available?
+
+Ah, here's a method for Environments!  You see, an `Environment`
+object not only contains information about vocabulary, it contains
+information about methods as well.  As it turns out, we have a handy
+environment ready for you to play with which knows how to work with a
+`JsonDBM` wrapped database.  Let's try it!
+
+.. code-block:: pycon
+
+  >>> env = dbm.DbmEnv
+  >>> note = env.c.Note("http://example.org/notes/cookie-time/",
+  ...                   content="I really want a cookie!")
+  >>> note.m.save(db)
+  >>> db["http://example.org/notes/cookie-time"]
+  {'@id': 'http://example.org/notes/cookie-time/',
+   '@type': 'Note',
+   'content': 'I really want a cookie!'}
+
+Hey, it worked!  That sure was handy... we got a .save() method
+attached right to our Note!  How about a .delete()?
+
+.. code-block:: pycon
+
+  >>> "http://example.org/notes/cookie-time" in db
+  True
+  >>> note.m.delete(db)
+  >>> "http://example.org/notes/cookie-time" in db
+  False
+
+How convenient!
+
+You may notice that we don't call `note.save()` or `note.delete()`;
+instead, we call `note.m.save()` and `note.m.delete()`!  That's
+because the `.m` attribute is a proxy object to all the methods the
+`ASObj.env` knows about (in this case, DbmEnv)::
+
+  >>> dbm.DbmEnv.methods
+  {(<MethodId save>, <ASType Object>): <function activipy.demos.dbm.dbm_save>,
+   (<MethodId delete>, <ASType Object>): <function activipy.demos.dbm.dbm_delete>}
+
+In fact, we could have used DbmEnv.m instead::
+
+  >>> dbm.DvmEnv.m.save(note, db)
+  >>> # is the same as
+  >>> note.m.save(db)
+
+But that's way more verbose!  Why not just use `note.m.save(db)`
+instead?  So convenient!
+
+What happens if we save a more complicated, nested note to the db?
+Remember our root beer float friend?
+
+.. code-block:: pycon
+
+  >>> post_this.json()
+  {"@id": "http://tsyesika.co.uk/act/foo-id-here/",
+   "@type": "Create",
+   "actor": {
+       "@type": "Person",
+       "@id": "http://tsyesika.co.uk/",
+       "displayName": "Jessica Tallon"},
+   "to": ["acct:cwebber@identi.ca",
+          "acct:justaguy@rhiaro.co.uk",
+          "acct:ladyaeva@hedgehog.example"],
+   "object": {
+       "@type": "Note",
+       "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+       "content": "Up for some root beer floats?"}}
+  
+So we now remember that when post_this was set up, it used the general
+purpose environment.  This means that there is no `post_this.m.save()`
+method for us to call, because that method is not set up in the
+BasicEnv environment.  We can't even use `BasicEnv.m.save()`,
+because Activipy safeguards against this::
+
+  >>> dbm.DbmEnv.m.save(post_this, db)
+  Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/cwebber/devel/activipy/activipy/core.py", line 464, in method_dispatcher
+    method = self.asobj_get_method(asobj, method_id)
+  File "/home/cwebber/devel/activipy/activipy/core.py", line 550, in asobj_get_method
+    "ASObj attempted to call method with an Environment "
+  activipy.core.EnvironmentMismatch: ASObj attempted to call method with an Environment it was not bound to!
+
+This makes sense, because different environments provide different
+vocabularies and handle different methods, and subtle bugs could creep
+in if we permitted this.  Normally this is no problem, one application
+will in general only make use of a single `Environment` tuned to that
+application.  Even here, it is easy to correct... let's just recast
+`post_this` to our new environment::
+
+  >>> post_this = core.ASObj(post_this.json(), dbm.DbmEnv)
+
+Now we can save away:::
+
+  >>> post_this.m.save(db)
+  >>> db["http://tsyesika.co.uk/act/foo-id-here/"]
+  {"@id": "http://tsyesika.co.uk/act/foo-id-here/",
+   "@type": "Create",
+   "actor": {
+       "@type": "Person",
+       "@id": "http://tsyesika.co.uk/",
+       "displayName": "Jessica Tallon"},
+   "to": ["acct:cwebber@identi.ca",
+          "acct:justaguy@rhiaro.co.uk",
+          "acct:ladyaeva@hedgehog.example"],
+   "object": {
+       "@type": "Note",
+       "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+       "content": "Up for some root beer floats?"}}
+  
+Horray, our note is in the database!  That's really nice.
+
+But wait, is this really how we want?  Notice that this activity
+contains two nested ActivityStreams objects: `actor` and `object`!
+Wouldn't it be nice if the `.save()` method was able to be smart about
+this and "normalize" the data for us, saving the child ActivityStreams
+objects as their own database references, and pulling them out as
+needed?
+
+Let's think about this for a moment.  We know that the root activity
+that we're posting here is of the type `Create`.  We could look at the
+`ActivityStreams Vocabulary document <http://www.w3.org/TR/activitystreams-vocabulary/>`_
+to find out the inheritence chain, but we don't even have to... Activipy
+can help us out here::
+
+  >>> post_this.types_inheritance
+  [<ASType Create>, <ASType Activity>, <ASType Object>]
+
+Looking at this, we know that `Create` is a type of `Activity`, which
+is itself a type of `Object`.
+
+.. Why do we do method dispatch through the environment?
+
 
 
 The more we change, the more we stay the same
@@ -197,3 +409,5 @@ just plain old json.  Even when you get into extension land, Activipy
 makes things so that you can think as in terms of pythonic constructors
 rather than json-ld, so your code will look like simple Python, just
 like at the very beginning of our tutorial.
+
+*TODO: Finish this section!*
