@@ -62,29 +62,40 @@ converted to ASObj objects as well.
 ** TODO Add ASProp
 
 ** TODO Add demos section
-*** DONE Easy GDBM based storage system
-    CLOSED: [2015-10-28 Wed 17:17]
 *** TODO linter/validator
 
 We can use the method dispatch system to handle this.
 
+*** Archive                                                         :ARCHIVE:
+**** DONE Easy GDBM based storage system
+     CLOSED: [2015-10-28 Wed 17:17]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-28 Wed 17:21
+     :END:
 ** TODO Documentation basics
-*** DONE Add sphinx basic structure
-    CLOSED: [2015-10-22 Thu 13:01]
-*** DONE Documentation structure
-    CLOSED: [2015-10-28 Wed 17:17]
-
- - Intro
-   - About ActiviPy
-   - Tutorial
- - Core types
- - Vocabulary
- - Extending the environment
- - Advanced Examples
-
 *** TODO Tutorial
 
 *** TODO Document basic "types" structure
+
+*** Archive                                                         :ARCHIVE:
+**** DONE Add sphinx basic structure
+     CLOSED: [2015-10-22 Thu 13:01]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-28 Wed 17:21
+     :END:
+**** DONE Documentation structure
+     CLOSED: [2015-10-28 Wed 17:17]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-28 Wed 17:21
+     :END:
+
+  - Intro
+    - About ActiviPy
+    - Tutorial
+  - Core types
+  - Vocabulary
+  - Extending the environment
+  - Advanced Examples
 
 ** TODO Make ASVocab more useful
 
@@ -96,15 +107,23 @@ We want to:
  - make ourself more useful to ASObj objects
 
 ** TODO Tests
-*** DONE Basic test infrastructure
-    CLOSED: [2015-10-12 Mon 16:37]
 *** TODO Test all types.py stuff
-**** DONE ASType
-     CLOSED: [2015-10-12 Mon 16:37]
 **** TODO ASVocab
 **** TODO ASObj
 **** TODO ASEnvironment
+**** Archive                                                        :ARCHIVE:
+***** DONE ASType
+      CLOSED: [2015-10-12 Mon 16:37]
+      :PROPERTIES:
+      :ARCHIVE_TIME: 2015-10-28 Wed 17:21
+      :END:
 *** TODO Basic vocabs stuff
+*** Archive                                                         :ARCHIVE:
+**** DONE Basic test infrastructure
+     CLOSED: [2015-10-12 Mon 16:37]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-10-28 Wed 17:21
+     :END:
 ** TODO Consider rename to Pydraulics?
 
 After all, I'm the one who started that project, and it's abandoned...
