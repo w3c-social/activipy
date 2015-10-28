@@ -344,7 +344,7 @@ Now we can save away:::
        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
        "content": "Up for some root beer floats?"}}
   
-Horray, our note is in the database!  That's really nice.
+Hooray, our note is in the database!  That's really nice.
 
 
 Save a few more
