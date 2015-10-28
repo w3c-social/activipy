@@ -44,7 +44,8 @@ what a method does and etc, but they're also slightly unwieldy to set
 up.  It will be less precise, but maybe easier, to just use strings to
 represent what a method is.
 
-** TODO Pass environment into methods?
+** CANCELED Pass environment into methods?
+   CLOSED: [2015-10-28 Wed 17:16]
 
 Should methods be able to themselves take advantage of method dispatch?
 If so, they will need "env" as first argument.
