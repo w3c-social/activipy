@@ -4,6 +4,9 @@ An Activipy tutorial
 .. TODO: Do we want to open up with a more "dive in" demo of the
    above?
 
+.. TODO: Break this up into multiple pages, so it doesn't look
+   intimidating?
+
 
 Sweet beginnings
 ----------------
