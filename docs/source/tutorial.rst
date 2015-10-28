@@ -123,10 +123,10 @@ What kind of type is our newly extracted `root_beer_note`?  Let's see::
   >>> root_beer_note.types
   ['Note']
 
-Wait, plural?  That's right, an ActivityStreams object's "type" is
-actually a "composite type".  It turns out this is useful when
-handling extensions to the vocabulary, but we'll come back to that
-later.
+Wait, "types", as in possibly plural?  That's right, an ActivityStreams
+object's "type" is actually a "composite type".  It turns out this is
+useful when handling extensions to the vocabulary, but we'll come back
+to that later.
 
 Strings are less fun as types than ASTypes, so can we get that back?
 We sure can::
