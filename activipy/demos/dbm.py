@@ -104,13 +104,14 @@ def dbm_activity_normalized_save(asobj, db):
         val_asobj = core.ASObj(val, asobj.env)
         # yup, time to normalize
         if asobj.env.is_astype(val_asobj, vocab.Object, inherit=True):
-            # If there's no id, or if this object is already in the database,
-            # then okay, don't normalize
-            if val_asobj.id is None or val_asobj.id in db:
+            # If there's no id, then okay, don't normalize
+            if val_asobj.id is None:
                 return
 
-            # Otherwise, save to the database
-            asobj.env.asobj_run_method(val_asobj, dbm_save_method, db)
+            if val_asobj.id not in db:
+                # save to the database
+                asobj.env.asobj_run_method(val_asobj, dbm_save_method, db)
+
             # and set the key to be the .id
             as_json[key] = val_asobj.id
 
