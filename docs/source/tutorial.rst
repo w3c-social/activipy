@@ -144,6 +144,9 @@ how do we do it?
 Methods for our madness
 -----------------------
 
+New environments, new friends
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Before we hop right into methods, a quick refresher.  Remember when we
 said we could have built our post_this object like this?
 
@@ -222,7 +225,11 @@ clearly dump our ASObj objects to json and manually save them into
 here.  It would be nice if there was a "save" method that could do
 that for us though.  How could such a save method be made available?
 
-Ah, here's a method for Environments!  You see, an `Environment`
+
+Save one for me, please
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Ah, here's a use for Environments!  You see, an `Environment`
 object not only contains information about vocabulary, it contains
 information about methods as well.  As it turns out, we have a handy
 environment ready for you to play with which knows how to work with a
@@ -334,6 +341,10 @@ Now we can save away:::
   
 Horray, our note is in the database!  That's really nice.
 
+
+Save a few more
+~~~~~~~~~~~~~~~
+
 But wait, is this really how we want?  Notice that this activity
 contains two nested ActivityStreams objects: `actor` and `object`!
 Wouldn't it be nice if the `.save()` method was able to be smart about
@@ -351,16 +362,214 @@ can help us out here::
   [<ASType Create>, <ASType Activity>, <ASType Object>]
 
 Looking at this, we know that `Create` is a type of `Activity`, which
-is itself a type of `Object`.
+is itself a type of `Object`.  Looking at the vocabulary document,
+it's clear to us that the `actor` and `object` fields
+`inherit from Activity <http://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity>`_.
 
-.. Why do we do method dispatch through the environment?
+It seems fine to save a general `Object` type as-is as we already are,
+and indeed, you may have noticed that the save method was operating
+precisely on this ASType::
 
+  >>> dbm.DbmEnv.methods
+  {(<MethodId save>, <ASType Object>): <function activipy.demos.dbm.dbm_save>,
+   (<MethodId delete>, <ASType Object>): <function activipy.demos.dbm.dbm_delete>}
 
+So, since a `Create` *is* an Object, of course the basic save happens
+here.  But it's even more an `Activity` than a mere `Object`, and if
+we think about it, hey!  Pretty much on any `Activity` ASType (whether
+it's a `Create` or a `Delete` or a `Like`...) it would be really nice
+to normalize the `actor` and `object` fields.  Is there a way to
+specify that we'd like to treat Activity objects a bit differently?
+Indeed, there is!  As you've already guessed, if our `Environment` had
+a separate method that did something different for `save` on
+`Activity`, that would be really helpful.  And it turns out,
+we've already supplied you with such an environment::
+
+  >>> dbm.DbmNormalizedEnv.methods
+  {(<MethodId save>, <ASType Object>): <function activipy.demos.dbm.dbm_save>,
+   (<MethodId save>, <ASType Activity>): <function activipy.demos.dbm.dbm_activity_normalized_save>,
+   (<MethodId denormalize>, <ASType Object>): <function activipy.demos.dbm.dbm_denormalize_object>,
+   (<MethodId denormalize>, <ASType Activity>): <function activipy.demos.dbm.dbm_denormalize_activity>,
+   (<MethodId delete>, <ASType Object>): <function activipy.demos.dbm.dbm_delete>}
+
+Neat, this does indeed provide us with a separate method for Activity.
+Let's switch to using the `DbmNormalizedEnv` instead and cast
+`post_this` to use it (again, you wouldn't normally need to do this in
+an application that uses just one environment)::
+
+  >>> env = dbm.DbmNormalizedEnv
+  >>> post_this = core.ASObj(post_this.json(), dbm.DbmNormalizedEnv)
+
+Now what happens if we save the object?
+
+.. code-block:: pycon
+
+  >>> post_this.m.save(db)
+  >>> db["http://tsyesika.co.uk/act/foo-id-here/"]
+  {'@id': 'http://tsyesika.co.uk/act/foo-id-here/',
+   '@type': 'Create',
+   'actor': 'http://tsyesika.co.uk/',
+   'object': 'http://tsyesika.co.uk/chat/sup-yo/',
+   'to': ['acct:cwebber@identi.ca',
+          'acct:justaguy@rhiaro.co.uk',
+          'acct:ladyaeva@hedgehog.example']}
+  >>> db["http://tsyesika.co.uk/"]
+  {'@id': 'http://tsyesika.co.uk/',
+   '@type': 'Person',
+   'displayName': 'Jessica Tallon'}  
+  >>> db["http://tsyesika.co.uk/chat/sup-yo/"]
+  {'@id': 'http://tsyesika.co.uk/chat/sup-yo/',
+   '@type': 'Note',
+   'content': 'Up for some root beer floats?'}
+
+Awesome... that is *exactly* what we were hoping for!
+
+There and back again
+~~~~~~~~~~~~~~~~~~~~
+
+Just to bring things full circle, here's a method that demonstrates
+pulling an object out of the database::
+
+  >>> def dbm_fetch(id, db, env):
+  ...     return core.ASObj(db[id], env)
+  ...
+  >>> normalized_post = dbm_fetch("http://tsyesika.co.uk/act/foo-id-here/",
+  ...                             db, dbm.DbmNormalizedEnv)
+  >>> normalized_post
+  <ASObj Create "http://tsyesika.co.uk/act/foo-id-here/">
+  >>> normalized_post.json()
+  {'@id': 'http://tsyesika.co.uk/act/foo-id-here/',
+   '@type': 'Create',
+   'actor': 'http://tsyesika.co.uk/',
+   'object': 'http://tsyesika.co.uk/chat/sup-yo/',
+   'to': ['acct:cwebber@identi.ca',
+          'acct:justaguy@rhiaro.co.uk',
+          'acct:ladyaeva@hedgehog.example']}
+
+We could make use of the environment's denormalize method::
+
+  >>> normalized_post.m.denormalize(db)
+  <ASObj Create "http://tsyesika.co.uk/act/foo-id-here/">
+  >>> normalized_post.m.denormalize(db).json()
+  {'@id': 'http://tsyesika.co.uk/act/foo-id-here/',
+   '@type': 'Create',
+   'actor': {'@id': 'http://tsyesika.co.uk/',
+             '@type': 'Person',
+             'displayName': 'Jessica Tallon'},
+   'object': {'@id': 'http://tsyesika.co.uk/chat/sup-yo/',
+              '@type': 'Note',
+              'content': 'Up for some root beer floats?'},
+   'to': ['acct:cwebber@identi.ca',
+          'acct:justaguy@rhiaro.co.uk',
+          'acct:ladyaeva@hedgehog.example']}
+
+Hey look, it's our original post back, with the `actor` and `object`
+filled in!  This time, they were extracted from their own entries'
+key-value pairs in the database.  Neat!
+
+And finally, we could simplify this whole thing, and write a method to
+pull data out of the database in a denormalized fashion, making use of
+our environment's denormalize methods::
+
+  >>> def dbm_fetch_denormalized(id, db, env):
+  ...     return env.m.denormalize(
+  ...         dbm_fetch(id, db, env), db)
+  ...
+  >>> denormalized_post = dbm_fetch_denormalized(
+  ...     "http://tsyesika.co.uk/act/foo-id-here/",
+  ...     db, dbm.DbmNormalizedEnv)
+  >>> denormalized_post
+  <ASObj Create "http://tsyesika.co.uk/act/foo-id-here/"
+  >>> denormalized_post.json()
+  {'@id': 'http://tsyesika.co.uk/act/foo-id-here/',
+   '@type': 'Create',
+   'actor': {'@id': 'http://tsyesika.co.uk/',
+             '@type': 'Person',
+             'displayName': 'Jessica Tallon'},
+   'object': {'@id': 'http://tsyesika.co.uk/chat/sup-yo/',
+              '@type': 'Note',
+              'content': 'Up for some root beer floats?'},
+   'to': ['acct:cwebber@identi.ca',
+          'acct:justaguy@rhiaro.co.uk',
+          'acct:ladyaeva@hedgehog.example']}
+  
+Whew, what a round trip!
+
+A word to the enwisened
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This whole process above of calling the appropriate methods for the
+appropriate type (or in our case, ASType) is called "method dispatch".
+You may have noticed that we do things fairly differently from most
+Python libraries, which usually use Python's native classes as an
+inheritance chain, something like this::
+
+  class Object(ASClass):
+      class_id = "http://www.w3.org/ns/activitystreams#Object"
+      # bla bla
+      def save(self, db):
+           # save thing here
+           pass
+
+  class Activity(Object):
+      class_id = "http://www.w3.org/ns/activitystreams#Activity"
+      # more bla bla
+      def save(self, db):
+           # save a bit differently
+           pass
+           
+  class Create(Activity):
+      class_id = "http://www.w3.org/ns/activitystreams#Create"
+
+  # also define Note, etc here
+
+We aren't doing that... we're using this intermediate `Environment`
+thing instead, and ASObj instances are all just instances of ASObj.
+Why?  Why not just use Python's normal class heirarchy?  Why have an
+`Environment` at all?
+
+There are a few reasons:
+
+1. ActivityStreams technically has "composite types"... an "@type" can
+   actually have *multiple* values set here, and the functionality
+   provided by the ASObj will be a union of those types.  Because of
+   this, Python's classes really don't work at all to track
+   inheritence.  Luckily, there are other benefits of going with an
+   `Environment`....
+
+2. Different applications need to do different things.  It's useful to
+   have a general way of handling method dispatch that appropriately
+   pays respect to the inheritence system of the ActivityStreams base
+   vocabulary, and it's nice to make that as Pythonic as posible, but
+   you might never save ActivityStreams objects to a DBM store (very
+   few production applications would).  You very well may store
+   objects to an SQL database, or some object store, or who knows
+   what.  You may wish to use Activipy for a desktop client or a
+   server application, and those might do very different things.  What
+   methods you specify are up to you, but Environments are built in
+   such a way that sharing methods between them, picking and choosing
+   the ones useful to you, and defining entirely new methods is easy.
+
+3. The core vocabulary is good enough for most social web
+   applications, but not for all.  You may well need to define
+   entirely new vocabulary, and Activipy allows you to do this.
+   Allowing a user to define their own Environment means that this is
+   not difficult to do, and how to transfer to those to the
+   appropriate ASType represenations (and then to know how to operate
+   upon them) is very possible.
+
+There's more to say on these subjects, but hopefully this section
+helped put some of this into perspective.  Hopefully the rest of this
+will become clear shortly, including how to expand our vocabulary
+without tripping over each others' definitions between applications.
+   
 
 The more we change, the more we stay the same
 ---------------------------------------------
 
 .. TODO: We need functional setters for this part to work :)
+
+*TODO: Fill in this section on the immutable properties of Activipy*
 
 
 Expanding our vocabulary
