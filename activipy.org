@@ -37,6 +37,23 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
+** TODO Handle all @context edges
+*** Brainstorming
+
+Probably what we ought to do is enforce that everything in an ASObj
+share a common @context setup.
+
+This means, it doesn't matter what's on an @context coming into
+ASObj(), we slice it off and replace it with @context after the
+deepcopy_in (and all child objects, we don't need an @context at all).
+
+But we do need to be able to "ingest foreign material", which means we
+should provide an Environment.ingest() method (or .ingest_foreign())
+
+*** TODO Handling in ASObj()
+*** TODO Ingesting foreign stuff
+*** TODO breaking off a child ASObj
+
 ** TODO Switch from method "object symbols" to strings?
 
 Currently we require setting up "object symbols" which self-document
