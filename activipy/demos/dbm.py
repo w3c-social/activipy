@@ -18,7 +18,8 @@
 ##   limitations under the License.
 
 import json
-from dbm import gnu as gdbm
+
+import dbm
 
 from activipy import core, vocab
 
@@ -44,7 +45,7 @@ class JsonDBM(object):
 
     @classmethod
     def open(cls, filename):
-        return cls(gdbm.open(filename, 'c'))
+        return cls(dbm.open(filename, 'c'))
 
     def close(self):
         self.db.close()
@@ -55,6 +56,8 @@ class JsonDBM(object):
         else:
             return default
 
+    def fetch_asobj(self, env):
+        return core.ASObj(self[id], env)
 
 # Each of these returns the full object inserted into dbm
 
