@@ -230,6 +230,7 @@ class ASObj(object):
         self.env = env
         # @@: Not used yet, but we might soon
         self.__orig_type = jsobj["@type"]
+        self.m = self.env._build_m_map(self)
 
     def __getitem__(self, key):
         val = self.__jsobj[key]
@@ -445,7 +446,7 @@ class Environment(object):
         self.shortids = shortids or {}
         self.document_loader = document_loader
         self.c = self.__build_c_accessors(c_accessors or {})
-        self.m = self.__build_m_map()
+        self.m = self._build_m_map()
 
         self.uri_map = self.__build_uri_map()
 
@@ -454,12 +455,19 @@ class Environment(object):
             {name: TypeConstructor(astype, self)
              for name, astype in c_accessors.items()})
 
-    def __build_m_map(self):
+    def _build_m_map(self, asobj=None):
         def make_method_dispatcher(method_id):
             def method_dispatcher(asobj, *args, **kwargs):
                 method = self.asobj_get_method(asobj, method_id)
                 return method(*args, **kwargs)
-            return method_dispatcher
+            if asobj is None:
+                return method_dispatcher
+            else:
+                # in this variation, we already know what the
+                # asobj is
+                def curried_method_dispatcher(*args, **kwargs):
+                    return method_dispatcher(asobj, *args, **kwargs)
+                return curried_method_dispatcher
 
         method_ids = set([method_id for (method_id, astype)
                           in self.methods.keys()])
@@ -520,6 +528,19 @@ class Environment(object):
         return astype_inheritance_list(
             *self.asobj_astypes(asobj))
 
+    def is_astype(self, asobj, astype, inherit=True):
+        """
+        Check to see if an ASObj is of ASType; check full inheritance chain
+        """
+        if not isinstance(asobj, ASObj):
+            return False
+
+        if inherit:
+            return astype in self.asobj_astype_inheritance(asobj)
+        else:
+            return astype in self.asobj_astypes(asobj)
+
+    # @@: Should we drop the asobj_ from these method names?
     def asobj_get_method(self, asobj, method):
         if asobj.env is not self:
             raise EnvironmentMismatch(
@@ -540,7 +561,7 @@ class Environment(object):
         # make note of why arguments make this slightly lossy
         # when passing on; eg, can't use asobj/method in the
         # arguments to this function
-        return self.astype_get_method(asobj, method)(*args, **kwargs)
+        return self.asobj_get_method(asobj, method)(*args, **kwargs)
 
 
 def shortids_from_vocab(vocab, prefix=None):
