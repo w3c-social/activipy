@@ -95,7 +95,7 @@ just for this?  Let's see what else Activipy gives us.
 Activipy gives simple dictionary-style access::
 
   >>> post_this["to"]
-  ['acct:cwebber@identi.ca', 'acct:justaguy@rhiaro.co.uk']
+  ['acct:cwebber@identi.ca', 'acct:justaguy@rhiaro.co.uk', 'acct:ladyaeva@hedgehog.example']
 
 Helpful, but we could have gotten that from running .json() and
 pulling out the right values!  But this is kinda nice::
