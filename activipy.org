@@ -44,113 +44,6 @@ what a method does and etc, but they're also slightly unwieldy to set
 up.  It will be less precise, but maybe easier, to just use strings to
 represent what a method is.
 
-** CANCELED Pass environment into methods?
-   CLOSED: [2015-10-28 Wed 17:16]
-
-Should methods be able to themselves take advantage of method dispatch?
-If so, they will need "env" as first argument.
-
-** DONE Add ASObj.type_astype()
-   CLOSED: [2015-10-28 Wed 17:17]
-
-*** Brainstorm
-
-Here's the problem.
-
-Assume we made an activity like this:
-
-#+BEGIN_SRC python
-ROOT_BEER_NOTE_VOCAB = vocab.Create(
-    "http://tsyesika.co.uk/act/foo-id-here/",
-    actor=vocab.Person(
-        "http://tsyesika.co.uk/",
-        displayName="Jessica Tallon"),
-    to=["acct:cwebber@identi.ca",
-        "acct:justaguy@rhiaro.co.uk"],
-    object=vocab.Note(
-        "htp://tsyesika.co.uk/chat/sup-yo/",
-        content="Up for some root beer floats?"))
-#+END_SRC
-
-Now assume we made one like this:
-
-#+BEGIN_SRC python
-ROOT_BEER_NOTE_JSOBJ = types.ASObj({
-    "@type": "Create",
-    "@id": "http://tsyesika.co.uk/act/foo-id-here/",
-    "actor": {
-        "@type": "Person",
-        "@id": "http://tsyesika.co.uk/",
-        "displayName": "Jessica Tallon"},
-    "to": ["acct:cwebber@identi.ca",
-           "acct:justaguy@rhiaro.co.uk"],
-    "object": {
-        "@type": "Note",
-        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
-        "content": "Up for some root beer floats?"}})
-#+END_SRC
-
-Now even worse:
-
-#+BEGIN_SRC python
-  ROOT_BEER_NOTE_JSOBJ = types.ASObj({
-      # AAAAAAAAAAA
-      "@type": "http://www.w3.org/ns/activitystreams#Create", 
-      "@id": "http://tsyesika.co.uk/act/foo-id-here/",
-      "actor": {
-          "@type": "Person",
-          "@id": "http://tsyesika.co.uk/",
-          "displayName": "Jessica Tallon"},
-      "to": ["acct:cwebber@identi.ca",
-             "acct:justaguy@rhiaro.co.uk"],
-      "object": {
-          "@type": "Note",
-          "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
-          "content": "Up for some root beer floats?"}})
-#+END_SRC
-
-So...
- - we really need to know about the whole set of vocabularies in order
-   to do ASObj.type_astype()
- - Obviously, we also need to for method dispatch also
- - It could be then that we don't load ASObj.vocab, but ASObj.env
- - Also, in general you can always do env.asobj_astypes(asobj)
- - Thus, we should also provide env.asobj_method(asobj, method_symbol)
- - Which means also, more obviously, and as a precedent, we must
-   provide Environment.asobj_astype_chain(asobj)!
-
-This also means that users should, in general, not use
-ASObj.type_astype(), unless they're using the "sugar" edition
-which comes from supplying an environment.
-
-We might want to also provide an expanded=True argument to some of those methods.
-
-OR, maybe we can do "cheapest available" determination of an ASType.
-
-What are the ways we might go about pulling down an ASType?
-
- - By short ID... but this requires this short ID be marked "safe"
-   for short expansion
- - By already known URI
- - By json-ld examination (most expensive!)
-
-Do we really want an expand=None?  Maybe that's kind of dumb
-
-*** DONE From short id
-    CLOSED: [2015-10-28 Wed 17:17]
-
-The question is, where do we mark whether its safe to consider the
-short_id as a safe representation from?  Is it in the environment
-or in the vocab?
-
-The vocab may make sense because we could do a
-shortids=load_from_vocabs((Vocab1, None), (GMGVocab, "gmg:"))
-
-*** DONE From known URI
-    CLOSED: [2015-10-28 Wed 17:17]
-*** DONE By json-ld examination
-    CLOSED: [2015-10-28 Wed 17:17]
-
 ** TODO Add memoization
 *** TODO General memoization function
 *** TODO Property memoization
@@ -735,4 +628,117 @@ I think this is a pretty good approach.
   myenv.Person("foo")
   Person()
 #+END_SRC
+
+*** CANCELED Pass environment into methods?
+   CLOSED: [2015-10-28 Wed 17:16]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-28 Wed 17:19
+    :END:
+
+Should methods be able to themselves take advantage of method dispatch?
+If so, they will need "env" as first argument.
+
+*** DONE Add ASObj.type_astype()
+    CLOSED: [2015-10-28 Wed 17:17]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-10-28 Wed 17:19
+    :END:
+
+**** Brainstorm
+
+Here's the problem.
+
+Assume we made an activity like this:
+
+#+BEGIN_SRC python
+ROOT_BEER_NOTE_VOCAB = vocab.Create(
+    "http://tsyesika.co.uk/act/foo-id-here/",
+    actor=vocab.Person(
+        "http://tsyesika.co.uk/",
+        displayName="Jessica Tallon"),
+    to=["acct:cwebber@identi.ca",
+        "acct:justaguy@rhiaro.co.uk"],
+    object=vocab.Note(
+        "htp://tsyesika.co.uk/chat/sup-yo/",
+        content="Up for some root beer floats?"))
+#+END_SRC
+
+Now assume we made one like this:
+
+#+BEGIN_SRC python
+ROOT_BEER_NOTE_JSOBJ = types.ASObj({
+    "@type": "Create",
+    "@id": "http://tsyesika.co.uk/act/foo-id-here/",
+    "actor": {
+        "@type": "Person",
+        "@id": "http://tsyesika.co.uk/",
+        "displayName": "Jessica Tallon"},
+    "to": ["acct:cwebber@identi.ca",
+           "acct:justaguy@rhiaro.co.uk"],
+    "object": {
+        "@type": "Note",
+        "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+        "content": "Up for some root beer floats?"}})
+#+END_SRC
+
+Now even worse:
+
+#+BEGIN_SRC python
+  ROOT_BEER_NOTE_JSOBJ = types.ASObj({
+      # AAAAAAAAAAA
+      "@type": "http://www.w3.org/ns/activitystreams#Create", 
+      "@id": "http://tsyesika.co.uk/act/foo-id-here/",
+      "actor": {
+          "@type": "Person",
+          "@id": "http://tsyesika.co.uk/",
+          "displayName": "Jessica Tallon"},
+      "to": ["acct:cwebber@identi.ca",
+             "acct:justaguy@rhiaro.co.uk"],
+      "object": {
+          "@type": "Note",
+          "@id": "htp://tsyesika.co.uk/chat/sup-yo/",
+          "content": "Up for some root beer floats?"}})
+#+END_SRC
+
+So...
+ - we really need to know about the whole set of vocabularies in order
+   to do ASObj.type_astype()
+ - Obviously, we also need to for method dispatch also
+ - It could be then that we don't load ASObj.vocab, but ASObj.env
+ - Also, in general you can always do env.asobj_astypes(asobj)
+ - Thus, we should also provide env.asobj_method(asobj, method_symbol)
+ - Which means also, more obviously, and as a precedent, we must
+   provide Environment.asobj_astype_chain(asobj)!
+
+This also means that users should, in general, not use
+ASObj.type_astype(), unless they're using the "sugar" edition
+which comes from supplying an environment.
+
+We might want to also provide an expanded=True argument to some of those methods.
+
+OR, maybe we can do "cheapest available" determination of an ASType.
+
+What are the ways we might go about pulling down an ASType?
+
+ - By short ID... but this requires this short ID be marked "safe"
+   for short expansion
+ - By already known URI
+ - By json-ld examination (most expensive!)
+
+Do we really want an expand=None?  Maybe that's kind of dumb
+
+**** DONE From short id
+    CLOSED: [2015-10-28 Wed 17:17]
+
+The question is, where do we mark whether its safe to consider the
+short_id as a safe representation from?  Is it in the environment
+or in the vocab?
+
+The vocab may make sense because we could do a
+shortids=load_from_vocabs((Vocab1, None), (GMGVocab, "gmg:"))
+
+**** DONE From known URI
+     CLOSED: [2015-10-28 Wed 17:17]
+**** DONE By json-ld examination
+     CLOSED: [2015-10-28 Wed 17:17]
 
