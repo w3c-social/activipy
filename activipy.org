@@ -50,10 +50,18 @@ deepcopy_in (and all child objects, we don't need an @context at all).
 But we do need to be able to "ingest foreign material", which means we
 should provide an Environment.ingest() method (or .ingest_foreign())
 
+As for how to combine multiple contexts, it can be done via an array;
+see the [[http://www.w3.org/TR/json-ld/#dfn-local-context][local context]] part of the docs.
+
+So that solves how to do things! (Though there may be some minor
+question as to what to do if the application's @context is also an
+array... do we merge them?  Will it work as-is?)
+
 *** TODO Handling when creating new ASObj()
 
 Basically, strip off the existing @context recursively with
 deepcopy_in, and add our context instead, if any exists.
+
 
 *** TODO Environment.ingest(jsonld, imply_asvocab=True)
 
