@@ -278,10 +278,7 @@ class ASObj(object):
         else:
             document_loader = default_loader
 
-        options = {
-            "expandContext": (
-                "http://www.w3.org/TR/activitystreams-core/"
-                "activitystreams2-context.jsonld")}
+        options = {"expandContext": self.env.expand_with_context}
         if document_loader:
             options["documentLoader"] = document_loader
 
@@ -436,6 +433,9 @@ class EnvironmentMismatch(Exception):
     pass
 
 
+AS_CONTEXT = ("http://www.w3.org/TR/activitystreams-core/"
+              "activitystreams2-context.jsonld")
+
 class Environment(object):
     """
     An environment to collect vocabularies and provide
@@ -446,17 +446,32 @@ class Environment(object):
                  # that uses the vocabs as passed in, but that
                  # introduces its own complexities
                  shortids=None, c_accessors=None,
+                 extra_context=None,
                  document_loader=default_loader):
         self.vocabs = vocabs or []
         self.methods = methods or {}
         # @@: Should we make all short ids mandatorily contain
         #   the base schema?
         self.shortids = shortids or {}
+        self.extra_context = extra_context
+        self.expand_with_context = self.__gen_expandwith()
         self.document_loader = document_loader
         self.c = self.__build_c_accessors(c_accessors or {})
         self.m = self._build_m_map()
 
         self.uri_map = self.__build_uri_map()
+
+    def __gen_expandwith(self):
+        if self.extra_context is None:
+            return AS_CONTEXT
+        # @@: Is this the right thing to do for an existing
+        #   json array context?  Or should we just include the array
+        #   in the array
+        elif isinstance(self.extra_context, list):
+            new_context = copy.copy(self.extra_context)
+            new_context.append(AS_CONTEXT)
+        else:
+            return [self.extra_context, AS_CONTEXT]
 
     def __build_c_accessors(self, c_accessors):
         return AttrMapper(
