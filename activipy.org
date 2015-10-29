@@ -108,9 +108,14 @@ So, if we're accessing a key value pair where the value is a list of
 activitystreams objects, we'd like the activitystreams objects
 converted to ASObj objects as well.
 
-*** TODO Add deepcopy_jsobj_out
-*** TODO Use it in ASObj.__getitem__
-*** TODO Rename deepcopy_jsobj -> deepcopy_jsobj_in
+*** DONE Add deepcopy_jsobj_out
+    CLOSED: [2015-10-29 Thu 14:07]
+*** DONE Use it in ASObj.__getitem__
+    CLOSED: [2015-10-29 Thu 14:07]
+*** DONE Rename deepcopy_jsobj -> deepcopy_jsobj_in
+    CLOSED: [2015-10-29 Thu 14:07]
+
+*** TODO Add tests
 
 ** TODO Add ASProp
 

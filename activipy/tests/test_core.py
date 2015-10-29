@@ -193,13 +193,14 @@ def _looks_like_root_beer_note(jsobj):
         jsobj["object"]["content"] == "Up for some root beer floats?")
 
 
-def test_deepcopy_jsobj():
+def test_deepcopy_jsobj_in():
     # We'll mutate later, so let's make a copy of this
     root_beer_note = copy.deepcopy(ROOT_BEER_NOTE_JSOBJ)
     assert _looks_like_root_beer_note(root_beer_note)
 
     # Test copying a compicated datastructure
-    copied_root_beer_note = core.deepcopy_jsobj(root_beer_note)
+    copied_root_beer_note = core.deepcopy_jsobj_in(
+        root_beer_note, vocab.BasicEnv)
     assert _looks_like_root_beer_note(copied_root_beer_note)
 
     # Mutate
@@ -210,7 +211,11 @@ def test_deepcopy_jsobj():
 
     # Test nested asobj copying
     assert _looks_like_root_beer_note(
-        core.deepcopy_jsobj(ROOT_BEER_NOTE_MIXED_ASOBJ))
+        core.deepcopy_jsobj_in(
+            ROOT_BEER_NOTE_MIXED_ASOBJ,
+            vocab.BasicEnv))
+
+# TODO: test_deepcopy_jsobj_out():
 
 
 def test_vocab_constructor():

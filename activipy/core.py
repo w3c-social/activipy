@@ -210,7 +210,7 @@ AS_CONTEXT = ("http://www.w3.org/TR/activitystreams-core/"
 # operations.  If we've done it once, that should be good enough
 # forever... in other words, memoization.  But memoization means
 # that the object should be immutable.
-# 
+#
 # ... but maybe ASObj objects *should* be immutable.
 # This means we copy.deepcopy() on our way in, and if users want
 # to change things, they either make a new ASObj or get back
@@ -223,14 +223,15 @@ class ASObj(object):
     The general ActivityStreams object that a user will work with
     """
     def __init__(self, jsobj, env=None):
-        self.__jsobj = deepcopy_jsobj(jsobj)
-        assert (isinstance(self.__jsobj.get("@type"), str) or
-                isinstance(self.__jsobj.get("@type"), list))
         if not env:
             from activipy import vocab
             env = vocab.BasicEnv
-            
         self.env = env
+
+        self.__jsobj = deepcopy_jsobj_in(jsobj, env)
+        assert (isinstance(self.__jsobj.get("@type"), str) or
+                isinstance(self.__jsobj.get("@type"), list))
+
         # @@: Not used yet, but we might soon
         self.__orig_type = jsobj["@type"]
         self.m = self.env._build_m_map(self)
@@ -240,8 +241,7 @@ class ASObj(object):
         if isinstance(val, dict) and "@type" in val:
             return ASObj(val, self.env)
         else:
-            # TODO: Switch this to deepcopy_jsobj_out(val, env=self.env)
-            return deepcopy_jsobj(val)
+            return deepcopy_jsobj_out(val, env=self.env)
 
     # META TODO: Convert some @property here to @memoized_property
     @property
@@ -310,18 +310,35 @@ class ASObj(object):
                 self.id)
         else:
             return "<ASObj %s>" % ", ".join(self.types)
-            
 
 
-def deepcopy_jsobj(jsobj):
+def deepcopy_jsobj_base(jsobj, env, going_in=True):
     """
-    Perform a deep copy of a JSON style object, but also
-    permit insertions of 
+    Perform a deep copy of a JSON style object
     """
+    going_out = not going_in
+
+    def add_context(this_dict):
+        if env.extra_context is not None:
+            this_dict["@context"] = env.extra_context
+
+    def remove_context(this_dict):
+        if "@context" in this_dict:
+            del this_dict["@context"]
+        return this_dict
+
     def copy_asobj(asobj):
-        return asobj.json()
+        if going_in:
+            return remove_context(asobj.json())
+        else:
+            return asobj
 
     def copy_dict(this_dict):
+        # Looks like an ASObj
+        if going_out and "@type" in this_dict:
+            return ASObj(this_dict, env)
+
+        # Otherwise, just recursively copy the dict
         new_dict = {}
         for key, val in this_dict.items():
             new_dict[key] = copy_main(val)
@@ -348,7 +365,23 @@ def deepcopy_jsobj(jsobj):
             #   it would bring unnecessary performance penalties.
             return jsobj
 
-    return copy_main(jsobj)
+    if going_in:
+        # Should be a dictionary or ASObj on the way in for this
+        assert isinstance(jsobj, dict) or isinstance(jsobj, ASObj)
+
+    final_json = copy_main(jsobj)
+
+    if going_in:
+        add_context(final_json)
+
+    return final_json
+
+
+def deepcopy_jsobj_in(jsobj, env):
+    return deepcopy_jsobj_base(jsobj, env, going_in=True)
+
+def deepcopy_jsobj_out(jsobj, env):
+    return deepcopy_jsobj_base(jsobj, env, going_in=False)
 
 
 # @@: Maybe rename to MethodSpec?
@@ -375,7 +408,7 @@ def throw_no_method_error(asobj):
 def handle_one(astype_methods, asobj, _fallback=throw_no_method_error):
     if len(astype_methods) == 0:
         _fallback(asobj)
-        
+
     def func(*args, **kwargs):
         method, astype = astype_methods[0]
         return method(asobj, *args, **kwargs)
