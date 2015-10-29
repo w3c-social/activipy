@@ -57,13 +57,15 @@ So that solves how to do things! (Though there may be some minor
 question as to what to do if the application's @context is also an
 array... do we merge them?  Will it work as-is?)
 
-*** TODO Add extra_context field to Environment
+*** DONE Add extra_context field to Environment
+    CLOSED: [2015-10-29 Thu 13:42]
 
 **** DONE Add to init structure
      CLOSED: [2015-10-29 Thu 13:20]
 **** DONE Add on expansion
      CLOSED: [2015-10-29 Thu 13:20]
-**** TODO Oh wait remove on expansion
+**** DONE Oh wait remove on expansion
+     CLOSED: [2015-10-29 Thu 13:42]
 
 That didn't make sense, because the extra context gets added to the
 asobj, so it doesn't need to be implicit.
