@@ -76,6 +76,7 @@ above description, or do we have
 Basically attach an @context to the json we have of it (though I guess
 this will happen automatically)
 
+** TODO Maybe rename MethodId to MethodSpec
 ** TODO Switch from method "object symbols" to strings?
 
 Currently we require setting up "object symbols" which self-document
