@@ -50,9 +50,23 @@ deepcopy_in (and all child objects, we don't need an @context at all).
 But we do need to be able to "ingest foreign material", which means we
 should provide an Environment.ingest() method (or .ingest_foreign())
 
-*** TODO Handling in ASObj()
-*** TODO Ingesting foreign stuff
+*** TODO Handling when creating new ASObj()
+
+Basically, strip off the existing @context recursively with
+deepcopy_in, and add our context instead, if any exists.
+
+*** TODO Environment.ingest(jsonld, imply_asvocab=True)
+
+This should expand out a json-ld document then compact it to the
+Environment's own context.
+
+The question is, can we use the "grafted-on @context" required in the
+above description, or do we have
+
 *** TODO breaking off a child ASObj
+
+Basically attach an @context to the json we have of it (though I guess
+this will happen automatically)
 
 ** TODO Switch from method "object symbols" to strings?
 
