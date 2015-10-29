@@ -57,6 +57,11 @@ So that solves how to do things! (Though there may be some minor
 question as to what to do if the application's @context is also an
 array... do we merge them?  Will it work as-is?)
 
+*** TODO Add extra_context field to Environment
+
+**** TODO Add to init structure
+**** TODO Add on expansion
+
 *** TODO Handling when creating new ASObj()
 
 Basically, strip off the existing @context recursively with
