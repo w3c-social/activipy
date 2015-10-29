@@ -281,7 +281,7 @@ class ASObj(object):
         else:
             document_loader = default_loader
 
-        options = {"expandContext": AS_CONTEXT}
+        options = {"expandContext": self.env.implied_context}
         if document_loader:
             options["documentLoader"] = document_loader
 
@@ -441,6 +441,8 @@ class Environment(object):
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
+    implied_context = AS_CONTEXT
+
     def __init__(self, vocabs=None, methods=None,
                  # not ideal, I'd rather somehow load something
                  # that uses the vocabs as passed in, but that
