@@ -66,10 +66,11 @@ class ASType(object):
             from activipy import vocab
             env = vocab.BasicEnv
 
-        if self.id_short is not None and self.id_short in env.shortids:
-            type_val = self.id_short
+        if self in env.shortids_reversemap:
+            type_val = env.shortids_reversemap[self]
         else:
             type_val = self.id_uri
+
         jsobj = {"@type": type_val}
         jsobj.update(kwargs)
         if id:
@@ -480,6 +481,8 @@ class Environment(object):
         # @@: Should we make all short ids mandatorily contain
         #   the base schema?
         self.shortids = shortids or {}
+        self.shortids_reversemap = {
+            val: key for key, val in self.shortids.items()}
         self.extra_context = extra_context
         self.document_loader = document_loader
         self.c = self.__build_c_accessors(c_accessors or {})
