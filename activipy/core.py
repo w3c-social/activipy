@@ -51,7 +51,7 @@ class ASType(object):
     def __repr__(self):
         return "<ASType %s>" % (self.id_short or self.id_uri)
 
-    # TODO: Memoize this!
+    # TODO: Use a generic memoizer?
     @property
     def inheritance_chain(self):
         # memoization
