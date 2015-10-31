@@ -226,8 +226,6 @@ class ASObj(object):
         assert (isinstance(self.__jsobj.get("@type"), str) or
                 isinstance(self.__jsobj.get("@type"), list))
 
-        # @@: Not used yet, but we might soon
-        self.__orig_type = jsobj["@type"]
         self.m = self.env._build_m_map(self)
 
     def __getitem__(self, key):
