@@ -19,7 +19,7 @@
 
 from activipy.core import (
     ASType, ASVocab, Environment, shortids_from_vocab,
-    chain_dicts)
+    chain_dicts, make_simple_loader)
 from activipy import vocab
 
 def checkup_uri(identifier):
@@ -44,11 +44,54 @@ RoyalStatus = ASType(
 
 CheckUpVocab = ASVocab([CheckIn, Coupon, RoyalStatus])
 
-CheckUpEnv = Environment(
+CHECKUP_EXTRA_CONTEXT_NAMESPACED = {"CheckUp": "http://checkup.example/ns#"}
+
+CheckUpNSEnv = Environment(
     vocabs=[vocab.CoreVocab],
     shortids=chain_dicts(
         shortids_from_vocab(vocab.CoreVocab),
         shortids_from_vocab(CheckUpVocab, "CheckUp")),
     c_accessors=chain_dicts(
         shortids_from_vocab(vocab.CoreVocab),
-        shortids_from_vocab(CheckUpVocab)))
+        shortids_from_vocab(CheckUpVocab)),
+    extra_context=CHECKUP_EXTRA_CONTEXT_NAMESPACED)
+
+CHECKUP_EXTRA_CONTEXT_VERBOSE = {
+    "CheckIn": {
+        "@id": CheckIn.id_uri,
+        "@type": "@id"},
+    "Coupon": {
+        "@id": Coupon.id_uri,
+        "@type": "@id"},
+    "RoyalStatus": {
+        "@id": RoyalStatus.id_uri,
+        "@type": "@id"}}
+
+CheckUpVerboseEnv = Environment(
+    vocabs=[vocab.CoreVocab],
+    shortids=chain_dicts(
+        shortids_from_vocab(vocab.CoreVocab),
+        shortids_from_vocab(CheckUpVocab)),
+    c_accessors=chain_dicts(
+        shortids_from_vocab(vocab.CoreVocab),
+        shortids_from_vocab(CheckUpVocab)),
+    extra_context=CHECKUP_EXTRA_CONTEXT_VERBOSE)
+
+
+CHECKUP_EXTRA_CONTEXT_URI = "http://checkup.example/context.jld"
+
+CHECKUP_JSONLD_LOADER = make_simple_loader(
+    {CHECKUP_EXTRA_CONTEXT_URI: {"@context": CHECKUP_EXTRA_CONTEXT_VERBOSE}},
+    # @@: Do we want this in the demo?
+    load_unknown_urls=False)
+
+CheckUpEnv = Environment(
+    vocabs=[vocab.CoreVocab],
+    shortids=chain_dicts(
+        shortids_from_vocab(vocab.CoreVocab),
+        shortids_from_vocab(CheckUpVocab)),
+    c_accessors=chain_dicts(
+        shortids_from_vocab(vocab.CoreVocab),
+        shortids_from_vocab(CheckUpVocab)),
+    extra_context=CHECKUP_EXTRA_CONTEXT_URI,
+    document_loader=CHECKUP_JSONLD_LOADER)
