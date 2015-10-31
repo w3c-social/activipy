@@ -177,10 +177,6 @@ def make_simple_loader(url_map, load_unknown_urls=True,
 
 default_loader = make_simple_loader({})
 
-AS_CONTEXT = ("http://www.w3.org/TR/activitystreams-core/"
-              "activitystreams2-context.jsonld")
-
-
 # TODO: This was a good early in-comments braindump; now move to the
 # documentation and restructure!
 
@@ -467,7 +463,7 @@ class Environment(object):
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
-    implied_context = AS_CONTEXT
+    implied_context = AS2_CONTEXT_URI
 
     def __init__(self, vocabs=None, methods=None,
                  # not ideal, I'd rather somehow load something
