@@ -151,7 +151,7 @@ def make_simple_loader(url_map, load_unknown_urls=True,
     # Wrap in the structure that's expected to come back from the
     # documentLoader
     _pre_url_map = {}
-    _pre_url_map.update(AS2_CONTEXT)
+    _pre_url_map.update(AS2_DEFAULT_URL_MAP)
     _pre_url_map.update(url_map)
     _url_map = {
         url: _make_context(url, doc)
