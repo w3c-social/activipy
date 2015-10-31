@@ -35,15 +35,11 @@ class ASType(object):
     can have multiple types listed under @type.  So our inheritance
     model is a bit different than python's.
     """
-    def __init__(self, id_uri, parents, id_short=None, notes=None,
-                 # Core means "core vocabulary", and must only
-                 # ever be set by ASType
-                 core=False):
+    def __init__(self, id_uri, parents, id_short=None, notes=None):
         self.id_uri = id_uri
         self.parents = parents
         self.id_short = id_short
         self.notes = notes
-        self.core = core
 
         self._inheritance = None
 

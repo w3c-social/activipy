@@ -74,15 +74,11 @@
 ##    specific, written prior permission. Title to copyright in this
 ##    work will at all times remain with copyright holders.
 
-from .core import ASType as real_ASType
+from .core import ASType
 from .core import ASVocab, Environment, shortids_from_vocab
 
 def as_uri(identifier):
     return "http://www.w3.org/ns/activitystreams#" + identifier
-
-def ASType(*args, **kwargs):
-    kwargs["core"] = True
-    return real_ASType(*args, **kwargs)
 
 
 # Core classes
