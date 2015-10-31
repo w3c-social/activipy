@@ -75,7 +75,6 @@ asobj, so it doesn't need to be implicit.
 Basically, strip off the existing @context recursively with
 deepcopy_in, and add our context instead, if any exists.
 
-
 *** TODO Environment.ingest(jsonld, imply_asvocab=True)
 
 This should expand out a json-ld document then compact it to the
@@ -120,6 +119,14 @@ converted to ASObj objects as well.
 ** TODO Add ASProp
 
 ** TODO Add demos section
+*** TODO Vocab demo
+
+RoyalCheckin or CheckUp
+
+ - checkup:CheckIn
+ - checkup:RoyalStatus
+ - checkup:Coupon
+
 *** TODO linter/validator
 
 We can use the method dispatch system to handle this.
