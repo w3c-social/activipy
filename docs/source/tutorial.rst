@@ -601,12 +601,161 @@ Luckily, Activipy has you covered... read on!
 Some new terms
 ~~~~~~~~~~~~~~
 
+Let's start out easy, and worry about the details later.
+
+So let's say that we're a user of a CheckUp vocabulary using service.
+We have a nice little demo for this, so let's import that, and we'll
+start using the CheckUpEnv::
+
+  >>> from activipy.demos import checkup    # contains vocab and environment
+  >>> from activipy import vocab            # we'll use some of these too
+  >>> env = checkup.CheckUpEnv              # for convenience of tutorial
+
+We'll also already assume that we've got a user setup in this system.
+Even though we're working with new vocabulary, the Core vocabulary is also
+set up in the CheckUpEnv::
+
+  >>> me = env.c.Person(
+  ...   "http://social.example/u/sugartooth/",
+  ...   displayName="Sarah Sugartooth")
+
+We're also going to set up an imaginary connection to the CheckUp
+server we're using, just for demonstration purposes::
+
+  >>> conn = checkup.FakeConnection()
+
+So we know there's a CheckIn vocabulary available through CheckUpEnv...
+let's say we just arrived at the "Sweet Expressions" ice cream parlor.
+Time to check in!
+
+.. code-block:: pycon
+
+  >>> check_in = env.c.CheckIn(
+  ...     actor=me,
+  ...     location=env.c.Place(
+  ...         "http://sweetexpressions.example/",
+  ...          displayName="Sweet Expressions"))
+  >>> check_in
+  <ASObj CheckIn>
+
+What does that check_in object look like in json form?
+
+.. code-block:: pycon
+
+  >>> check_in.json()
+  {'@context': 'http://checkup.example/context.jld',
+   '@type': 'CheckIn',
+   'actor': {'@id': 'http://social.example/u/sugartooth/',
+             '@type': 'Person',
+             'displayName': 'Sarah Sugartooth'},
+   'location': {'@id': 'http://sweetexpressions.example/',
+                '@type': 'Place',
+                'displayName': 'Sweet Expressions'}}
+
+Huh, so this is kind of interesting.  The `@type` looks nice and
+simple as "CheckIn", but there's also this `@context` thing.  We won't
+worry too much about what that is yet, but a brief preview is given by
+checking the types::
+
+  >>> check_in.types_astype
+  [<ASType CheckIn>]
+  >>> check_in.types_expanded
+  ['http://checkup.example/ns#CheckIn']
+
+Hm, so this is pretty cool!  Something in that @context has helped
+clarify exactly what "CheckIn" we're talking about.  We'll get into
+this more later, but if in the future there was ever a DoctorVisit
+vocabulary, we'd never mistake "http://checkup.example/ns#CheckIn" for
+a "http://doctoroffice.example/terms#CheckIn".  Our doctor might be
+fairly confused if we sent her a note telling her that we're out to
+get ice cream, but now we can be sure that that mistake won't happen.
+We'll get into this more later, but that's already good to know!
+
+Okay, so we've made the `check_in` object, but we haven't *done*
+anything with it yet.  We have this connection to our CheckUp service,
+why not post it there!
+
+.. code-block:: pycon
+
+  >>> check_in.m.post(conn)
+
+Well that was easy... what can we do now?  How about check out our
+inbox?
+
+.. code-block:: pycon
+
+  >>> inbox_contents = me.m.inbox(conn)
+  <ASObj Collection>
+  >>> inbox_contents.json()
+  {'@context': 'http://checkup.example/context.jld',
+   '@type': 'Collection',
+   'items': [
+       {'@type': ['Coupon', 'Note'],
+        'content': 'Thanks for 40 visits to Sweet Expressions!',
+        'recipient': {'@id': 'http://social.example/u/sugartooth/',
+                      '@type': 'Person',
+                      'displayName': 'Sarah Sugartooth'},
+        'redeem_uri': 'http://sweetexpressions.example/coupon/9ae37630/',
+        'vendor': {'@id': 'http://sweetexpressions.example/',
+                   '@type': 'Place',
+                   'displayName': 'Sweet Expressions'}}]}
+    
+Huh... that's interesting, so this is a collection... it has one item
+in it.  Of course, we could pull out that item individually and take a
+look at it in detail::
+
+  >>> coupon = inbox_contents["items"][0]
+  >>> coupon
+  <ASObj Coupon, Note>
+
+Huh, that's interesting, it says it's a Coupon *and* a Note?  It sure
+is::
+
+  >>> coupon.json()
+  {'@context': 'http://checkup.example/context.jld',
+   '@type': ['Coupon', 'Note'],
+   'content': 'Thanks for 40 visits to Sweet Expressions!',
+   'recipient': {'@id': 'http://social.example/u/sugartooth/',
+                 '@type': 'Person',
+                 'displayName': 'Sarah Sugartooth'},
+   'redeem_uri': 'http://sweetexpressions.example/coupon/9ae37630/',
+   'vendor': {'@id': 'http://sweetexpressions.example/',
+              '@type': 'Place',
+              'displayName': 'Sweet Expressions'}}
+  >>> coupon.types_astype
+  [<ASType Coupon>, <ASType Note>]
+  >>> coupon.types_expanded
+  ['http://checkup.example/ns#Coupon', 'http://www.w3.org/ns/activitystreams#Note']
+
+So first of all, this makes sense.  All a Coupon is to our system is
+something fairly functional, something by which a vendor can deliver a
+`redeem_uri` (which is a one-time-use URI to redeem a coupon for
+something special) to a recipient.  But our friends at Sweet
+Expressions wanted to include a little thank-you along with the
+coupon, so this object acts as a composite type of both of these.
+
+As a user, for the most part, the details of handling composite types
+are mostly taken care of for you by Activipy.  But as a side note,
+it's interesting to look at what this means for the inheritence
+chain::
+
+  # inheritence chain for the Coupon ASType
+  >>> checkup.Coupon.inheritance_chain
+  [<ASType Coupon>, <ASType Object>]
+  # inheritence chain for the Coupon ASType
+  >>> vocab.Note.inheritance_chain
+  [<ASType Note>, <ASType Content>, <ASType Object>]
+  # The actual types for our coupon object
+  >>> coupon.types_astype
+  [<ASType Coupon>, <ASType Note>]
+  # And the inheritence chain built by the composite type
+  >>> coupon.types_inheritance
+  [<ASType Coupon>, <ASType Note>, <ASType Content>, <ASType Object>]
+
 
 
 Expanding into json-ld
 ~~~~~~~~~~~~~~~~~~~~~~
-
-
 
 Remember when we did this?
 
