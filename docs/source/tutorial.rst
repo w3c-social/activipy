@@ -563,6 +563,14 @@ There are a few reasons:
    appropriate ASType representations (and then to know how to operate
    upon them) is very possible.
 
+4. We didn't get into it here, but fancier method handling can also be
+   done than just the traditional "dispatch hands off to a single
+   procedure" approach.  You can also set up a method with a handler
+   which maps or folds over the methods provided through the method
+   mapping and inheritence chain.  (Cool, but advanced, stuff!  You
+   can imagine how this might be helpful for writing a validator, or
+   etc.)
+
 There's more to say on these subjects, but hopefully this section
 helped put some of this into perspective.  Hopefully the rest of this
 will become clear shortly, including how to expand our vocabulary
@@ -751,6 +759,7 @@ chain::
   # And the inheritence chain built by the composite type
   >>> coupon.types_inheritance
   [<ASType Coupon>, <ASType Note>, <ASType Content>, <ASType Object>]
+
 
 
 
