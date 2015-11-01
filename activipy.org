@@ -123,7 +123,8 @@ converted to ASObj objects as well.
 ** TODO Add ASProp
 
 ** TODO Add demos section
-*** TODO Vocab demo
+*** DONE Vocab demo
+    CLOSED: [2015-11-01 Sun 10:30]
 
 RoyalCheckin or CheckUp
 
