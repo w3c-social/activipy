@@ -9,6 +9,23 @@ An Activipy tutorial
 .. TODO: Break this up into multiple pages, so it doesn't look
    intimidating?
 
+This tutorial is fairly robust and is broken into sections.  Each one
+of them builds upon each other like a ladder, but you can step off at
+any time.  In this tutorial you'll learn:
+
+1. How to use Activipy to express and share basic social networking
+   features.
+2. How to *do* cool things with Activipy using the method dispatch
+   system.
+3. Go beyond the basics and use extended vocabulary.
+4. Why Activipy objects are "immutable" (or are intended to be)
+   and how to use that to your advantage.
+
+.. There's also an advanced tutorial for building environments and etc
+
+You can read as much or as little as you like, but we hope this
+tutorial is engaging enough where you won't be able to stop reading
+until the end!
 
 Sweet beginnings
 ----------------
