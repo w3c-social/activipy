@@ -144,7 +144,6 @@ We can use the method dispatch system to handle this.
      :END:
 ** TODO Documentation basics
 *** TODO Tutorial
-
 *** TODO Document basic "types" structure
 
 *** Archive                                                         :ARCHIVE:
@@ -166,6 +165,10 @@ We can use the method dispatch system to handle this.
   - Vocabulary
   - Extending the environment
   - Advanced Examples
+
+** TODO Rename CheckUp demo to VisitIt everywhere
+*** TODO code
+*** TODO docs
 
 ** TODO Make ASVocab more useful
 
