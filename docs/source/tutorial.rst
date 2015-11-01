@@ -569,16 +569,44 @@ will become clear shortly, including how to expand our vocabulary
 without tripping over each others' definitions between applications.
    
 
-The more we change, the more we stay the same
----------------------------------------------
-
-.. TODO: We need functional setters for this part to work :)
-
-*TODO: Fill in this section on the immutable properties of Activipy*
-
-
 Expanding our vocabulary
 ------------------------
+
+Setting the stage
+~~~~~~~~~~~~~~~~~
+
+The default
+`ActivityStreams vocabulary <http://www.w3.org/TR/activitystreams-vocabulary/>`_
+is fairly comprehensive, and for most social networking applications,
+probably has everything you need.
+
+But what happens if it doesn't?  In this section we'll explore adding
+vocabulary for an imaginary social network application that's a
+"check-in" application (somewhere between Foursquare and Groupon in
+design).  Users check in on their phones or other mobile devices when
+they arrive somewhere, and their frequency of attendance is somewhat
+gameified.  Frequent attendance increases a "royalty" status, and some
+stores or other consumer outlets may reward users with one-time use
+coupons for frequent attendance.
+
+This is an intereresting application, but the default vocabulary
+doesn't give us everything we need.  We'd like to define new types
+like "CheckIn", but if someone comes up with a hospital application
+that also defines CheckIn, we don't want our applications to get
+confused while talking to each other.  How can we do this?
+
+Luckily, Activipy has you covered... read on!
+
+
+Some new terms
+~~~~~~~~~~~~~~
+
+
+
+Expanding into json-ld
+~~~~~~~~~~~~~~~~~~~~~~
+
+
 
 Remember when we did this?
 
@@ -625,3 +653,22 @@ rather than json-ld, so your code will look like simple Python, just
 like at the very beginning of our tutorial.
 
 *TODO: Finish this section!*
+
+
+It's all contextual
+~~~~~~~~~~~~~~~~~~~
+
+
+Consume the world
+~~~~~~~~~~~~~~~~~
+
+
+
+The more we change, the more we stay the same
+---------------------------------------------
+
+.. TODO: We need functional setters for this part to work :)
+
+*TODO: Fill in this section on the immutable properties of Activipy*
+
+
