@@ -723,11 +723,20 @@ inbox?
         'redeem_uri': 'http://sweetexpressions.example/coupon/9ae37630/',
         'vendor': {'@id': 'http://sweetexpressions.example/',
                    '@type': 'Place',
+                   'displayName': 'Sweet Expressions'}}
+       {'@type': 'http://checkup.example/ns#RoyalStatus',
+        'displayName': "Sarah Sugartooth's been upgraded to Queen status!",
+        'recipient': {'@id': 'http://social.example/u/sugartooth/',
+                      '@type': 'Person',
+                      'displayName': 'Sarah Sugartooth'},
+        'status': 'Queen',
+        'vendor': {'@id': 'http://sweetexpressions.example/',
+                   '@type': 'Place',
                    'displayName': 'Sweet Expressions'}}]}
 
-Huh... that's interesting, so this is a collection... it has one item
-in it.  Of course, we could pull out that item individually and take a
-look at it in detail::
+Huh... that's interesting, so this is a collection... it has two items
+in it.  We could pull out that first item individually and take a look
+at it in detail::
 
   >>> coupon = inbox_contents["items"][0]
   >>> coupon
@@ -879,8 +888,26 @@ makes things so that you can think as in terms of pythonic constructors
 rather than json-ld, so your code will look like simple Python, just
 like at the very beginning of our tutorial.
 
+So if you nearly never need to work with this super-extensible version
+of things, what's the point of us showing you it?  Well the
+interesting here is, since that's the unambiguous "expanded" version,
+we can now understand how we can get information from another source
+and clearly understand its meaning.
 
-*TODO: Finish this section!*
+We can also now begin to understand what "compacted" means: the simple
+JSON representations we've been showing for most of this post!
+
+So we can take data from the outside world, expand it into an
+unambiguous format, and then compact it down to the terminology we
+actually know.  Once compacted, it's in a format that's so simple even
+poor Billy Scripter with his json and ruby toolbox can use it.  And
+since we've compacted it to a context *we* know, we know that an
+`Activity` is an `Activity <http://www.w3.org/TR/activitystreams-vocabulary/#dfn-activity>`_
+and we'll never confuse "run a program" with someone else's "run a
+mile" again.  Horray!
+
+But... the `CheckIn` / `Coupon` examples above included this
+`@context` key.  What is that thing.  What is that?
 
 
 It's all contextual
