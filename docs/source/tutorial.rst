@@ -724,7 +724,7 @@ inbox?
         'vendor': {'@id': 'http://sweetexpressions.example/',
                    '@type': 'Place',
                    'displayName': 'Sweet Expressions'}}]}
-    
+
 Huh... that's interesting, so this is a collection... it has one item
 in it.  Of course, we could pull out that item individually and take a
 look at it in detail::
@@ -739,7 +739,7 @@ is::
   >>> coupon.json()
   {'@context': 'http://checkup.example/context.jld',
    '@type': ['Coupon', 'Note'],
-   'content': 'Thanks for 40 visits to Sweet Expressions!',
+   'content': 'Thanks for visiting Sweet Expressions!',
    'recipient': {'@id': 'http://social.example/u/sugartooth/',
                  '@type': 'Person',
                  'displayName': 'Sarah Sugartooth'},
@@ -777,8 +777,51 @@ chain::
   >>> coupon.types_inheritance
   [<ASType Coupon>, <ASType Note>, <ASType Content>, <ASType Object>]
 
+You don't necessarily need to make use of composite types in your
+system, but we can now see one possible reason you might want to: some
+of your activities might be a union of actions, and composite types
+are a great way to express them.  (As will be covered in the "advanced
+tutorial", you can use the mapping/folding method features to maximize
+composite types with your method handling, too.)
 
+There's another reason that we might see composite types used...
+let's look at our outbox from our connection::
 
+  >>> me.m.outbox(conn).json()
+  {'@context': 'http://checkup.example/context.jld',
+   '@type': 'Collection',
+   'items': [
+       {'@type': ['CheckIn', 'Arrive'],
+        'actor': {'@id': 'http://social.example/u/sugartooth/',
+                  '@type': 'Person',
+                  'displayName': 'Sarah Sugartooth'},
+        'location': {'@id': 'http://sweetexpressions.example/',
+                     '@type': 'Place',
+                     'displayName': 'Sweet Expressions'}}]}
+
+Huh... that's interesting.  So we've retreived from the connection our
+recent activities, but whatever server is on the other end is showing
+the CheckIn we just did as a composite type of both `CheckIn` and
+`Arrive`!  This seems kind of stange, because `CheckIn` is just a
+subclass of `Arrive` anyway::
+
+  >>> checkup.CheckIn.inheritance_chain
+  ... [<ASType CheckIn>,
+  ...  <ASType Arrive>,
+  ...  <ASType IntransitiveActivity>,
+  ...  <ASType Activity>,
+  ...  <ASType Object>]
+
+So if a `CheckIn` is technically part of an `Arrive`, why might our server
+do this?  Well, not all servers might have the `CheckIn` vocabulary (or
+know that it's a parent to `Arrive`), so since `CheckIn` can technically
+be displayed as an `Arrive`, so if a recipient of this activity knows
+how to display an `Arrive` but not a `Checkin`, they could do that.
+
+So anyway!  Now you've seen how to work with new types.  Now you're
+maybe starting to wonder, what's the theoretical model of all this
+under the hood?  (What, you weren't wondering that before?  Okay, now
+you are!)  Let's take a look!
 
 Expanding into json-ld
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -789,6 +832,8 @@ Remember when we did this?
 
   >>> root_beer_note.types_expanded
   ['http://www.w3.org/ns/activitystreams#Note']
+  >>> coupon.types_expanded
+  ['http://checkup.example/ns#Coupon', 'http://www.w3.org/ns/activitystreams#Note']
 
 This starts to make more sense when we think about naming
 conflicts... if you send me a message about "running a mile", and I
@@ -803,22 +848,29 @@ between two different definitions of "running" again.  Here's a brief
 hint towards that right now::
 
   >>> post_this.expanded()
-  [{'@type': ['http://www.w3.org/ns/activitystreams#Create'],
-    'http://www.w3.org/ns/activitystreams#actor': [{'@id': 'http://tsyesika.co.uk/',
-      '@type': ['http://www.w3.org/ns/activitystreams#Person'],
-      'http://www.w3.org/ns/activitystreams#displayName': [{'@value': 'Jessica Tallon'}]}],
-    'http://www.w3.org/ns/activitystreams#object': [{'@id': 'http://tsyesika.co.uk/chat/sup-yo/',
-      '@type': ['http://www.w3.org/ns/activitystreams#Note'],
-      'http://www.w3.org/ns/activitystreams#content': [{'@value': 'Up for some root beer floats?'}]}],
-    'http://www.w3.org/ns/activitystreams#to': [{'@id': 'acct:cwebber@identi.ca'},
-     {'@id': 'acct:justaguy@rhiaro.co.uk'}]}]
+  [{'@id': 'http://tsyesika.co.uk/act/foo-id-here/',
+    '@type': ['http://www.w3.org/ns/activitystreams#Create'],
+    'http://www.w3.org/ns/activitystreams#actor': [
+        {'@id': 'http://tsyesika.co.uk/',
+         '@type': ['http://www.w3.org/ns/activitystreams#Person'],
+         'http://www.w3.org/ns/activitystreams#displayName': [
+             {'@value': 'Jessica Tallon'}]}],
+    'http://www.w3.org/ns/activitystreams#object': [
+        {'@id': 'htp://tsyesika.co.uk/chat/sup-yo/',
+         '@type': ['http://www.w3.org/ns/activitystreams#Note'],
+         'http://www.w3.org/ns/activitystreams#content': [
+             {'@value': 'Up for some root beer floats?'}]}],
+    'http://www.w3.org/ns/activitystreams#to': [
+        {'@id': 'acct:cwebber@identi.ca'},
+        {'@id': 'acct:justaguy@rhiaro.co.uk'},
+        {'@id': 'acct:ladyaeva@hedgehog.example'}]}]
 
 That might look a bit complicated, but normally you wouldn't work in
 an expanded document, you'd compact to your local context.  If this
-seems confusing, don't worry about it for now; Activipy uses json-ld
-under the hood but you usually won't need to interact with it.  One
-nice feature though is that ActivityStreams 2.0 documents have
-an "implied context" of
+seems confusing, you don't really need to worry about; Activipy uses
+json-ld under the hood but you usually won't need to interact with it.
+One nice feature though is that ActivityStreams 2.0 documents have an
+"implied context" of
 `the core ActivityStreams vocabulary <http://www.w3.org/TR/activitystreams-vocabulary/>`_.
 This means that a "Note" will always mean the ActivityStreams version
 of a Note, even if you don't do any fancy context things and are using
@@ -826,6 +878,7 @@ just plain old json.  Even when you get into extension land, Activipy
 makes things so that you can think as in terms of pythonic constructors
 rather than json-ld, so your code will look like simple Python, just
 like at the very beginning of our tutorial.
+
 
 *TODO: Finish this section!*
 
@@ -845,5 +898,3 @@ The more we change, the more we stay the same
 .. TODO: We need functional setters for this part to work :)
 
 *TODO: Fill in this section on the immutable properties of Activipy*
-
-
