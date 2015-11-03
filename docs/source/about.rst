@@ -122,7 +122,7 @@ environment that knows how to post notes to it::
   >>> dear_diary = DiaryEnv.c.Note(
   ...     displayName="New job, please.",
   ...     content="Anyone know where I can get a job not managed by a mad scientist?")
-  >>> dear_diary.post()
+  >>> dear_diary.m.post()
 
 Activipy provides you with the basic tools you need to map
 ActivityStreams to the world of your Python application.  And if
