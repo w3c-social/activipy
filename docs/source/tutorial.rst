@@ -647,7 +647,9 @@ set up in the CheckUpEnv::
 We're also going to set up an imaginary connection to the CheckUp
 server we're using, just for demonstration purposes::
 
-  >>> conn = checkup.FakeConnection()
+.. TODO: Provide an actual FakeConnection() thing eventually
+
+  >>> conn = FakeConnection()
 
 So we know there's a CheckIn vocabulary available through CheckUpEnv...
 let's say we just arrived at the "Sweet Expressions" ice cream parlor.
