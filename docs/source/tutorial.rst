@@ -907,15 +907,103 @@ and we'll never confuse "run a program" with someone else's "run a
 mile" again.  Horray!
 
 But... the `CheckIn` / `Coupon` examples above included this
-`@context` key.  What is that thing.  What is that?
+`@context` key.  What is that thing?  Let's take a look.
 
 
 It's all contextual
 ~~~~~~~~~~~~~~~~~~~
 
+As a refresher, some of our early examples looked like this::
+
+  >>> root_beer_note
+  {'@id': 'http://tsyesika.co.uk/chat/sup-yo/',
+   '@type': 'Note',
+   'content': 'Up for some root beer floats?'}
+  >>> root_beer_note.types_expanded
+  ['http://www.w3.org/ns/activitystreams#Note']
+
+No `@context` there.  And yet just recently we saw this::
+
+  >>> check_in.json()
+  {'@context': 'http://checkup.example/context.jld',
+   '@type': 'CheckIn',
+   'actor': {'@id': 'http://social.example/u/sugartooth/',
+             '@type': 'Person',
+             'displayName': 'Sarah Sugartooth'},
+   'location': {'@id': 'http://sweetexpressions.example/',
+                '@type': 'Place',
+                'displayName': 'Sweet Expressions'}}
+  >>> check_in.types_expanded
+  ['http://checkup.example/ns#CheckIn']
+
+Okay, that does have an `@context`!  Well, we're working with
+extensions, so it's obvious that this maps our vocabulary to the
+unambiguous definitions we saw in the expanded version.
+
+So that's kind of cool, we can imagine that
+`'http://checkup.example/context.jld'` somehow maps `'CheckIn'` ->
+`'http://checkup.example/ns#CheckIn'` in our second example.  But
+wait, how did `'Note'` get mapped to
+`'http://www.w3.org/ns/activitystreams#Note'` in our first example?
+We didn't specify any context at all!  This is because ActivityStreams
+has an "implied context" of its own vocabulary at
+`'http://www.w3.org/TR/activitystreams-core/activitystreams2-context.jsonld'`,
+so that vocabulary mapping context is there without us even having to
+specify it.
+
+You might have noticed a small amount of trickery:
+`http://checkup.example/context.jld` doesn't exist!  You caught us, this
+is just a demonstration, so we overrode the `default_loader` in the
+environment to pretend that it knew what was at that URL already.
+Tricky!
+
+It turns out we could have rewritten the `CheckIn` example with the
+contents of what we were "pretending" was at
+`http://checkup.example/context.jld`, and it would have worked during
+expansion just as well::
+
+  {'@context': {'CheckIn': {'@id': 'http://checkup.example/ns#CheckIn',
+                            '@type': '@id'},
+                'Coupon': {'@id': 'http://checkup.example/ns#Coupon',
+                           '@type': '@id'},
+                'RoyalStatus': {'@id': 'http://checkup.example/ns#RoyalStatus',
+                                '@type': '@id'}},
+   '@type': 'CheckIn',
+   'actor': {'@id': 'http://social.example/u/sugartooth/',
+             '@type': 'Person',
+             'displayName': 'Sarah Sugartooth'},
+   'location': {'@id': 'http://sweetexpressions.example/',
+                '@type': 'Place',
+                'displayName': 'Sweet Expressions'}}
+
+Wow, that's *quite* verbose.  But that's basically dumping what would
+have been at `http://checkup.example/context.jld` inline.
+
+It turns out there's another kind of interesting way to specify terms
+in an `@context`, which is namespacing::
+
+  {'@context': {'CheckUp': 'http://checkup.example/ns#'},
+   '@type': 'CheckUp:CheckIn',
+   'actor': {'@id': 'http://social.example/u/sugartooth/',
+             '@type': 'Person',
+             'displayName': 'Sarah Sugartooth'},
+   'location': {'@id': 'http://sweetexpressions.example/',
+                '@type': 'Place',
+                'displayName': 'Sweet Expressions'}}
+
+If you'd like to play with these, we have environments set up for them
+at `activipy.demos.checkup` under the varibles `CheckUpVerboseEnv` and
+`CheckUpNSEnv`.
+
 
 Consume the world
 ~~~~~~~~~~~~~~~~~
+
+So now you have a solid theoretical understanding of how information
+can be unambiguously represented in Activipy.  But what if we want to
+consume activities from the outside world?
+
+*TODO: Finish this section!*
 
 
 
