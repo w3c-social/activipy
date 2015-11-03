@@ -21,10 +21,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="activipy",
-    version="0.1.dev",
+    version="0.1",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
-    include_package_data = True,
+    include_package_data=True,
     install_requires=[
         "PyLD",
         "pytest",
