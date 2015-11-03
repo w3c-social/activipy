@@ -21,7 +21,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="activipy",
-    version="0.1",
+    version="0.2.dev",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     include_package_data=True,
