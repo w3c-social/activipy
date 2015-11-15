@@ -37,6 +37,7 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
+** TODO Handle that @id is now an alias for id, @type an alias for type
 ** TODO Add optional thunk to ASType constructor: get_default_env
 
 Should return the default vocabulary if none specified.
