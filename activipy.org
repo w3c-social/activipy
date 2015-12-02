@@ -37,6 +37,13 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
+** TODO Add JF2 context vocabulary
+
+JF2 is the new MicroFormats json representation, but there's a new
+verion that has a json-ld context.  Add it as a vocabulary!
+
+https://github.com/w3c-social/Social-Syntax-Brainstorming/wiki/jf2
+
 ** TODO Handle that @id is now an alias for id, @type an alias for type
 ** TODO Add optional thunk to ASType constructor: get_default_env
 
