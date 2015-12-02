@@ -463,15 +463,15 @@ class Environment(object):
     An environment to collect vocabularies and provide
     methods for activitystream types
     """
-    implied_context = AS2_CONTEXT_URI
-
     def __init__(self, vocabs=None, methods=None,
                  # not ideal, I'd rather somehow load something
                  # that uses the vocabs as passed in, but that
                  # introduces its own complexities
                  shortids=None, c_accessors=None,
                  extra_context=None,
-                 document_loader=default_loader):
+                 document_loader=default_loader,
+                 implied_context=AS2_CONTEXT_URI):
+        self.implied_context = implied_context
         self.vocabs = vocabs or []
         self.methods = methods or {}
         # @@: Should we make all short ids mandatorily contain
