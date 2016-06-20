@@ -34,7 +34,9 @@
   (source #f)
   (build-system python-build-system)
   (inputs
-   `(("python" ,python)))
+   `(("python" ,python)
+     ("python-pyld" ,python-pyld)
+     ("python-sphinx" ,python-sphinx)))
   (synopsis "ActivityStreams 2.0 implementation and testing for Python")
   (description "An ActivityStreams 2.0 implementation for Python.
 Provides an easy API for building ActivityStreams 2.0 based applications
