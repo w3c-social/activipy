@@ -3,12 +3,12 @@
     "@vocab": "_:",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
     "as": "http://www.w3.org/ns/activitystreams#",
+    "id": "@id",
+    "type": "@type",
     "Accept": "as:Accept",
     "Activity": "as:Activity",
     "IntransitiveActivity": "as:IntransitiveActivity",
-    "Actor": "as:Actor",
     "Add": "as:Add",
-    "Album": "as:Album",
     "Announce": "as:Announce",
     "Application": "as:Application",
     "Arrive": "as:Arrive",
@@ -18,13 +18,11 @@
     "Collection": "as:Collection",
     "CollectionPage": "as:CollectionPage",
     "Relationship": "as:Relationship",
-    "Content": "as:Content",
     "Create": "as:Create",
     "Delete": "as:Delete",
     "Dislike": "as:Dislike",
     "Document": "as:Document",
     "Event": "as:Event",
-    "Folder": "as:Folder",
     "Follow": "as:Follow",
     "Flag": "as:Flag",
     "Group": "as:Group",
@@ -45,24 +43,26 @@
     "Page": "as:Page",
     "Person": "as:Person",
     "Place": "as:Place",
-    "Process": "as:Process",
     "Profile": "as:Profile",
     "Question": "as:Question",
     "Reject": "as:Reject",
     "Remove": "as:Remove",
     "Service": "as:Service",
-    "Story": "as:Story",
     "TentativeAccept": "as:TentativeAccept",
     "TentativeReject": "as:TentativeReject",
+    "Tombstone": "as:Tombstone",
     "Undo": "as:Undo",
     "Update": "as:Update",
     "Video": "as:Video",
-    "Experience": "as:Experience",
     "View": "as:View",
     "Listen": "as:Listen",
     "Read": "as:Read",
     "Move": "as:Move",
     "Travel": "as:Travel",
+    "IsFollowing": "as:IsFollowing",
+    "IsFollowedBy": "as:IsFollowedBy",
+    "IsContact": "as:IsContact",
+    "IsMember": "as:IsMember",
     "subject": {
       "@id": "as:subject",
       "@type": "@id"
@@ -168,6 +168,10 @@
       "@id": "as:anyOf",
       "@type": "@id"
     },
+    "closed": {
+      "@id": "as:closed",
+      "@type": "xsd:dateTime"
+    },
     "origin": {
       "@id": "as:origin",
       "@type": "@id"
@@ -196,8 +200,8 @@
       "@id": "as:result",
       "@type": "@id"
     },
-    "scope": {
-      "@id": "as:scope",
+    "audience": {
+      "@id": "as:audience",
       "@type": "@id"
     },
     "partOf": {
@@ -224,10 +228,6 @@
       "@id": "as:url",
       "@type": "@id"
     },
-    "alias": {
-      "@id": "as:alias",
-      "@type": "@id"
-    },
     "altitude": {
       "@id": "as:altitude",
       "@type": "xsd:float"
@@ -237,17 +237,13 @@
       "@id": "as:content",
       "@container": "@language"
     },
-    "displayName": "as:displayName",
-    "displayNameMap": {
-      "@id": "as:displayName",
+    "name": "as:name",
+    "nameMap": {
+      "@id": "as:name",
       "@container": "@language"
     },
     "downstreamDuplicates": "as:downStreamDuplicates",
     "duration": {
-      "@id": "as:duration",
-      "@type": "xsd:nonNegativeInteger"
-    },
-    "durationIso": {
       "@id": "as:duration",
       "@type": "xsd:duration"
     },
@@ -264,7 +260,6 @@
       "@type": "@id"
     },
     "hreflang": "as:hreflang",
-    "id": "as:id",
     "latitude": {
       "@id": "as:latitude",
       "@type": "xsd:float"
@@ -274,11 +269,6 @@
       "@type": "xsd:float"
     },
     "mediaType": "as:mediaType",
-    "objectType": "as:objectType",
-    "priority": {
-      "@id": "as:priority",
-      "@type": "xsd:float"
-    },
     "published": {
       "@id": "as:published",
       "@type": "xsd:dateTime"
@@ -305,11 +295,6 @@
       "@id": "as:summary",
       "@container": "@language"
     },
-    "title": "as:title",
-    "titleMap": {
-      "@id": "as:title",
-      "@container": "@language"
-    },
     "totalItems": {
       "@id": "as:totalItems",
       "@type": "xsd:nonNegativeInteger"
@@ -328,6 +313,14 @@
     "describes": {
       "@id": "as:describes",
       "@type": "@id"
+    },
+    "formerType": {
+      "@id": "as:formerType",
+      "@type": "@id"
+    },
+    "deleted": {
+      "@id": "as:deleted",
+      "@type": "xsd:dateTime"
     }
   }
 }
