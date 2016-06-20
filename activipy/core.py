@@ -220,6 +220,7 @@ class ASObj(object):
         self.env = env
 
         self.__jsobj = deepcopy_jsobj_in(jsobj, env)
+
         assert (isinstance(self.__jsobj.get("@type"), str) or
                 isinstance(self.__jsobj.get("@type"), list))
 
@@ -327,10 +328,16 @@ def deepcopy_jsobj_base(jsobj, env, going_in=True):
         if going_out and "@type" in this_dict:
             return ASObj(this_dict, env)
 
-        # Otherwise, just recursively copy the dict
+        # Otherwise, recursively copy the dict
+        # but handle id/type aliases
         new_dict = {}
         for key, val in this_dict.items():
-            new_dict[key] = copy_main(val)
+            if key == "id":
+                new_dict["@id"] = val
+            elif key == "type":
+                new_dict["@type"] = val
+            else:
+                new_dict[key] = copy_main(val)
         return new_dict
 
     def copy_list(this_list):

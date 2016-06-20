@@ -43,7 +43,8 @@ Amy pointed out that it's unnecessarily negative at one point
 
 ** TODO Handle that @id is now an alias for id, @type an alias for type
 
-*** TODO Consuming
+*** DONE Consuming
+    CLOSED: [2016-06-20 Mon 10:53]
 
 We should be able to consume this:
 
