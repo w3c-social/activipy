@@ -42,6 +42,35 @@ to trigger application-specific hooks.
 Amy pointed out that it's unnecessarily negative at one point
 
 ** TODO Handle that @id is now an alias for id, @type an alias for type
+
+*** TODO Consuming
+
+We should be able to consume this:
+
+#+BEGIN_SRC python
+post_this = core.ASObj({
+    "type": "Create",
+    "id": "http://tsyesika.co.uk/act/foo-id-here/",
+    "actor": {
+        "type": "Person",
+        "id": "http://tsyesika.co.uk/",
+        "displayName": "Jessica Tallon"},
+    "to": ["acct:cwebber@identi.ca",
+           "acct:justaguy@rhiaro.co.uk",
+           "acct:ladyaeva@hedgehog.example"],
+    "object": {
+        "type": "Note",
+        "id": "htp://tsyesika.co.uk/chat/sup-yo/",
+        "content": "Up for some root beer floats?"}},
+  vocab.BasicEnv)
+#+END_SRC
+
+*** TODO Producing
+
+This is less important.  The AS2 core doc says that implementations
+need to treat "id" as an alias for "@id" and "type" for an alias for
+"@type", but does not say these need to be the default representations.
+
 ** TODO Add optional thunk to ASType constructor: get_default_env
 
 Should return the default vocabulary if none specified.
