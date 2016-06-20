@@ -37,13 +37,6 @@ don't just store and receive what's been given to us.  We need a way
 to trigger application-specific hooks.
 
 * Tasks
-** TODO Add JF2 context vocabulary
-
-JF2 is the new MicroFormats json representation, but there's a new
-verion that has a json-ld context.  Add it as a vocabulary!
-
-https://github.com/w3c-social/Social-Syntax-Brainstorming/wiki/jf2
-
 ** TODO Handle that @id is now an alias for id, @type an alias for type
 ** TODO Add optional thunk to ASType constructor: get_default_env
 
@@ -69,19 +62,6 @@ So that solves how to do things! (Though there may be some minor
 question as to what to do if the application's @context is also an
 array... do we merge them?  Will it work as-is?)
 
-*** DONE Add extra_context field to Environment
-    CLOSED: [2015-10-29 Thu 13:42]
-
-**** DONE Add to init structure
-     CLOSED: [2015-10-29 Thu 13:20]
-**** DONE Add on expansion
-     CLOSED: [2015-10-29 Thu 13:20]
-**** DONE Oh wait remove on expansion
-     CLOSED: [2015-10-29 Thu 13:42]
-
-That didn't make sense, because the extra context gets added to the
-asobj, so it doesn't need to be implicit.
-
 *** TODO Handling when creating new ASObj()
 
 Basically, strip off the existing @context recursively with
@@ -99,6 +79,23 @@ above description, or do we have
 
 Basically attach an @context to the json we have of it (though I guess
 this will happen automatically)
+
+*** Archive                                                         :ARCHIVE:
+**** DONE Add extra_context field to Environment
+     CLOSED: [2015-10-29 Thu 13:42]
+     :PROPERTIES:
+     :ARCHIVE_TIME: 2015-12-02 Wed 18:10
+     :END:
+
+***** DONE Add to init structure
+      CLOSED: [2015-10-29 Thu 13:20]
+***** DONE Add on expansion
+      CLOSED: [2015-10-29 Thu 13:20]
+***** DONE Oh wait remove on expansion
+     CLOSED: [2015-10-29 Thu 13:42]
+
+That didn't make sense, because the extra context gets added to the
+asobj, so it doesn't need to be implicit.
 
 ** TODO Maybe rename MethodId to MethodSpec
 ** TODO Switch from method "object symbols" to strings?
@@ -841,4 +838,15 @@ shortids=load_from_vocabs((Vocab1, None), (GMGVocab, "gmg:"))
      CLOSED: [2015-10-28 Wed 17:17]
 **** DONE By json-ld examination
      CLOSED: [2015-10-28 Wed 17:17]
+
+*** DONE Add JF2 context vocabulary
+   CLOSED: [2015-12-02 Wed 18:10]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-12-02 Wed 18:10
+    :END:
+
+JF2 is the new MicroFormats json representation, but there's a new
+verion that has a json-ld context.  Add it as a vocabulary!
+
+https://github.com/w3c-social/Social-Syntax-Brainstorming/wiki/jf2
 
