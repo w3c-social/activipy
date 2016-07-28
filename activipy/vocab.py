@@ -493,7 +493,7 @@ Video = ASType(
     notes=("Represents a video document of any kind."))
 
 Note = ASType(
-    as_uri("Note"), [Document],
+    as_uri("Note"), [Object],
     "Note",
     notes=(
         "Represents a short work typically less than a single "
