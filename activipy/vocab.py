@@ -488,12 +488,12 @@ Image = ASType(
         "An image document of any kind"))
 
 Video = ASType(
-    as_uri("Video"), [Content],
+    as_uri("Video"), [Document],
     "Video",
     notes=("Represents a video document of any kind."))
 
 Note = ASType(
-    as_uri("Note"), [Content],
+    as_uri("Note"), [Document],
     "Note",
     notes=(
         "Represents a short work typically less than a single "
