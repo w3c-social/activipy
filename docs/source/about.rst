@@ -112,7 +112,7 @@ system, and much more.  We could express the above like this::
   ...   to=["http://employeemine.example/jim/",
   ...       "http://employeemine.example/sarah/"],
   ...   object=vocab.Note(
-  ...     http://drboss.example/rants/power-productivity/",
+  ...     "http://drboss.example/rants/power-productivity/",
   ...     content="Thanks to my latest invention, productivity is up 1 million percent! MWAHAHA!!"))
 
 If we were writing our own diary application, we could specify an
