@@ -892,7 +892,7 @@ like at the very beginning of our tutorial.
 
 So if you nearly never need to work with this super-extensible version
 of things, what's the point of us showing you it?  Well the
-interesting here is, since that's the unambiguous "expanded" version,
+interesting thing here is, since that's the unambiguous "expanded" version,
 we can now understand how we can get information from another source
 and clearly understand its meaning.
 
