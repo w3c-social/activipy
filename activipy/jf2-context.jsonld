@@ -36,7 +36,7 @@
       "org": "vcard:organization-name",
       "organization-unit": "vcard:organizational-unit",
       "postal-code": "vcard:hasPostalCode",
-      "sex": "vcard:hasGender",
+      "gender": "vcard:hasGender",
       "street-address": "vcard:street-address",
       "locality": "vcard:locality",
       "region": "vcard:region",
