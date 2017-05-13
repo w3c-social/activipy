@@ -11,3 +11,8 @@ It also, hopefully soon, will serve as an ActivityStreams validator.
 More things will go here in the future, in the meanwhile maybe see
 [[file:./activipy.org][activipy.org]] in this directory for braindumps and tasks.
 
+## Development
+
+Install all the dependencies as follows:
+
+    pip install -e .[dev]

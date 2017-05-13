@@ -27,14 +27,13 @@ setup(
     include_package_data=True,
     install_requires=[
         "PyLD",
-        "pytest",
-        "sphinx",
-        ],
-    # @@: Can we reproduce this in Guix?
-    entry_points="""\
-        [console_scripts]
-        activipy_tester = activipy.testcli:main
-        """,
+    ],
+    extras_require={
+        "dev": [
+            "pytest",
+            "sphinx",
+        ]
+    },
     license="Apache v2",
     author="Christopher Allan Webber",
     author_email="cwebber@dustycloud.org",
