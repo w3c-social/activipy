@@ -24,3 +24,6 @@ __pycache__
 .cache
 
 docs/build/
+
+# JetBrains IDE's
+.idea/
