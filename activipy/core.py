@@ -17,9 +17,13 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
-from pkg_resources import resource_filename
 import copy
 import json
+try:
+    from importlib.resources import files
+except ImportError:
+    # Fallback for Python < 3.9
+    from importlib_resources import files
 
 from pyld import jsonld
 
@@ -129,9 +133,8 @@ class ASVocab(object):
 
 
 # TODO: Add this one by default
-AS2_CONTEXT_FILE = resource_filename(
-    'activipy', 'activitystreams2-context.jsonld')
-AS2_CONTEXT = json.loads(open(AS2_CONTEXT_FILE, 'r').read())
+AS2_CONTEXT_FILE = files('activipy').joinpath('activitystreams2-context.jsonld')
+AS2_CONTEXT = json.loads(AS2_CONTEXT_FILE.read_text())
 AS2_CONTEXT_URI = (
     "http://www.w3.org/TR/activitystreams-core/activitystreams2-context.jsonld")
 AS2_DEFAULT_URL_MAP = {
