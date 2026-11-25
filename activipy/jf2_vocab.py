@@ -24,10 +24,11 @@
 
 
 import json
+import os
 
 from .core import (
     ASType, ASVocab, Environment, shortids_from_vocab,
-    resource_filename, chain_dicts,
+    chain_dicts,
     AS2_CONTEXT, AS2_CONTEXT_URI, make_simple_loader)
 from .vocab import CoreVocab, Object
 
@@ -122,8 +123,8 @@ JF2Vocab = ASVocab(
      Review, ReviewAggregate, Cite])
 
 
-JF2_CONTEXT_FILE = resource_filename(
-    'activipy', 'jf2-context.jsonld')
+JF2_CONTEXT_FILE = os.path.join(
+    os.path.dirname(__file__), 'jf2-context.jsonld')
 JF2_CONTEXT = json.loads(open(JF2_CONTEXT_FILE, 'r').read())
 JF2_CONTEXT_URI = (
     "http://stream.thatmustbe.us/jf2.php")
